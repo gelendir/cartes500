@@ -5,36 +5,34 @@ import game.Player;
 
 import java.rmi.RemoteException;
 
-import client.AbstractClient;
+import client.Client;
+
+import view.AbstractView;
+
 
 public class Server implements ServerInterface {
 
 	@Override
-	public boolean addClient(AbstractClient client, Player player) throws RemoteException {
+	public boolean connectClient(Client client, Player player)
+			throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void playCard(AbstractClient client, Card card) throws RemoteException {
+	public void playCard(Client client, Card card) throws RemoteException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void disconnectClient(AbstractClient client) {
+	public void disconnectClient(Client client) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Player getCurrentPlayer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Player[] getPlayingOrder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
