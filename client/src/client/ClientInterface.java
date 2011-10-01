@@ -5,16 +5,17 @@ import game.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import server.Turn;
 
 public interface ClientInterface extends Remote {
-		
-	public void giveCards( Card[] cards ) throws RemoteException;
 	
-	public void setPlayingOrder( Player[] players ) throws RemoteException;
+	public void startNewGame( ArrayList<Card> cards, ArrayList<Player> players ) throws RemoteException;
 	
-	public Turn notifyPlayerTurn( Turn turn ) throws RemoteException;
+	public void notifyYourTurn() throws RemoteException;
+	
+	public Turn notifyTurn( Turn turn ) throws RemoteException;
 	
 	public void notifyPlayerDisconnect( Player player ) throws RemoteException;
 	
