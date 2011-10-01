@@ -7,8 +7,6 @@ import java.rmi.RemoteException;
 
 import client.Client;
 
-import view.AbstractView;
-
 
 public class Server implements ServerInterface {
 

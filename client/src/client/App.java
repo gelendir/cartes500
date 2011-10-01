@@ -28,14 +28,16 @@ public class App {
 	
 	private static CommandLine parseArgs(String[] args) {
 		
-		Options options = new Options();
-
+		Options options = new Options();		
+		
+		@SuppressWarnings("static-access")
 		Option port = OptionBuilder.withLongOpt("port")
 									.withArgName("PORT")
 									.hasArg()
 									.withDescription("Port of the rmi registry server")
 									.create("p");
 		
+		@SuppressWarnings("static-access")
 		Option host = OptionBuilder.withLongOpt("host")
 									.withArgName("HOST")
 									.hasArg()
