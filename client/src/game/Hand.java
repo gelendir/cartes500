@@ -38,4 +38,16 @@ public class Hand {
 	public int getNumberOfCard() {
 		return this.numberOfCard;
 	}
+	
+	public String toString() {
+		
+		String hand = "";
+	
+		for( Card card : this.getCards() ) {
+			hand += card.toString() + "\n";
+		}
+		
+		return hand;
+		
+	}
 }

@@ -41,4 +41,8 @@ public class Player {
 	public void endTurn() {
 		this.turn = false;
 	}
+	
+	public String toString() {
+		return this.name;
+	}
 }
