@@ -1,5 +1,8 @@
 package client;
 
+import game.Game;
+import game.Player;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -16,6 +19,7 @@ import org.apache.commons.cli.PosixParser;
 
 import server.Server;
 import server.ServerInterface;
+import view.ConsoleView;
 
 public class App {
 	
@@ -70,7 +74,6 @@ public class App {
 
 		}
 
-		//So Greg is Greg...
 		return cmd;
 	}
 	
@@ -123,8 +126,11 @@ public class App {
 			
 			System.out.println(host);
 			System.out.println(port);
+			System.out.println();
 			
 			//App.connectToServer( host, port );
+			
+			ConsoleView view = ConsoleView.welcome( new Server(), new Game() );
 			
 		}
 

@@ -14,7 +14,6 @@ public abstract class AbstractView {
 		
 		this.server = server;
 		this.game = game;
-		this.player = player;
 		
 	}
 	
@@ -29,5 +28,5 @@ public abstract class AbstractView {
 	protected Player getPlayer() {
 		return this.player;
 	}
-	
+
 }
