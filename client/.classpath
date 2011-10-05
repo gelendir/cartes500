@@ -7,5 +7,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/cartes500Client/lib/commons-cli-1.2-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
