@@ -1,10 +1,14 @@
 package game;
 
+import game.enumeration.Suit;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Hand {
 	private transient ArrayList<Card> hand = new ArrayList<Card>(10);
 	private int numberOfCard = 0;
+	private Suit suit = null;
 	
 	public Hand(Deck deck) throws Exception {
 		for(int i = 0; i < 10; ++i) {
@@ -16,6 +20,18 @@ public class Hand {
 				++this.numberOfCard;
 			}
 		}
+	}
+	
+	public Suit getSuit() {
+		return this.suit;
+	}
+	
+	public boolean setSuit(Suit suit) {
+		if(this.suit ==  Suit.BLACK || this.suit == Suit.COLOR)
+			return false;
+		
+		this.suit = suit;
+		return true;
 	}
 	
 	public Card[] getCards() {
@@ -33,6 +49,26 @@ public class Hand {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<Card> getPlayableCard() {
+		if(this.suit !=  null && this.hand != null) {
+			ArrayList<Card> ret = new ArrayList<Card>();
+			Iterator<Card> itr = this.hand.iterator(); 
+			
+			while(itr.hasNext()) {
+				Card card = itr.next();
+				if(card.getSuit().equals(this.suit)) {
+					ret.add(card);
+				}
+			}
+			
+			if(ret.size() != 0) {
+				return ret;
+			}		
+		}
+		
+		return this.hand;
 	}
 	
 	public int getNumberOfCard() {
