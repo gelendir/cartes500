@@ -7,7 +7,7 @@ public class Card {
 	private final Suit suit;
 	private final CardValue value;
 	
-	public Card(Suit suit, CardValue value) throws Exception {
+	public Card(Suit suit, CardValue value) { //throws Exception {
 		if(value.equals(CardValue.JOKER)) {
 			if(!suit.equals(Suit.BLACK) && !suit.equals(Suit.COLOR)) {
 				//throw new Exception("Playing Card does not exist.");

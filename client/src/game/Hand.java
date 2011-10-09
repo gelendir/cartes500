@@ -22,11 +22,11 @@ public class Hand {
 		}
 	}
 	
-	public Suit getSuit() {
+	public Suit getGameSuit() {
 		return this.suit;
 	}
 	
-	public boolean setSuit(Suit suit) {
+	public boolean setGameSuit(Suit suit) {
 		if(this.suit ==  Suit.BLACK || this.suit == Suit.COLOR)
 			return false;
 		
@@ -39,6 +39,10 @@ public class Hand {
 			return null;
 		else
 			return (Card[])this.hand.toArray();
+	}
+	
+	public void setCards(ArrayList<Card> cards) {
+		this.hand = (ArrayList<Card>) cards.clone();
 	}
 	
 	public boolean playCard(Card card) {
