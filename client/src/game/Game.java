@@ -33,15 +33,13 @@ public class Game {
 		this.players = players;
 	}
 
-	
-	//TODO: À débuguer
 	public ArrayList<Card> getPlayableBets(int indexPlayer) {
 		Card first = null;
-		ArrayList<Card> bets = new ArrayList<Card>();
+		ArrayList<Card> bets = new ArrayList<Card>(25);
 
 		if(indexPlayer == 0) {
 			try {
-				first = new Card(Suit.BLACK, CardValue.FIVE);
+				first = new Card(Suit.NONE, CardValue.FIVE);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -53,25 +51,27 @@ public class Game {
 
 		if(first != null) {
 			int cardValueIndex = first.getCardValue().ordinal();
-			int suitIndex= first.getSuit().ordinal();
+			int suitIndex= first.getSuit().ordinal() + 1;
 
 			CardValue values[] = CardValue.values();
 			Suit suits[] = Suit.values();
 
 			for(int j = cardValueIndex; j <= CardValue.TEN.ordinal(); ++j) {
 
-				for(int i = suitIndex; i <= Suit.HEARTS.ordinal(); ++i) {
-					
+				for(int i = suitIndex; i <= Suit.NONE.ordinal(); ++i) {
+
 					try {
 						bets.add(new Card(suits[i], values[j]));
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					
+
 				}
 
+				suitIndex = Suit.SPADES.ordinal();
+
 			}
-			
+
 		}
 
 		return bets;
@@ -87,25 +87,42 @@ public class Game {
 	}
 
 	private boolean isValidBet(Card bet, int indexPlayer) {
+		
 		if(bet != null) {
-			for(int i = 0; i < indexPlayer; ++i) {
-				if(this.players[i] != null && this.players[i].getOriginalBet() != null) {
-					if(this.players[i].getOriginalBet().getCardValue().getValue() >= bet.getCardValue().getValue()) {
-						return false;
-					}
-					else if(this.players[i].getOriginalBet().getCardValue().getValue() == bet.getCardValue().getValue()) {
-						if(this.players[i].getOriginalBet().getSuit().getValue() >= bet.getSuit().getValue()) {
-							return false;
+			
+			if(bet.getCardValue().ordinal() >= CardValue.SIX.ordinal() && bet.getCardValue().ordinal() <= CardValue.TEN.ordinal()) {
+				
+				if(bet.getSuit() != Suit.COLOR) {
+					
+					for(int i = 0; i < indexPlayer; ++i) {
+						
+						if(this.players[i] != null && this.players[i].getOriginalBet() != null) {
+							
+							if(this.players[i].getOriginalBet().getCardValue().getValue() >= bet.getCardValue().getValue()) {
+								return false;
+							}
+							else if(this.players[i].getOriginalBet().getCardValue().getValue() == bet.getCardValue().getValue()) {
+								
+								if(this.players[i].getOriginalBet().getSuit().getValue() >= bet.getSuit().getValue()) {
+									return false;
+								}
+								
+							}
+							
 						}
+						
 					}
+					
 				}
+				
 			}
+			
 		}
 
 		return true;
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws Exception {
 		Game game = new Game();
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
@@ -113,5 +130,8 @@ public class Game {
 		}
 		game.setPlayers(players);
 		ArrayList<Card> bets = game.getPlayableBets(0);
+		boolean result = game.isValidBet(new Card(Suit.CLUBS, CardValue.SEVEN), 0);
+		game.setBet(new Card(Suit.CLUBS, CardValue.SEVEN), 0);
+		bets = game.getPlayableBets(1);
 	}
 }

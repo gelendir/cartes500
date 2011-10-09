@@ -5,8 +5,9 @@ public enum Suit {
 	CLUBS (2), 
 	DIAMONDS (3),
 	HEARTS (4),
-	BLACK (5),
-	COLOR (5);
+	NONE (5), //Utile pour la mise (bet) de départ
+	BLACK (6),
+	COLOR (7);
 	
 	private final int value;
 	
