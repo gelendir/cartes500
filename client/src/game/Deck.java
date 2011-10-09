@@ -65,4 +65,8 @@ public class Deck {
 	public boolean isEmpty() {
 		return cards.empty();
 	}
+	
+	public Stack<Card> getDeck() {
+		return this.cards;
+	}
 }
