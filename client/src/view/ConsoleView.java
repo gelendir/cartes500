@@ -6,11 +6,11 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import game.Bet;
 import game.Card;
-import game.Game;
 import game.Hand;
 import game.Player;
-import server.Server;
+import game.enumeration.Suit;
 import server.Turn;
 
 public class ConsoleView extends AbstractView {
@@ -21,33 +21,45 @@ public class ConsoleView extends AbstractView {
 	protected PrintStream out;
 	protected PropertyResourceBundle bundle;
 	
-	private ConsoleView( Server server, Game game, Player player, 
-			Scanner in, PrintStream out, PropertyResourceBundle bundle ) {
+	public ConsoleView( Scanner in, PrintStream out ) {
 		
-		super( server, game, player );
+		super();
 		this.in = in;
 		this.out = out;
-		this.bundle = bundle;
+		this.bundle = (PropertyResourceBundle) ResourceBundle.getBundle( ConsoleView.BUNDLE );
 		
 	}
 	
-	public static ConsoleView welcome( Server server, Game game ) {
+	public void welcome() {
 		
-		PropertyResourceBundle bundle = (PropertyResourceBundle) ResourceBundle.getBundle( ConsoleView.BUNDLE );
-		PrintStream out = System.out;
-		Scanner in = new Scanner( System.in );
+		this.out.println( bundle.getString("banner") );
+
+	}
+	
+	public void gameStarted() {
 		
-		out.println( bundle.getString("banner") );
-		out.println( bundle.getString("enterName") );
+	}
+	
+	public Player createPlayer()
+	{
 		
-		String name = in.nextLine();
+		String name = "";
+		
+		while( name == "" || name == null ) {
+			this.out.println( this.bundle.getString("enterName") );
+			name = this.in.nextLine();
+		}
+		
+		String template = this.bundle.getString("welcomePlayer");
+		String msg = MessageFormat.format( template , name );
+		
+		this.out.println( msg );
 		
 		Player player = new Player( name );
 		
-		out.println( player );
-		
-		return new ConsoleView( server, game, player, in, out, bundle );
+		return player;
 	}
+	
 	
 	public void printTurn( Turn turn ) {
 		
@@ -76,6 +88,89 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	public void playerConnected( Player player ) {
+		
+		String msg = MessageFormat.format( 
+				this.bundle.getString("playerConnected"),
+				player.getName() 
+				);
+		
+		
+		this.out.println( msg );
+		
+	}
+	
+	public void playerHasBet( Player player, Bet bet ) {
+		
+		String msg = MessageFormat.format(
+				this.bundle.getString("playerBet"),
+				player.getName(),
+				Integer.toString( bet.getNbRounds() ),
+				bet.getSuit().toString()
+				);
+		
+		this.out.println( msg );
+		
+	}
+	
+	public void printWaitingForOtherPlayers() {
+		
+		this.out.println( this.bundle.getString("waitingForOtherPlayers") );
+		
+	}
+	
+	public Bet askBet( Hand hand ) {
+		
+		
+		this.out.println( this.bundle.getString("allPlayersConnected" ) );
+		
+		int nbRounds = -1;
+		Card[] cards = hand.getCards();
+		int maxRounds = cards.length;
+		int suitId = 0;
+		int maxSuit = Suit.values().length;
+		
+		this.printHand( hand );
+		
+		while( nbRounds < 0 || nbRounds > maxRounds ) {
+			
+			this.out.println( this.bundle.getString( "playerAskBetNbCards" ) );
+			nbRounds = this.in.nextInt();
+			
+		}
+		
+		this.printSuits();
+
+		while( suitId <= 0 || suitId > maxSuit ) {
+			
+			this.out.println( this.bundle.getString( "playerAskBetSuit" ) );
+			suitId = this.in.nextInt();
+		}
+		
+		//TODO: ugly hack
+		Suit suit = null;
+		Suit[] suites = Suit.values();
+		for( int i = 0; i < suites.length && suit == null; i++ ) {
+			if( suites[i].getValue() == suitId ) {
+				suit = suites[i];
+			}
+		}
+		
+		return new Bet( nbRounds, suit );
+		
+	}
+	
+	public void printSuits() {
+		
+		String template = this.bundle.getString( "suitSelectionTemplate" );
+		
+		for( Suit s : Suit.values() ) {
+			String msg = MessageFormat.format( template, Integer.toString( s.getValue() ), s.toString() );
+			this.out.println( msg );
+		}
+		
+	}
+	
 	public Card getCardToPlay( Hand hand ) {
 		
 		int cardNumber = -1;
@@ -93,10 +188,14 @@ public class ConsoleView extends AbstractView {
 
 	}
 	
-	public void showPlayerTurn( Player player, Card card ) {
-		
+	public void showPlayerTurn( Turn turn ) {
+			
 		String template = this.bundle.getString("playerTurn");
-		String result = MessageFormat.format( template, player.toString(), card.toString() );
+		
+		String result = MessageFormat.format( 
+				template, turn.getLatestPlayer().toString(), 
+				turn.getLatestCard().toString() 
+				);
 		
 		this.out.println( result );
 		
