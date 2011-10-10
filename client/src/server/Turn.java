@@ -11,6 +11,8 @@ public class Turn {
 	final private static int MAX_CARDS = 4;
 	
 	private HashMap<Player, Card> cards;
+	private Player latestPlayer = null;
+	private Card latestCard = null;
 	
 	public Turn() {
 		this.cards = new HashMap<Player, Card>( Turn.MAX_CARDS );
@@ -25,6 +27,8 @@ public class Turn {
 		}
 		
 		this.cards.put( player, card );
+		this.latestPlayer = player;
+		this.latestCard = card;
 		
 	}
 	
@@ -44,6 +48,14 @@ public class Turn {
 		}
 		
 		return result;
+	}
+	
+	public Player getLatestPlayer() {
+		return this.latestPlayer;
+	}
+	
+	public Card getLatestCard() {
+		return this.latestCard;
 	}
 
 }
