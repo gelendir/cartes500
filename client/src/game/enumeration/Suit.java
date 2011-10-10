@@ -1,5 +1,8 @@
 package game.enumeration;
 
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+
 public enum Suit {
 	SPADES (1),
 	CLUBS (2), 
@@ -9,6 +12,9 @@ public enum Suit {
 	BLACK (6),
 	COLOR (7);
 	
+	static private final String BUNDLE_NAME= "suit";
+	static private final PropertyResourceBundle BUNDLE = (PropertyResourceBundle) ResourceBundle.getBundle( Suit.BUNDLE_NAME );
+	
 	private final int value;
 	
 	private Suit(int value) {
@@ -17,6 +23,12 @@ public enum Suit {
 	
 	public int getValue() {
 		return this.value;
+	}
+	
+	public String toString() {
+		
+		return Suit.BUNDLE.getString( Integer.toString( this.value ) );
+		
 	}
 	
 }
