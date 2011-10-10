@@ -1,6 +1,8 @@
 package view;
 
 import server.Server;
+import server.Turn;
+import game.Bet;
 import game.Card;
 import game.Game;
 import game.Hand;
@@ -12,10 +14,7 @@ public abstract class AbstractView {
 	private Server server;
 	private Player player;
 	
-	public AbstractView( Server server, Game game, Player player ) {
-		
-		this.server = server;
-		this.game = game;
+	public AbstractView() {
 		
 	}
 	
@@ -31,8 +30,18 @@ public abstract class AbstractView {
 		return this.player;
 	}
 	
+	public abstract Player createPlayer();
+	
 	public abstract Card getCardToPlay( Hand hand );
 	
-	public abstract void showPlayerTurn( Player player, Card card );
+	public abstract void showPlayerTurn( Turn turn );
+
+	public abstract void playerConnected( Player player );
+	
+	public abstract Bet askBet( Hand hand );
+	
+	public abstract void playerHasBet( Player player, Bet bet );
+
+	public abstract void welcome();
 	
 }
