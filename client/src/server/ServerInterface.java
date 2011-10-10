@@ -1,5 +1,6 @@
 package server;
 
+import game.Bet;
 import game.Card;
 import game.Player;
 
@@ -15,6 +16,8 @@ public interface ServerInterface extends Remote {
 	public void playCard( Client client, Card card ) throws RemoteException;
 	
 	public void disconnectClient( Client client );
+	
+	public void setBetForPlayer( Client client, Bet bet );
 	
 	public Player getCurrentPlayer();
 	

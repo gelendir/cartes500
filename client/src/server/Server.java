@@ -1,5 +1,6 @@
 package server;
 
+import game.Bet;
 import game.Card;
 import game.Player;
 
@@ -45,6 +46,12 @@ public class Server implements ServerInterface {
 	public int getScore() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void setBetForPlayer(Client client, Bet bet) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
