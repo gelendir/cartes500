@@ -45,4 +45,11 @@ public class Player {
 	public String toString() {
 		return this.name;
 	}
+	
+	public boolean equals( Player player ) {
+		
+		return this.name.equals( player.name );
+		
+	}
+	
 }
