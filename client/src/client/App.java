@@ -1,12 +1,10 @@
 package client;
 
-import game.Game;
-import game.Player;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -17,6 +15,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
+import server.MockServer;
 import server.Server;
 import server.ServerInterface;
 import view.ConsoleView;
@@ -130,7 +129,16 @@ public class App {
 			
 			//App.connectToServer( host, port );
 			
-			ConsoleView view = ConsoleView.welcome( new Server(), new Game() );
+			
+			ConsoleView view = new ConsoleView( new Scanner( System.in ), System.out );
+			MockServer server = new MockServer();
+			
+			try {
+				Client client = new Client( server, view );
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 
