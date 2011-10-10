@@ -35,10 +35,14 @@ public class Hand {
 	}
 	
 	public Card[] getCards() {
-		if(this.hand == null)
+		if(this.hand == null) {
 			return null;
-		else
-			return (Card[])this.hand.toArray();
+		} else {
+			Card cards[] = new Card[ this.hand.size() ];
+			this.hand.toArray( cards );
+			return cards;
+			//return (Card[])this.hand.toArray();
+		}
 	}
 	
 	public void setCards(ArrayList<Card> cards) {
