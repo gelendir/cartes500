@@ -1,7 +1,5 @@
-package server;
+package game;
 
-import game.Card;
-import game.Player;
 
 import java.util.HashMap;
 import java.util.Map;
