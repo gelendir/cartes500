@@ -18,7 +18,8 @@ public class Deck {
 			for(int j = 0; j < values.length - 1; ++j) {
 
 				if(!suits[i].equals(Suit.BLACK) && 
-						!suits[i].equals(Suit.COLOR)) {
+						!suits[i].equals(Suit.COLOR) &&
+						!suits[i].equals(Suit.NONE)) {
 
 					if(!values[j].equals(CardValue.JOKER) && 
 							!values[j].equals(CardValue.TWO) && 
