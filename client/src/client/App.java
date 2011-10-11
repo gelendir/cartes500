@@ -1,5 +1,7 @@
 package client;
 
+import game.Game;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -28,6 +30,7 @@ public class App {
 	
 	private static ServerInterface server = null;
 	private static Registry registry = null;
+	private static Game game = new Game();
 	
 	private static CommandLine parseArgs(String[] args) {
 		
@@ -126,7 +129,7 @@ public class App {
 			//App.connectToServer( host, port );
 			
 			ConsoleView view = new ConsoleView( new Scanner( System.in ), System.out );
-			MockServer server = new MockServer();
+			MockServer server = new MockServer(App.game);
 			
 			try {
 				Client client = new Client( server, view );

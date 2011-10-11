@@ -35,8 +35,12 @@ public class Game {
 		this.players = players;
 	}
 
-	public int getBetWinner() {
-		return this.indexPlayerWinner;
+	public Suit getGameSuit() {
+		return this.players[this.indexPlayerWinner].getOriginalBet().getSuit();
+	}
+	
+	public Player getBestPlayerBet() {
+		return this.players[this.indexPlayerWinner];
 	}
 
 	public boolean chooseCardFromSecretBet(ArrayList<Card> finalHand, Player player) {
