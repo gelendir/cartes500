@@ -77,6 +77,7 @@ public class App {
 		}
 
 		return cmd;
+		//Test push
 	}
 	
 	private static boolean connectToServer( String host, int port ) {
