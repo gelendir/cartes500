@@ -3,8 +3,9 @@ package game;
 public class Player {
 	private Hand hand = null;
 	private Card bet = null;
-	private boolean turn = false;
+	//private boolean turn = false;
 	private String name = "";
+	private int turnWin = 0;
 	
 	public Player(String name) {
 		this.name = name;
@@ -30,7 +31,16 @@ public class Player {
 		return this.hand;
 	}
 	
-	public boolean isTurn() {
+	public int getTurnWin() {
+		return this.turnWin;
+	}
+	
+	public void addTurnWin() {
+		++this.turnWin;
+	}
+	
+	
+	/*public boolean isTurn() {
 		return this.turn;
 	}
 	
@@ -40,7 +50,7 @@ public class Player {
 	
 	public void endTurn() {
 		this.turn = false;
-	}
+	}*/
 	
 	public String toString() {
 		return this.name;
