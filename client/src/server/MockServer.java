@@ -37,6 +37,11 @@ public class MockServer extends Server {
 		this.client = client;
 		this.player = player;
 
+		//On set les joueurs à la Game.
+		Player[] playersToSend = { this.player, new Player("p2"), new Player("p3"), new Player("p4") };
+		this.game.setPlayers(playersToSend);
+		
+		
 		Player[] players = { new Player("p2"), new Player("p3"), new Player("p4") };
 
 		try {
@@ -68,10 +73,16 @@ public class MockServer extends Server {
 		Bet bet3 = new Bet( 3, Suit.DIAMONDS );
 		Bet bet4 = new Bet( 4, Suit.HEARTS );
 
+		this.game.setBet(bet, this.player);
+		this.game.setBet(bet2, players[0]);
+		this.game.setBet(bet3, players[1]);
+		this.game.setBet(bet4, players[2]);
+		
 		client.notifyPlayerBet( players[0], bet2 );
 		client.notifyPlayerBet( players[1], bet3 );
 		client.notifyPlayerBet( players[2], bet4 );
 
+		
 		Card newCards[] = new Card[6];
 
 		for( int i = 0; i < 6; i++ ) {
@@ -105,7 +116,8 @@ public class MockServer extends Server {
 		System.out.println("SERVER: player " + client.getPlayer().toString() + " has played card " + card.toString() );
 
 		try {
-			turn.addCard( client.getPlayer() , card );
+			turn.addCard( this.player , card );
+			this.player.getHand().playCard(card);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,6 +131,7 @@ public class MockServer extends Server {
 
 			try {
 				turn.addCard(player, toPlay);
+				player.getHand().playCard(toPlay);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
