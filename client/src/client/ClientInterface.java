@@ -3,12 +3,12 @@ package client;
 import game.Bet;
 import game.Hand;
 import game.Player;
+import game.Turn;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import server.Turn;
 
 public interface ClientInterface extends Remote {
 	
