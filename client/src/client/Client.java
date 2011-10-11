@@ -113,4 +113,13 @@ public class Client implements ClientInterface {
 		
 	}
 
+	@Override
+	public void notifyChangeCardsAfterBet( Card[] newCards ) {
+		
+		ArrayList<Card> cards = this.view.changeCards( this.player.getHand(), newCards );
+		this.server.setNewHandAfterBet( this, cards );
+		
+	}
+
+
 }

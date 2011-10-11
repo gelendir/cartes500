@@ -5,6 +5,7 @@ import game.Card;
 import game.Player;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import client.Client;
 
@@ -50,6 +51,12 @@ public class Server implements ServerInterface {
 
 	@Override
 	public void setBetForPlayer(Client client, Bet bet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setNewHandAfterBet(Client client, ArrayList<Card> cards) {
 		// TODO Auto-generated method stub
 		
 	}

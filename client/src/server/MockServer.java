@@ -68,6 +68,19 @@ public class MockServer extends Server {
 		client.notifyPlayerBet( players[1], bet3 );
 		client.notifyPlayerBet( players[2], bet4 );
 		
+		Card newCards[] = new Card[6];
+		
+		for( int i = 0; i < 6; i++ ) {
+			newCards[i] = deck.takeCard();
+		}
+		
+		try {
+			client.notifyChangeCardsAfterBet( newCards );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		ArrayList<Player> playerOrder = new ArrayList<Player>();
 		playerOrder.add( this.player );
 		playerOrder.add( players[0] );
@@ -142,6 +155,13 @@ public class MockServer extends Server {
 	public int getScore() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	@Override
+	public void setNewHandAfterBet(Client client, ArrayList<Card> cards) {
+		
+		System.out.println("SERVER: Player " + client.getPlayer().toString() + " has new hand " + cards.toString() );
+		
 	}
 
 }

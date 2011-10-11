@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Hand {
+	
+	final static public int MAX_CARDS = 10;
+	
 	private transient ArrayList<Card> hand = new ArrayList<Card>(10);
 	private int numberOfCard = 0;
 	private Suit suit = null;

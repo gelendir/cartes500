@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+
 import server.Server;
 import game.Bet;
 import game.Card;
@@ -43,5 +45,7 @@ public abstract class AbstractView {
 	public abstract void playerHasBet( Player player, Bet bet );
 
 	public abstract void welcome();
+	
+	public abstract ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards );
 	
 }

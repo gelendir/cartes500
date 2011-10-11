@@ -6,6 +6,7 @@ import game.Player;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import client.Client;
 
@@ -24,5 +25,7 @@ public interface ServerInterface extends Remote {
 	public Player getWinner();
 	
 	public int getScore();
+	
+	public void setNewHandAfterBet( Client client, ArrayList<Card> cards );
 	
 }
