@@ -123,12 +123,7 @@ public class App {
 				port = Integer.parseInt( cmd.getOptionValue("port") );
 			}
 			
-			System.out.println(host);
-			System.out.println(port);
-			System.out.println();
-			
 			//App.connectToServer( host, port );
-			
 			
 			ConsoleView view = new ConsoleView( new Scanner( System.in ), System.out );
 			MockServer server = new MockServer();
