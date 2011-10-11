@@ -64,37 +64,48 @@ public class Hand {
 		if(this.suit !=  null && this.hand != null) {
 			ArrayList<Card> ret = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
+			Card add = null;
 			
 			while(itr.hasNext()) {
-				Card card = itr.next();
-				if(card.getSuit().equals(this.suit)) {
-					ret.add(card);
+				add = itr.next();
+				if(add.getSuit().equals(this.suit)) {
+					ret.add(add);
 				}
 			}
 			
 			if(this.suit == Suit.SPADES) {
-				Card add = new Card(Suit.CLUBS, CardValue.JACK);
+				add = new Card(Suit.CLUBS, CardValue.JACK);
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.CLUBS) {
-				Card add = new Card(Suit.SPADES, CardValue.JACK);
+				add = new Card(Suit.SPADES, CardValue.JACK);
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.DIAMONDS) {
-				Card add = new Card(Suit.HEARTS, CardValue.JACK);
+				add = new Card(Suit.HEARTS, CardValue.JACK);
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.HEARTS) {
-				Card add = new Card(Suit.DIAMONDS, CardValue.JACK);
+				add = new Card(Suit.DIAMONDS, CardValue.JACK);
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
+			}
+			
+			add = new Card(Suit.COLOR, CardValue.JOKER);
+			if(this.hand.contains(add)) {
+				ret.add(add);
+			}
+			
+			add = new Card(Suit.BLACK, CardValue.JOKER);
+			if(this.hand.contains(add)) {
+				ret.add(add);
 			}
 			
 			if(ret.size() != 0) {
