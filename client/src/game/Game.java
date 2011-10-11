@@ -1,10 +1,7 @@
 package game;
 
-import game.enumeration.CardValue;
 import game.enumeration.Suit;
-
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class Game {
 
