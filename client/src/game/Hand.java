@@ -60,8 +60,8 @@ public class Hand {
 		return false;
 	}
 	
-	public ArrayList<Card> getPlayableCard() {
-		if(this.suit !=  null && this.hand != null) {
+	public ArrayList<Card> getPlayableCard(Suit turn) {
+		if(this.suit !=  null && !this.suit.equals(Suit.NONE) && this.hand != null) {
 			ArrayList<Card> ret = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
 			Card add = null;

@@ -1,6 +1,8 @@
 package game;
 
 
+import game.enumeration.Suit;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,9 +13,12 @@ public class Turn {
 	private HashMap<Player, Card> cards;
 	private Player latestPlayer = null;
 	private Card latestCard = null;
+	private Suit suit = null;
+	private boolean haveSort = false;
 	
-	public Turn() {
+	public Turn(Suit suit) {
 		this.cards = new HashMap<Player, Card>( Turn.MAX_CARDS );
+		this.suit = suit;
 	}
 	
 	public void addCard( Player player, Card card ) throws Exception {
@@ -27,6 +32,14 @@ public class Turn {
 		this.cards.put( player, card );
 		this.latestPlayer = player;
 		this.latestCard = card;
+		
+		if(this.suit.equals(Suit.NONE)) {
+			this.suit = card.getSuit();
+		}
+		
+		if(this.suit.equals(card.getSuit())) {
+			this.haveSort = true;
+		}
 		
 	}
 	
@@ -55,5 +68,22 @@ public class Turn {
 	public Card getLatestCard() {
 		return this.latestCard;
 	}
-
+	
+	public Player getWinner() {
+		Player winner = null;
+		Card cardWin = null;
+		for(Map.Entry<Player, Card> entry : this.cards.entrySet()) {
+			Player actualPlayer = entry.getKey();
+			Card actuelCard = entry.getValue();
+			if(cardWin != null) {
+				winner = actualPlayer;
+				cardWin = actuelCard;
+			}
+			else {
+				
+			}
+		}
+		
+		return winner;
+	}
 }
