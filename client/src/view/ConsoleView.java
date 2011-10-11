@@ -2,6 +2,7 @@ package view;
 
 import java.io.PrintStream;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -70,13 +71,25 @@ public class ConsoleView extends AbstractView {
 	
 	public void printHand( Hand hand ) {
 		
-		Card[] cards = hand.getCards();
+		String banner = this.bundle.getString("currentHandBanner");
+		this.printHand( hand, banner );
+		
+	}
+	
+	public void printHand( Hand hand, String banner ) {
+		
+		this.printCards( hand.getCards(), banner );
+		
+	}
+	
+	public void printCards( Card[] cards, String banner ) {
+
 		Card card = null;
 		
 		String cardTemplate = this.bundle.getString("cardSelectionTemplate");
 		String cardLine = "";
 		
-		this.out.println( this.bundle.getString("currentHandBanner") );
+		this.out.println( banner );
 		
 		for( int i = 0; i < cards.length; ++i ) {
 			
@@ -85,6 +98,8 @@ public class ConsoleView extends AbstractView {
 			this.out.println( cardLine );
 					
 		}
+		
+		this.out.println();
 		
 	}
 	
@@ -197,6 +212,95 @@ public class ConsoleView extends AbstractView {
 				);
 		
 		this.out.println( result );
+		
+	}
+	
+	public boolean validateCommaList( String list ) {
+		
+		int number;
+		
+		if( list == null ) {
+			return false;
+		}
+		
+		for( String token: list.split(",") ) {
+			try {
+				number = Integer.parseInt( token );
+			} catch ( NumberFormatException e ) {
+				return false;
+			}
+			if( number < 0 ) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards ) {
+		
+		Card[] oldCards = oldHand.getCards();
+		String selection = null;
+		
+		ArrayList<Card> discard = new ArrayList<Card>();
+		ArrayList<Card> selected = new ArrayList<Card>();
+		ArrayList<Card> newCards = new ArrayList<Card>( Hand.MAX_CARDS );
+			
+		//Print the cards in the players' hand and the new cards
+		this.out.println( this.bundle.getString("changeCards") );
+		this.printHand( oldHand );
+		this.printCards( availableCards, this.bundle.getString("changeCardsNewHand") );
+		
+		//Ask the player for the list of cards in his hand to discard
+		while( ! this.validateCommaList( selection ) ) {
+			this.out.println( this.bundle.getString("changeCardsSelectOldCards") );
+			selection = this.in.nextLine();
+		}
+		
+		//Take the cards selected and create a list of cards to discard
+		for( String token : selection.split(",") ) {
+			discard.add( oldCards[ Integer.parseInt( token ) ] ); 
+		}
+		
+		if( discard.size() > 0 ) {
+		
+			//Select cards from the new hand
+			int nbDiscard = discard.size();
+			selection = null;
+			
+			//Prepare message telling the player to select new cards
+			String template = this.bundle.getString("changeCardsSelectNewCards");
+			String msg = MessageFormat.format( template, Integer.toString( nbDiscard ) );
+			
+			while( 	selection == null ||
+					(	!this.validateCommaList( selection ) &&
+						selection.split(",").length != nbDiscard
+					)
+				)
+			{
+				this.out.println( msg );
+				selection = this.in.nextLine();
+			}
+			
+			for( String token : selection.split(",") ) {
+				selected.add( availableCards[ Integer.parseInt( token ) ] );
+			}
+			
+		}
+		
+		//Create list of new cards from the combination of cards that have not been discarded
+		//and the new cards selected by the player
+		for( Card c : oldCards ) {
+			if( !discard.contains( c ) ) {
+				newCards.add( c );
+			}
+		}
+		
+		for( Card c : selected ) {
+			newCards.add( c );
+		}
+		
+		return newCards;
 		
 	}
 
