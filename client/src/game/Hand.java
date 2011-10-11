@@ -1,5 +1,6 @@
 package game;
 
+import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
 import java.util.ArrayList;
@@ -68,6 +69,31 @@ public class Hand {
 				Card card = itr.next();
 				if(card.getSuit().equals(this.suit)) {
 					ret.add(card);
+				}
+			}
+			
+			if(this.suit == Suit.SPADES) {
+				Card add = new Card(Suit.CLUBS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.CLUBS) {
+				Card add = new Card(Suit.SPADES, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.DIAMONDS) {
+				Card add = new Card(Suit.HEARTS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.HEARTS) {
+				Card add = new Card(Suit.DIAMONDS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
 				}
 			}
 			
