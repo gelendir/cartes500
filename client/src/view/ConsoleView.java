@@ -120,19 +120,17 @@ public class ConsoleView extends AbstractView {
 	}
 	
 	public Bet askBet( Hand hand ) {
-		
-		
+				
 		this.out.println( this.bundle.getString("allPlayersConnected" ) );
 		
 		int nbRounds = -1;
-		Card[] cards = hand.getCards();
-		int maxRounds = cards.length;
-		int suitId = 0;
-		int maxSuit = Suit.values().length;
+		int nbSuit = -1;
+		
+		Suit suit = Suit.NONE;
 		
 		this.printHand( hand );
 		
-		while( nbRounds < 0 || nbRounds > maxRounds ) {
+		while ( ! ( nbRounds == 0 || (nbRounds >= Bet.MIN_BET && nbRounds <= Bet.MAX_BET ) ) ) {
 			
 			this.out.println( this.bundle.getString( "playerAskBetNbCards" ) );
 			nbRounds = this.in.nextInt();
@@ -140,20 +138,17 @@ public class ConsoleView extends AbstractView {
 		}
 		
 		this.printSuits();
-
-		while( suitId <= 0 || suitId > maxSuit ) {
-			
-			this.out.println( this.bundle.getString( "playerAskBetSuit" ) );
-			suitId = this.in.nextInt();
-		}
 		
-		//TODO: ugly hack
-		Suit suit = null;
-		Suit[] suites = Suit.values();
-		for( int i = 0; i < suites.length && suit == null; i++ ) {
-			if( suites[i].getValue() == suitId ) {
-				suit = suites[i];
+		if( nbRounds > 0 ) {
+			
+			while( nbSuit < 0 || nbSuit > Bet.SUITS.length ) {
+				
+				this.out.println( this.bundle.getString( "playerAskBetSuit" ) );
+				nbSuit = this.in.nextInt();
 			}
+			
+			suit = Bet.SUITS[ nbSuit ];
+			
 		}
 		
 		return new Bet( nbRounds, suit );
@@ -164,9 +159,13 @@ public class ConsoleView extends AbstractView {
 		
 		String template = this.bundle.getString( "suitSelectionTemplate" );
 		
-		for( Suit s : Suit.values() ) {
-			String msg = MessageFormat.format( template, Integer.toString( s.getValue() ), s.toString() );
+		for( int i = 0; i < Bet.SUITS.length; i++ ) {
+			
+			Suit s = Bet.SUITS[ i ];
+			
+			String msg = MessageFormat.format( template, Integer.toString( i ), s.toString() );
 			this.out.println( msg );
+			
 		}
 		
 	}
