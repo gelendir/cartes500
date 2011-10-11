@@ -64,11 +64,36 @@ public class Hand {
 	}
 	
 	public ArrayList<Card> getPlayableCard(Suit turn) {
-		if(this.suit !=  null && !this.suit.equals(Suit.NONE) && this.hand != null) {
+		if(this.suit !=  null && !this.suit.equals(Suit.NONE) && this.hand != null && turn != null) {
 			ArrayList<Card> ret = new ArrayList<Card>();
+			ArrayList<Card> trumpCardsGame = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
 			Card add = null;
 			
+			while(itr.hasNext()) {
+				add = itr.next();
+				if(add.getSuit().equals(turn)) {
+					ret.add(add);
+				}
+			}
+			
+			if(ret.size() != 0) {
+				add = new Card(Suit.COLOR, CardValue.JOKER);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+				
+				add = new Card(Suit.BLACK, CardValue.JOKER);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+				
+				return ret;
+			}
+			
+			
+			
+			//Si on n'a pas de carte avec l'atout du tour...
 			while(itr.hasNext()) {
 				add = itr.next();
 				if(add.getSuit().equals(this.suit)) {
@@ -101,19 +126,19 @@ public class Hand {
 				}
 			}
 			
-			add = new Card(Suit.COLOR, CardValue.JOKER);
-			if(this.hand.contains(add)) {
-				ret.add(add);
-			}
-			
-			add = new Card(Suit.BLACK, CardValue.JOKER);
-			if(this.hand.contains(add)) {
-				ret.add(add);
-			}
-			
 			if(ret.size() != 0) {
+				add = new Card(Suit.COLOR, CardValue.JOKER);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+				
+				add = new Card(Suit.BLACK, CardValue.JOKER);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+				
 				return ret;
-			}		
+			}
 		}
 		
 		return this.hand;
