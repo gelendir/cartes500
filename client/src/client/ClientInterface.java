@@ -1,6 +1,7 @@
 package client;
 
 import game.Bet;
+import game.Card;
 import game.Hand;
 import game.Player;
 
@@ -27,5 +28,7 @@ public interface ClientInterface extends Remote {
 	public void notifyExit() throws RemoteException;
 	
 	public void notifyPlayerBet( Player player, Bet bet );
+	
+	public void notifyChangeCardsAfterBet( Card[] newCards );
 
 }
