@@ -62,7 +62,7 @@ public class Client implements ClientInterface {
 	}
 
 	@Override
-	public void notifyWinner(Player player) throws RemoteException {
+	public void notifyWinner(Player player, Player player2) throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}

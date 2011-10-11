@@ -23,7 +23,7 @@ public interface ClientInterface extends Remote {
 	
 	public Bet notifyBettingTime( Hand hand ) throws RemoteException;
 	
-	public void notifyWinner( Player player ) throws RemoteException;
+	public void notifyWinner( Player player, Player player2 ) throws RemoteException;
 	
 	public void notifyExit() throws RemoteException;
 	
