@@ -3,12 +3,12 @@ package view;
 import java.util.ArrayList;
 
 import server.Server;
-import server.Turn;
 import game.Bet;
 import game.Card;
 import game.Game;
 import game.Hand;
 import game.Player;
+import game.Turn;
 
 public abstract class AbstractView {
 	

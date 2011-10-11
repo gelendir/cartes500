@@ -4,12 +4,12 @@ import game.Bet;
 import game.Card;
 import game.Hand;
 import game.Player;
+import game.Turn;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import server.Server;
-import server.Turn;
 import view.AbstractView;
 
 public class Client implements ClientInterface {

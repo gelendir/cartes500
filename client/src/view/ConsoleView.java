@@ -11,8 +11,8 @@ import game.Bet;
 import game.Card;
 import game.Hand;
 import game.Player;
+import game.Turn;
 import game.enumeration.Suit;
-import server.Turn;
 
 public class ConsoleView extends AbstractView {
 	

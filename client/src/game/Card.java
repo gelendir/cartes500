@@ -29,6 +29,16 @@ public class Card {
 		return this.value;
 	}
 	
+	public boolean equals(Object obj) {
+		if(obj instanceof Card) {
+			Card card = (Card)obj;
+			if(this.suit == card.suit && this.value == card.value) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String toString() {
 		String s = this.value.name().toLowerCase();
 		s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();

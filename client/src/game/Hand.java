@@ -1,5 +1,6 @@
 package game;
 
+import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
 import java.util.ArrayList;
@@ -66,12 +67,48 @@ public class Hand {
 		if(this.suit !=  null && this.hand != null) {
 			ArrayList<Card> ret = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
+			Card add = null;
 			
 			while(itr.hasNext()) {
-				Card card = itr.next();
-				if(card.getSuit().equals(this.suit)) {
-					ret.add(card);
+				add = itr.next();
+				if(add.getSuit().equals(this.suit)) {
+					ret.add(add);
 				}
+			}
+			
+			if(this.suit == Suit.SPADES) {
+				add = new Card(Suit.CLUBS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.CLUBS) {
+				add = new Card(Suit.SPADES, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.DIAMONDS) {
+				add = new Card(Suit.HEARTS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			else if(this.suit == Suit.HEARTS) {
+				add = new Card(Suit.DIAMONDS, CardValue.JACK);
+				if(this.hand.contains(add)) {
+					ret.add(add);
+				}
+			}
+			
+			add = new Card(Suit.COLOR, CardValue.JOKER);
+			if(this.hand.contains(add)) {
+				ret.add(add);
+			}
+			
+			add = new Card(Suit.BLACK, CardValue.JOKER);
+			if(this.hand.contains(add)) {
+				ret.add(add);
 			}
 			
 			if(ret.size() != 0) {
