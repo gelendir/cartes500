@@ -2,7 +2,7 @@ package game;
 
 public class Player {
 	private Hand hand = null;
-	private Card bet = null;
+	private Bet bet = null;
 	//private boolean turn = false;
 	private String name = "";
 	private int turnWin = 0;
@@ -15,11 +15,11 @@ public class Player {
 		return this.name;
 	}
 	
-	public void setOriginalBet(Card card) {
+	public void setOriginalBet(Bet card) {
 		this.bet = card;
 	}
 	
-	public Card getOriginalBet() {
+	public Bet getOriginalBet() {
 		return this.bet;
 	}
 	
