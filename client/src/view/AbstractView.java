@@ -52,4 +52,8 @@ public abstract class AbstractView {
 	
 	public abstract void showGameStart( Player first );
 	
+	public abstract void showWinners( Player player, Player player2 );
+	
+	public abstract void showTurnWinner( Player player );
+	
 }
