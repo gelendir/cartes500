@@ -17,15 +17,13 @@ public class Turn {
 	
 	private Player latestPlayer = null;
 	private Card latestCard = null;
-	private Suit suit = null;
-	
-	private boolean haveSort = false;
-	
+	private Suit gameSuit = null;
+
 	public Turn(Suit suit) {
 		this.cards = new LinkedHashMap<Player, Card>( Turn.MAX_CARDS );
-		this.suit = suit;
+		this.gameSuit = suit;
 	}
-	
+		
 	public void addCard( Player player, Card card ) throws Exception {
 		
 		if( this.cards.size() >= Turn.MAX_CARDS ) {
@@ -38,13 +36,15 @@ public class Turn {
 		this.latestPlayer = player;
 		this.latestCard = card;
 		
-		if(this.suit.equals(Suit.NONE)) {
-			this.suit = card.getSuit();
+	}
+	
+	public Suit getTurnSuit() {
+		
+		if( this.cards.size() == 0 ) {
+			return null;
 		}
 		
-		if(this.suit.equals(card.getSuit())) {
-			this.haveSort = true;
-		}
+		return this.cards.values().iterator().next().getSuit();
 		
 	}
 	
@@ -73,6 +73,8 @@ public class Turn {
 	public Card getLatestCard() {
 		return this.latestCard;
 	}
+	
+	
 	
 	private ArrayList<Card> filterCards( Suit suit ) {
 		
@@ -113,8 +115,8 @@ public class Turn {
 			throw new Exception("Not all players have played a card in this turn");
 		}
 		
-		Suit strongSuit = this.suit;
-		Suit turnSuit = this.cards.values().iterator().next().getSuit();
+		Suit strongSuit = this.gameSuit;
+		Suit turnSuit = this.getTurnSuit();
 		Suit weakSuit = null;
 		
 		Card colorJoker = new Card( Suit.COLOR, CardValue.JOKER );
