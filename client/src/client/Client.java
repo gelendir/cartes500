@@ -105,6 +105,7 @@ public class Client implements ClientInterface {
 			throws RemoteException {
 		
 		this.players = players;
+		this.view.showGameStart( players.get(0) );
 		
 	}
 
