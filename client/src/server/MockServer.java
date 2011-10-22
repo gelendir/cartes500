@@ -74,29 +74,37 @@ public class MockServer extends Server {
 		
 		//Bot bets
 		//For this prototype, we don't really care if the bots don't give realistic bets.
-		Bet[] bets = { 
-			bet, 
-			new Bet( MockServer.MIN_BET, Suit.CLUBS ), 
-			new Bet( MockServer.MIN_BET, Suit.DIAMONDS ), 
-			new Bet( MockServer.MIN_BET, Suit.HEARTS )
-		};
+		this.game.setBet( bet, this.player );
 		
-		for( int i = 0; i < MockServer.MAX_PLAYERS; i++ ) {
-			this.game.setBet( bets[i], this.players[i] );
-			if( i > 0 ) {
-				this.client.notifyPlayerBet( this.players[i] , bets[i] );
-			}
-		}
+		for( int i = 1; i < MockServer.MAX_PLAYERS; i++ ) {
 			
-		//For this prototype, we suppose that the client has the highest bet.
-		//So, we give him new cards
-		Card newCards[] = new Card[ MockServer.NB_CARDS_NEW_HAND ];
-
-		for( int i = 0; i < 6; i++ ) {
-			newCards[i] = deck.takeCard();
+			ArrayList<Bet> botBets = this.game.getPlayableBets( this.players[i] );
+			Bet botBet = null;
+			if( botBets.size() == 0 ) {
+				botBet = new Bet( 0, Suit.NONE );
+			} else {
+				botBet = botBets.get(0);
+			}
+			
+			this.game.setBet( botBet, this.players[i] );
+			this.client.notifyPlayerBet( this.players[i], botBet );
+			
 		}
+		
+		Player betWinner = this.game.getBestPlayerBet();
+		Suit gameSuit = this.game.getGameSuit();
+		this.client.notifyBetWinner( betWinner, gameSuit );
+		
+		if( betWinner == this.player ) {
+			
+			Card newCards[] = new Card[ MockServer.NB_CARDS_NEW_HAND ];
 
-		this.client.notifyChangeCardsAfterBet( newCards );
+			for( int i = 0; i < 6; i++ ) {
+				newCards[i] = deck.takeCard();
+			}
+			
+			this.client.notifyChangeCardsAfterBet( newCards );
+		}
 		
 	}
 	
