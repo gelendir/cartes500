@@ -35,4 +35,6 @@ public interface ClientInterface extends Remote {
 	
 	public void notifyBetWinner( Player player, Suit gameSuit );
 	
+	public void notifyTurnWinner( Player player );
+	
 }

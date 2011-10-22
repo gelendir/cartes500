@@ -65,7 +65,7 @@ public class Client implements ClientInterface {
 
 	@Override
 	public void notifyWinner(Player player, Player player2) throws RemoteException {
-		// TODO Auto-generated method stub
+		this.view.showWinners( player, player2 );
 
 	}
 
@@ -121,6 +121,11 @@ public class Client implements ClientInterface {
 	public void notifyBetWinner(Player player, Suit gameSuit) {
 		this.gameSuit = gameSuit;
 		this.view.showBetWinner( player, gameSuit );
+	}
+
+	@Override
+	public void notifyTurnWinner(Player player) {
+		this.view.showTurnWinner( player );
 	}
 
 }
