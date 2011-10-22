@@ -133,8 +133,8 @@ public class ConsoleView extends AbstractView {
 		String msg = MessageFormat.format(
 				this.bundle.getString("playerBet"),
 				player.getName(),
-				Integer.toString( bet.getNbRounds() ),
-				bet.getSuit().toString()
+				bet == null ? 0 : Integer.toString( bet.getNbRounds() ),
+				bet == null ? "Nothing" : bet.getSuit().toString()
 				);
 		
 		this.out.println( msg );
@@ -152,9 +152,9 @@ public class ConsoleView extends AbstractView {
 		this.out.println( this.bundle.getString("allPlayersConnected" ) );
 		
 		int nbRounds = -1;
-		int nbSuit = -1;
+		int nbSuit = -1;		
 		
-		Suit suit = Suit.NONE;
+		Bet bet = null;
 		
 		this.out.println( this.bundle.getString("currentHandBanner") );
 		this.printCards( hand.getCards() );
@@ -176,11 +176,13 @@ public class ConsoleView extends AbstractView {
 				nbSuit = this.in.nextInt();
 			}
 			
-			suit = Bet.SUITS[ nbSuit ];
+			Suit suit = Bet.SUITS[ nbSuit ];
+			
+			bet  = new Bet( nbRounds, suit );
 			
 		}
 		
-		return new Bet( nbRounds, suit );
+		return bet;
 		
 	}
 	
