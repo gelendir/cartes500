@@ -4,7 +4,7 @@ import game.Bet;
 import game.Card;
 import game.Hand;
 import game.Player;
-import game.Turn;
+import game.enumeration.Suit;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -15,7 +15,9 @@ public interface ClientInterface extends Remote {
 	
 	public void notifyStartNewGame( ArrayList<Player> players ) throws RemoteException;
 	
-	public void notifyTurn( Turn turn ) throws RemoteException;
+	public void notifyPlayerTurn( Player player, Card card ) throws RemoteException;
+	
+	public Card notifyYourTurn( Suit suit ) throws RemoteException;
 	
 	public void notifyPlayerDisconnect( Player player ) throws RemoteException;
 	
