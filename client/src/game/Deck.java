@@ -39,7 +39,7 @@ public class Deck {
 		this.cards.add(new Card(Suit.COLOR, CardValue.JOKER));
 	}
 
-	public void mixCard() {
+	public void mixCards() {
 		/*Random rand = new Random();
 		for(int i = 0; i < cards.size(); ++i) {
 			int pos = rand.nextInt(cards.size());
