@@ -49,9 +49,8 @@ public class MockServer extends Server {
 		this.client.connect();
 		
 		//Connections
-		this.game.setPlayers( players );
-		
-		
+		this.game.setPlayers( this.players );
+				
 		//Start i and 1 to skip the first player since it's us
 		for( int i = 1; i < this.players.length; i++ ) {
 			client.notifyPlayerConnect( this.players[i] );
@@ -59,30 +58,36 @@ public class MockServer extends Server {
 		
 	}
 	
-	private void createHandsAndBets() throws Exception {
+	private Bet createHands() throws Exception {
 		
-		//Client hand and bet
 		Hand hand = new Hand( deck );
 		Bet bet = this.client.notifyBettingTime( hand );
 		
-		System.out.println("SERVER: Player " + this.player.getName() + " has bet " + bet.toString() );
+		System.out.println("SERVER: Player " + this.player.getName() + " has bet " + bet );
 		
 		//Bot hands
-		players[1].setHand( new Hand( this.deck ) );
-		players[2].setHand( new Hand( this.deck ) );
-		players[3].setHand( new Hand( this.deck ) );
+		this.players[1].setHand( new Hand( this.deck ) );
+		this.players[2].setHand( new Hand( this.deck ) );
+		this.players[3].setHand( new Hand( this.deck ) );
 		
-		//Bot bets
-		//For this prototype, we don't really care if the bots don't give realistic bets.
+		
+		return bet;
+		
+	}
+	
+	private void createAndManageBets() throws Exception {
+		
+		//Client bet
+		Bet bet = this.createHands();
 		this.game.setBet( bet, this.player );
 		
+		//Bot bets		
 		for( int i = 1; i < MockServer.MAX_PLAYERS; i++ ) {
 			
 			ArrayList<Bet> botBets = this.game.getPlayableBets( this.players[i] );
 			Bet botBet = null;
-			if( botBets.size() == 0 ) {
-				botBet = new Bet( 0, Suit.NONE );
-			} else {
+			
+			if( botBets.size() > 0 ) {
 				botBet = botBets.get(0);
 			}
 			
@@ -147,7 +152,7 @@ public class MockServer extends Server {
 	public void startGame() throws RemoteException, Exception {
 		
 		this.connectPlayers();
-		this.createHandsAndBets();
+		this.createAndManageBets();
 		
 		ArrayList<Player> playingOrder = new ArrayList<Player>(Arrays.asList( players ));
 		this.client.notifyStartNewGame( playingOrder );
