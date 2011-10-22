@@ -48,4 +48,6 @@ public abstract class AbstractView {
 	
 	public abstract ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards );
 	
+	public abstract void showBetWinner( Player player, Suit gameSuit );
+	
 }

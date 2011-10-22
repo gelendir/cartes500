@@ -315,4 +315,13 @@ public class ConsoleView extends AbstractView {
 		
 	}
 
+	@Override
+	public void showBetWinner(Player player, Suit gameSuit) {
+		
+		String template = this.bundle.getString("playerBetWinner");
+		String msg = MessageFormat.format( template, player.getName(), gameSuit.toString() );
+		this.out.println( msg );
+		
+	}
+
 }
