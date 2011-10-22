@@ -4,7 +4,7 @@ import game.Bet;
 import game.Card;
 import game.Hand;
 import game.Player;
-import game.Turn;
+import game.enumeration.Suit;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Client implements ClientInterface {
 	private AbstractView view;
 	private Player player;
 	private ArrayList<Player> players;
-
+	
 	public Client( Server server, AbstractView view ) throws RemoteException {
 		
 		this.server = server;
@@ -27,32 +27,32 @@ public class Client implements ClientInterface {
 		
 		this.view.welcome();
 		this.player = this.view.createPlayer();
-		this.server.connectClient( this , this.player );
 		
+	}
+	
+	public boolean connect() throws RemoteException {
+		return this.server.connectClient( this, this.player );
 	}
 
 	public Player getPlayer() {
 		return player;
 	}
+	
+	@Override
+	public void notifyPlayerTurn( Player player, Card card )
+			throws RemoteException {
+		
+		this.view.showPlayerTurn( player, card );
+		
+	}
 
 	@Override
-	public void notifyTurn(Turn turn) throws RemoteException {
+	public Card notifyYourTurn( Suit suit ) {
 		
-		this.view.showPlayerTurn( turn );
-		Player lastPlayer = turn.getLatestPlayer();
-		
-		int index = this.players.indexOf( lastPlayer );
-		
-		if( 
-				( index + 1 >= this.players.size() && this.players.get(0).equals( this.player ) ) ||
-				( this.players.get( index + 1 ).equals( this.player ) )
-		) {
-			
-			Card card = this.view.getCardToPlay( this.player.getHand() );
-			this.server.playCard( this, card );
-			
-		}
-		
+		Card card = this.view.getCardToPlay( this.player.getHand(), suit );
+		this.player.getHand().playCard( card );
+		return card;
+
 	}
 
 	@Override
@@ -104,13 +104,6 @@ public class Client implements ClientInterface {
 		
 		this.players = players;
 		
-		if( this.players.get(0).equals( this.player ) ) {
-			
-			Card card = this.view.getCardToPlay( this.player.getHand() );
-			this.server.playCard( this, card );
-			
-		}
-		
 	}
 
 	@Override
@@ -120,6 +113,7 @@ public class Client implements ClientInterface {
 		this.server.setNewHandAfterBet( this, cards );
 		
 	}
+
 
 
 }
