@@ -136,9 +136,11 @@ public class MockServer extends Server {
 			teammate = 1;
 		}
 		
-		if(players[indexPlayer].getTurnWin() + players[teammate].getTurnWin() >= this.game.getBestPlayerBet().getOriginalBet().getNbRounds()) {
-			this.client.notifyWinner(players[indexPlayer], players[teammate]);
-		}			
+		//if(players[indexPlayer].getTurnWin() + players[teammate].getTurnWin() >= this.game.getBestPlayerBet().getOriginalBet().getNbRounds()) {
+		//	this.client.notifyWinner(players[indexPlayer], players[teammate]);
+		//}
+		
+		this.client.notifyWinner( players[indexPlayer], players[teammate] );
 		
 	}
 	
@@ -161,6 +163,9 @@ public class MockServer extends Server {
 			if( playerIndex >= MockServer.MAX_PLAYERS ) {
 				playerIndex = 0;
 				this.nbTurn++;
+				
+				this.client.notifyTurnWinner( this.turn.getWinner() );
+				
 				this.turn = new Turn( this.game.getGameSuit() );
 			}
 			
