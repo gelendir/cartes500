@@ -28,7 +28,7 @@ public class MockServer extends Server {
 	private Player player = null;
 	private Player[] players = null;
 	private Game game = null;
-	private int nbTurn = 1;
+	private int nbTurn = 0;
 	private Turn turn = null;
 
 	public MockServer() {
@@ -149,6 +149,34 @@ public class MockServer extends Server {
 		
 	}
 	
+	private Player[] playingOrder( Player winner ) {
+		
+		Player[] order = new Player[ MockServer.MAX_PLAYERS ];
+		int orderPos = 1;
+		
+		int pos = -1;
+		for( int i = 0; i < this.players.length && pos < 0; i++ ) {
+			if( this.players[i] == winner ) {
+				pos = i;
+			}
+		}
+		
+		order[0] = this.players[pos];
+		
+		for( int i = pos + 1; i < this.players.length; i++ ) {
+			order[orderPos] = this.players[i];
+			orderPos++;
+		}
+		
+		for( int i = 0; i < pos; i++ ) {
+			order[orderPos] = this.players[i];
+			orderPos++;
+		}
+		
+		return order;
+		
+	}
+	
 	public void startGame() throws RemoteException, Exception {
 		
 		this.connectPlayers();
@@ -156,43 +184,36 @@ public class MockServer extends Server {
 		
 		ArrayList<Player> playingOrder = new ArrayList<Player>(Arrays.asList( players ));
 		this.client.notifyStartNewGame( playingOrder );
-		
-		int playerIndex = 0;
-		Player currentPlayer;
-		Suit currentSuit = null;
-		
+				
 		this.turn = new Turn( this.game.getGameSuit() );
+		Player[] turnOrder = this.playingOrder( this.game.getBestPlayerBet() );
 		
 		while( this.nbTurn < MockServer.MAX_TURNS ) {
 			
-			if( playerIndex >= MockServer.MAX_PLAYERS ) {
-				playerIndex = 0;
-				this.nbTurn++;
+			for( Player currentPlayer : turnOrder ) {
+								
+				if( currentPlayer == this.player ) {
+					
+					Card card = this.client.notifyYourTurn( this.turn.getTurnSuit() );
+					this.turn.addCard( currentPlayer , card );
+					
+				} else {
+					
+					Card botCard = currentPlayer.getHand().getPlayableCard( this.turn.getTurnSuit() ).get(0);				
+					this.turn.addCard( currentPlayer, botCard );
+					currentPlayer.getHand().playCard( botCard );
+					this.client.notifyPlayerTurn( currentPlayer, botCard );
+				}
 				
-				this.client.notifyTurnWinner( this.turn.getWinner() );
-				
-				this.turn = new Turn( this.game.getGameSuit() );
 			}
 			
-			currentPlayer = this.players[ playerIndex ];
+			Player turnWinner = this.turn.getWinner();
+			this.client.notifyTurnWinner( turnWinner );
 			
-			if( playerIndex == 0 ) {
-				
-				Card card = this.client.notifyYourTurn( null );
-				currentSuit = card.getSuit();
-				this.turn.addCard( currentPlayer , card );
-				
-			} else {
-				
-				Card botCard = currentPlayer.getHand().getPlayableCard( currentSuit ).get(0);
-				
-				this.turn.addCard( currentPlayer, botCard );
-				currentPlayer.getHand().playCard( botCard );
-				this.client.notifyPlayerTurn( currentPlayer, botCard );
-				
-			}	
-		
-			playerIndex++;
+			turnOrder = this.playingOrder(  turnWinner );
+			this.turn = new Turn( this.game.getGameSuit() );
+			this.nbTurn++;
+
 			
 		}
 		
