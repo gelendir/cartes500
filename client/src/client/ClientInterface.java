@@ -32,5 +32,7 @@ public interface ClientInterface extends Remote {
 	public void notifyPlayerBet( Player player, Bet bet );
 	
 	public void notifyChangeCardsAfterBet( Card[] newCards );
-
+	
+	public void notifyBetWinner( Player player, Suit gameSuit );
+	
 }
