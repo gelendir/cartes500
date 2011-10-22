@@ -197,8 +197,9 @@ public class ConsoleView extends AbstractView {
 	public Card getCardToPlay( Hand hand, Suit suit ) {
 		
 		int cardNumber = -1;
-		
 		ArrayList<Card> cards = hand.getPlayableCard( suit );
+		
+		this.out.println( this.bundle.getString("playerYourTurn") );
 		this.printCards( cards );
 				
 		while( cardNumber < 0 ) {
