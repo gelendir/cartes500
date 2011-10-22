@@ -18,6 +18,8 @@ public class ConsoleView extends AbstractView {
 	
 	final private static String BUNDLE = "console";
 	
+	final private static String PLAYABLE = "(*)";
+	
 	protected Scanner in;
 	protected PrintStream out;
 	protected PropertyResourceBundle bundle;
@@ -68,44 +70,46 @@ public class ConsoleView extends AbstractView {
 		this.out.println( turn.toString() );
 		
 	}
-	
-	public void printHand( Hand hand ) {
 		
-		String banner = this.bundle.getString("currentHandBanner");
-		this.printHand( hand, banner );
+	public void printHand( Hand hand, Suit suit ) {
 		
-	}
-	
-	public void printHand( Hand hand, String banner ) {
-		
-		this.printCards( hand.getCards(), banner );
+		this.printCards( hand.getCards(), hand.getPlayableCard( suit ) );
 		
 	}
-	
-	public void printCards( ArrayList<Card> cards ) {
-		
-		Card[] arrayCards = new Card[ cards.size() ];
-		String banner = this.bundle.getString("currentHandBanner");
-		cards.toArray( arrayCards );
-		this.printCards( arrayCards, banner );
-		
-	}
-	
-	public void printCards( Card[] cards, String banner ) {
+				
+	public void printCards( Card[] cards ) {
 
+		this.printCards( cards, new ArrayList<Card>() );
+		
+	}
+	
+	public void printCards( Card[] cards, ArrayList<Card> playable ) {
+		
 		Card card = null;
 		
 		String cardTemplate = this.bundle.getString("cardSelectionTemplate");
 		String cardLine = "";
-		
-		this.out.println( banner );
-		
+				
 		for( int i = 0; i < cards.length; ++i ) {
 			
 			card = cards[i];
-			cardLine = MessageFormat.format( cardTemplate, Integer.toString( i ), card.toString() );
+			
+			if( playable.contains( card ) ) {
+				cardLine = MessageFormat.format( 
+						cardTemplate, 
+						Integer.toString( i ), 
+						card.toString(), 
+						ConsoleView.PLAYABLE );
+			} else {
+				cardLine = MessageFormat.format( 
+						cardTemplate, 
+						Integer.toString( i ), 
+						card.toString(),
+						"" );
+			}
+			
 			this.out.println( cardLine );
-					
+			
 		}
 		
 		this.out.println();
@@ -152,7 +156,8 @@ public class ConsoleView extends AbstractView {
 		
 		Suit suit = Suit.NONE;
 		
-		this.printHand( hand );
+		this.out.println( this.bundle.getString("currentHandBanner") );
+		this.printCards( hand.getCards() );
 		
 		while ( ! ( nbRounds == 0 || (nbRounds >= Bet.MIN_BET && nbRounds <= Bet.MAX_BET ) ) ) {
 			
@@ -197,17 +202,24 @@ public class ConsoleView extends AbstractView {
 	public Card getCardToPlay( Hand hand, Suit suit ) {
 		
 		int cardNumber = -1;
-		ArrayList<Card> cards = hand.getPlayableCard( suit );
+		
+		Card[] cards = hand.getCards();
+		ArrayList<Card> playableCards = hand.getPlayableCard( suit );
 		
 		this.out.println( this.bundle.getString("playerYourTurn") );
-		this.printCards( cards );
+		this.out.println( this.bundle.getString("currentHandBanner") );
+		
+		this.printHand( hand, suit );
 				
-		while( cardNumber < 0 ) {
+		while( 
+			cardNumber < 0 
+			|| !( playableCards.contains( cards[ cardNumber ] ) ) 
+		) {
 			this.out.println( this.bundle.getString("playerSelectCard") );
 			cardNumber = this.in.nextInt();
 		}
 		
-		Card card = cards.get( cardNumber );
+		Card card = cards[ cardNumber ];
 		
 		return card;
 
@@ -259,8 +271,11 @@ public class ConsoleView extends AbstractView {
 			
 		//Print the cards in the players' hand and the new cards
 		this.out.println( this.bundle.getString("changeCards") );
-		this.printHand( oldHand );
-		this.printCards( availableCards, this.bundle.getString("changeCardsNewHand") );
+		this.out.println( this.bundle.getString("currentHandBanner") );
+		this.printCards( oldHand.getCards() );
+		
+		this.out.println( this.bundle.getString("changeCardsNewHand") );
+		this.printCards( availableCards );
 		
 		//Ask the player for the list of cards in his hand to discard
 		while( ! this.validateCommaList( selection ) ) {
@@ -320,6 +335,15 @@ public class ConsoleView extends AbstractView {
 		
 		String template = this.bundle.getString("playerBetWinner");
 		String msg = MessageFormat.format( template, player.getName(), gameSuit.toString() );
+		this.out.println( msg );
+		
+	}
+
+	@Override
+	public void showGameStart(Player first) {
+		
+		String template = this.bundle.getString("gameStart");
+		String msg = MessageFormat.format( template, first.getName() );
 		this.out.println( msg );
 		
 	}

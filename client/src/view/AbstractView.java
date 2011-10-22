@@ -50,4 +50,6 @@ public abstract class AbstractView {
 	
 	public abstract void showBetWinner( Player player, Suit gameSuit );
 	
+	public abstract void showGameStart( Player first );
+	
 }
