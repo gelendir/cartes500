@@ -30,7 +30,7 @@ public class App {
 	
 	private static ServerInterface server = null;
 	private static Registry registry = null;
-	private static Game game = new Game();
+	private static Game game = null;
 	
 	private static CommandLine parseArgs(String[] args) {
 		
@@ -107,8 +107,9 @@ public class App {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		CommandLine cmd = null;
 		String host = App.DEFAULT_HOST;
@@ -128,15 +129,15 @@ public class App {
 			
 			//App.connectToServer( host, port );
 			
-			ConsoleView view = new ConsoleView( new Scanner( System.in ), System.out );
-			MockServer server = new MockServer(App.game);
+			Scanner in = new Scanner( System.in );
 			
-			try {
-				Client client = new Client( server, view );
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			ConsoleView view = new ConsoleView( in , System.out );
+			MockServer server = new MockServer();
+
+			Client client = new Client( server, view );
+			
+			server.setClient( client );
+			server.startGame();
 			
 		}
 
