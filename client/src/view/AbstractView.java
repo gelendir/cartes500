@@ -8,7 +8,7 @@ import game.Card;
 import game.Game;
 import game.Hand;
 import game.Player;
-import game.Turn;
+import game.enumeration.Suit;
 
 public abstract class AbstractView {
 	
@@ -34,9 +34,9 @@ public abstract class AbstractView {
 	
 	public abstract Player createPlayer();
 	
-	public abstract Card getCardToPlay( Hand hand );
+	public abstract Card getCardToPlay( Hand hand, Suit suit );
 	
-	public abstract void showPlayerTurn( Turn turn );
+	public abstract void showPlayerTurn( Player player, Card card );
 
 	public abstract void playerConnected( Player player );
 	

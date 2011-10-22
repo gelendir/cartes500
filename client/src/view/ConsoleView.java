@@ -82,6 +82,15 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	public void printCards( ArrayList<Card> cards ) {
+		
+		Card[] arrayCards = new Card[ cards.size() ];
+		String banner = this.bundle.getString("currentHandBanner");
+		cards.toArray( arrayCards );
+		this.printCards( arrayCards, banner );
+		
+	}
+	
 	public void printCards( Card[] cards, String banner ) {
 
 		Card card = null;
@@ -185,30 +194,31 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
-	public Card getCardToPlay( Hand hand ) {
+	public Card getCardToPlay( Hand hand, Suit suit ) {
 		
 		int cardNumber = -1;
 		
-		this.printHand( hand );
-		
+		ArrayList<Card> cards = hand.getPlayableCard( suit );
+		this.printCards( cards );
+				
 		while( cardNumber < 0 ) {
 			this.out.println( this.bundle.getString("playerSelectCard") );
 			cardNumber = this.in.nextInt();
 		}
 		
-		Card card = hand.getCards()[ cardNumber ];
+		Card card = cards.get( cardNumber );
 		
 		return card;
 
 	}
 	
-	public void showPlayerTurn( Turn turn ) {
+	public void showPlayerTurn( Player player, Card card ) {
 			
 		String template = this.bundle.getString("playerTurn");
 		
 		String result = MessageFormat.format( 
-				template, turn.getLatestPlayer().toString(), 
-				turn.getLatestCard().toString() 
+				template, player.toString(), 
+				card.toString() 
 				);
 		
 		this.out.println( result );
