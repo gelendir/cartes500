@@ -95,6 +95,10 @@ public class MockServer extends Server {
 		Suit gameSuit = this.game.getGameSuit();
 		this.client.notifyBetWinner( betWinner, gameSuit );
 		
+		for( Player p : this.players ) {
+			p.getHand().setGameSuit( gameSuit );
+		}
+		
 		if( betWinner == this.player ) {
 			
 			Card newCards[] = new Card[ MockServer.NB_CARDS_NEW_HAND ];
@@ -148,6 +152,7 @@ public class MockServer extends Server {
 		
 		int playerIndex = 0;
 		Player currentPlayer;
+		Suit currentSuit = null;
 		
 		this.turn = new Turn( this.game.getGameSuit() );
 		
@@ -163,12 +168,13 @@ public class MockServer extends Server {
 			
 			if( playerIndex == 0 ) {
 				
-				Card card = this.client.notifyYourTurn( this.game.getGameSuit() );
+				Card card = this.client.notifyYourTurn( null );
+				currentSuit = card.getSuit();
 				this.turn.addCard( currentPlayer , card );
 				
 			} else {
 				
-				Card botCard = currentPlayer.getHand().getCards()[0];
+				Card botCard = currentPlayer.getHand().getPlayableCard( currentSuit ).get(0);
 				
 				this.turn.addCard( currentPlayer, botCard );
 				currentPlayer.getHand().playCard( botCard );
