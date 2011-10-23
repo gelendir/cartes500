@@ -66,7 +66,6 @@ public class Hand {
 	public ArrayList<Card> getPlayableCard(Suit turn) {
 		if(this.suit !=  null && !this.suit.equals(Suit.NONE) && this.hand != null && turn != null) {
 			ArrayList<Card> ret = new ArrayList<Card>();
-			ArrayList<Card> trumpCardsGame = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
 			Card add = null;
 			
@@ -78,12 +77,22 @@ public class Hand {
 			}
 			
 			if(ret.size() != 0) {
-				add = new Card(Suit.COLOR, CardValue.JOKER);
+				try {
+					add = new Card(Suit.COLOR, CardValue.JOKER);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 				
-				add = new Card(Suit.BLACK, CardValue.JOKER);
+				try {
+					add = new Card(Suit.BLACK, CardValue.JOKER);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
@@ -102,37 +111,67 @@ public class Hand {
 			}
 			
 			if(this.suit == Suit.SPADES) {
-				add = new Card(Suit.CLUBS, CardValue.JACK);
+				try {
+					add = new Card(Suit.CLUBS, CardValue.JACK);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.CLUBS) {
-				add = new Card(Suit.SPADES, CardValue.JACK);
+				try {
+					add = new Card(Suit.SPADES, CardValue.JACK);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.DIAMONDS) {
-				add = new Card(Suit.HEARTS, CardValue.JACK);
+				try {
+					add = new Card(Suit.HEARTS, CardValue.JACK);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			else if(this.suit == Suit.HEARTS) {
-				add = new Card(Suit.DIAMONDS, CardValue.JACK);
+				try {
+					add = new Card(Suit.DIAMONDS, CardValue.JACK);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 			}
 			
 			if(ret.size() != 0) {
-				add = new Card(Suit.COLOR, CardValue.JOKER);
+				try {
+					add = new Card(Suit.COLOR, CardValue.JOKER);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}
 				
-				add = new Card(Suit.BLACK, CardValue.JOKER);
+				try {
+					add = new Card(Suit.BLACK, CardValue.JOKER);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
 				}

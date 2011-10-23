@@ -25,7 +25,12 @@ public class Deck {
 							!values[j].equals(CardValue.TWO) && 
 							!values[j].equals(CardValue.THREE)) {
 
-						cards.add(new Card(suits[i], values[j]));
+						try {
+							cards.add(new Card(suits[i], values[j]));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 					}
 
@@ -35,8 +40,14 @@ public class Deck {
 
 		}
 		
-		this.cards.add(new Card(Suit.BLACK, CardValue.JOKER));
-		this.cards.add(new Card(Suit.COLOR, CardValue.JOKER));
+		try {
+			this.cards.add(new Card(Suit.BLACK, CardValue.JOKER));
+			this.cards.add(new Card(Suit.COLOR, CardValue.JOKER));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void mixCards() {
