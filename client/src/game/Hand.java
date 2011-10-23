@@ -51,6 +51,7 @@ public class Hand {
 	
 	public void setCards(ArrayList<Card> cards) {
 		this.hand = (ArrayList<Card>) cards.clone();
+		this.numberOfCard = this.hand.size();
 	}
 	
 	public boolean playCard(Card card) {
@@ -103,6 +104,7 @@ public class Hand {
 			
 			
 			//Si on n'a pas de carte avec l'atout du tour...
+			itr = this.hand.iterator(); 
 			while(itr.hasNext()) {
 				add = itr.next();
 				if(add.getSuit().equals(this.suit)) {
