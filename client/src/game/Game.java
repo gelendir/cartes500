@@ -117,7 +117,7 @@ public class Game {
 
 						if(this.players[i] != null && this.players[i].getOriginalBet() != null) {
 
-							if(this.players[i].getOriginalBet().getNbRounds() >= bet.getNbRounds()) {
+							if(this.players[i].getOriginalBet().getNbRounds() > bet.getNbRounds()) {
 								return false;
 							}
 							else if(this.players[i].getOriginalBet().getNbRounds() == bet.getNbRounds()) {
