@@ -103,7 +103,7 @@ public class Hand {
 			
 			
 			
-			//Si on n'a pas de carte avec l'atout du tour...
+			/*//Si on n'a pas de carte avec l'atout du tour...
 			itr = this.hand.iterator(); 
 			while(itr.hasNext()) {
 				add = itr.next();
@@ -179,7 +179,7 @@ public class Hand {
 				}
 				
 				return ret;
-			}
+			}*/
 		}
 		
 		return this.hand;
