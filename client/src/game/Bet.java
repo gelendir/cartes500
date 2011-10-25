@@ -1,6 +1,7 @@
 package game;
 
 import game.enumeration.Suit;
+import java.util.Arrays;
 
 /**
  * Mise d'un joueur fait au début d'une partie.
@@ -27,7 +28,7 @@ public class Bet {
 	/**
 	 * Les sortes de cartes disponibles pour miser.
 	 */
-	final static public  Suit[] SUITS = { 
+	final static public Suit[] SUITS = { 
 		Suit.SPADES, 
 		Suit.CLUBS, 
 		Suit.DIAMONDS, 
@@ -49,8 +50,17 @@ public class Bet {
 	 * Constructeur. Crée une nouvelle mise.
 	 * @param nbRounds Le nombre de tours que le joueur désire remporter
 	 * @param suit L'atout que le joueur désire.
+	 * @throws Exception 
 	 */
-	public Bet( int nbRounds, Suit suit ) {
+	public Bet( int nbRounds, Suit suit ) { //throws Exception {
+		
+		/*
+		if( nbRounds < Bet.MIN_BET || nbRounds > Bet.MAX_BET ) {
+			throw new Exception("number of bets must be between " + Bet.MIN_BET + " and " + Bet.MAX_BET );
+		} else if ( ! Arrays.asList( Bet.SUITS ).contains( suit ) ) {
+			throw new Exception("cannot use this suit in a bet");
+		}
+		*/
 		
 		this.nbRounds = nbRounds;
 		this.suit = suit;
