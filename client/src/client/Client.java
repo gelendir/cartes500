@@ -19,6 +19,8 @@ public class Client implements ClientInterface {
 	private Player player;
 	private ArrayList<Player> players;
 	
+	private Player betWinner = null;
+	
 	private Suit gameSuit;
 	
 	public Client( Server server, AbstractView view ) throws RemoteException {
@@ -105,7 +107,7 @@ public class Client implements ClientInterface {
 			throws RemoteException {
 		
 		this.players = players;
-		this.view.showGameStart( players.get(0) );
+		this.view.showGameStart( this.betWinner );
 		
 	}
 
@@ -120,6 +122,7 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyBetWinner(Player player, Suit gameSuit) {
 		this.gameSuit = gameSuit;
+		this.betWinner = player;
 		this.view.showBetWinner( player, gameSuit );
 	}
 
