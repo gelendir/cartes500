@@ -78,7 +78,7 @@ public class Hand {
 			}
 			
 			if(ret.size() != 0) {
-				try {
+				/*try {
 					add = new Card(Suit.COLOR, CardValue.JOKER);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -96,7 +96,7 @@ public class Hand {
 				}
 				if(this.hand.contains(add)) {
 					ret.add(add);
-				}
+				}*/
 				
 				return ret;
 			}
@@ -199,5 +199,22 @@ public class Hand {
 		
 		return hand;
 		
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj instanceof Hand) {
+			Hand hand = (Hand)obj;
+			if(hand.hand.size() == this.hand.size() &&
+					hand.numberOfCard == this.numberOfCard &&
+					hand.suit == this.suit) {
+				for(int i = 0; i < this.hand.size(); ++i) {
+					if(!hand.hand.get(i).equals(this.hand.get(i))) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }
