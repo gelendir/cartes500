@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import client.Client;
 
 /**
- * Serveur du jeu. Classe en charge de gérer les connexions, 
+ * Serveur du jeu de 500. Classe en charge de gérer les connexions, 
  * les événements venant des clients (joueurs) et de mettre 
- * à jour l'état du jeu selon les réponses reçues. Le serveur
- * commence à l'état "en attente", c'est-à-dire qu'il attend que
- * 4 clients se connecent. Ensuite, il démarre le jeu, distribue
+ * à jour l'état du jeu selon les réponses reçues.Le serveur communique 
+ * avec les clients en utilisant le patron de conception "Observeur Observé". 
+ * Le serveur commence à l'état "en attente", c'est-à-dire qu'il attend que
+ * 4 clients se connectent. Ensuite, il démarre le jeu, distribue
  * les cartes à chaque joueur, et fait avancer le jeu selon
  * ce que chaque client joue comme carte. 
  * 
