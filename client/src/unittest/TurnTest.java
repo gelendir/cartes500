@@ -279,14 +279,27 @@ public class TurnTest extends TestCase {
 		
 	}
 	
+	public void testWinnerGameSuitNoSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.HEARTS );
+		
+		t.addCard( this.dummyPlayers[0], this.diamondCards[0] );
+		t.addCard( this.dummyPlayers[1], this.diamondCards[2] );
+		t.addCard( this.dummyPlayers[2], this.diamondCards[1] );
+		t.addCard( this.dummyPlayers[3], this.diamondCards[3] );
+		
+		assertEquals( this.dummyPlayers[3], t.getWinner() );
+		
+	}
+	
 	public void testWinnerColorJoker() throws Exception {
 		
-		Turn t = new Turn( Suit.DIAMONDS );
+		Turn t = new Turn( Suit.HEARTS );
 		
-		t.addCard( this.dummyPlayers[0], this.diamondCards[2] );
+		t.addCard( this.dummyPlayers[0], this.heartCards[2] );
 		t.addCard( this.dummyPlayers[1], this.colorJoker );
-		t.addCard( this.dummyPlayers[2], this.diamondCards[0] );
-		t.addCard( this.dummyPlayers[3], this.diamondCards[1] );
+		t.addCard( this.dummyPlayers[2], this.heartCards[0] );
+		t.addCard( this.dummyPlayers[3], this.heartCards[1] );
 		
 		assertEquals( this.dummyPlayers[1], t.getWinner() );
 		
@@ -294,12 +307,12 @@ public class TurnTest extends TestCase {
 	
 	public void testWinnerBlackJoker() throws Exception {
 		
-		Turn t = new Turn( Suit.DIAMONDS );
+		Turn t = new Turn( Suit.CLUBS );
 		
-		t.addCard( this.dummyPlayers[0], this.diamondCards[2] );
+		t.addCard( this.dummyPlayers[0], this.clubCards[2] );
 		t.addCard( this.dummyPlayers[1], this.blackJoker );
-		t.addCard( this.dummyPlayers[2], this.diamondCards[0] );
-		t.addCard( this.dummyPlayers[3], this.diamondCards[1] );
+		t.addCard( this.dummyPlayers[2], this.clubCards[0] );
+		t.addCard( this.dummyPlayers[3], this.clubCards[1] );
 		
 		assertEquals( this.dummyPlayers[1], t.getWinner() );
 		
@@ -315,6 +328,84 @@ public class TurnTest extends TestCase {
 		t.addCard( this.dummyPlayers[3], this.diamondCards[1] );
 		
 		assertEquals( this.dummyPlayers[2], t.getWinner() );
+		
+	}
+	
+	public void testWinnerJackGameSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.DIAMONDS );
+		
+		t.addCard( this.dummyPlayers[0], this.diamondCards[8] );
+		t.addCard( this.dummyPlayers[1], this.diamondCards[9] );
+		t.addCard( this.dummyPlayers[2], this.diamondCards[7] ); //Jack
+		t.addCard( this.dummyPlayers[3], this.diamondCards[1] );
+		
+		assertEquals( this.dummyPlayers[2], t.getWinner() );	
+		
+	}
+	
+	public void testWinnerJackTurnSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.CLUBS );
+		
+		t.addCard( this.dummyPlayers[0], this.diamondCards[8] );
+		t.addCard( this.dummyPlayers[1], this.diamondCards[9] );
+		t.addCard( this.dummyPlayers[2], this.clubCards[7] ); //Jack
+		t.addCard( this.dummyPlayers[3], this.diamondCards[1] );
+		
+		assertEquals( this.dummyPlayers[2], t.getWinner() );
+		
+	}
+	
+	public void testWinnerJackNotGameSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.CLUBS );
+		
+		t.addCard( this.dummyPlayers[0], this.diamondCards[7] ); //Jack
+		t.addCard( this.dummyPlayers[1], this.clubCards[6] ); //Winner
+		t.addCard( this.dummyPlayers[2], this.clubCards[5] );
+		t.addCard( this.dummyPlayers[3], this.diamondCards[4] );
+		
+		assertEquals( this.dummyPlayers[1], t.getWinner() );
+		
+	}
+	
+	public void testWinnerBothJackGameSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.SPADES );
+		
+		t.addCard( this.dummyPlayers[0], this.diamondCards[3] );
+		t.addCard( this.dummyPlayers[1], this.spadeCards[7] ); //Jack major
+		t.addCard( this.dummyPlayers[2], this.clubCards[7] ); //Jack minor
+		t.addCard( this.dummyPlayers[3], this.diamondCards[4] );
+		
+		assertEquals( this.dummyPlayers[1], t.getWinner() );
+		
+	}
+	
+	public void testWinnerJackMinorGameSuit() throws Exception {
+		
+		Turn t = new Turn( Suit.HEARTS );
+		
+		t.addCard( this.dummyPlayers[0], this.heartCards[3] );
+		t.addCard( this.dummyPlayers[1], this.diamondCards[7] ); //Jack minor
+		t.addCard( this.dummyPlayers[2], this.clubCards[8] );
+		t.addCard( this.dummyPlayers[3], this.diamondCards[4] );
+		
+		assertEquals( this.dummyPlayers[1], t.getWinner() );
+			
+	}
+	
+	public void testWinnerAllJacks() throws Exception {
+		
+		Turn t = new Turn( Suit.DIAMONDS );
+		
+		t.addCard( this.dummyPlayers[0], this.heartCards[7] );
+		t.addCard( this.dummyPlayers[1], this.clubCards[7] );
+		t.addCard( this.dummyPlayers[2], this.spadeCards[7] );
+		t.addCard( this.dummyPlayers[3], this.diamondCards[7] );
+		
+		assertEquals( this.dummyPlayers[3], t.getWinner() );
 		
 	}
 
