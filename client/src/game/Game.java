@@ -6,22 +6,10 @@ import java.util.ArrayList;
 public class Game {
 
 	private Player players[] = null;
-	private int actualPlayerTurn = 0;
-	private int indexPlayerWinner = -1;
-
+	private int indexPlayerBetWinner = -1;
+	
 	public Game() {
 
-	}
-
-	public int nextTurn() {
-		if(++this.actualPlayerTurn >= this.players.length) {
-			this.actualPlayerTurn = 0;
-		}
-		return this.actualPlayerTurn;
-	}
-
-	public int getTurn() {
-		return this.actualPlayerTurn;
 	}
 
 	public Player[] getPlayers() {
@@ -33,14 +21,14 @@ public class Game {
 	}
 
 	public Suit getGameSuit() {
-		return this.players[this.indexPlayerWinner].getOriginalBet().getSuit();
+		return this.players[this.indexPlayerBetWinner].getOriginalBet().getSuit();
 	}
 	
 	public Player getBestPlayerBet() {
-		return this.players[this.indexPlayerWinner];
+		return this.players[this.indexPlayerBetWinner];
 	}
 
-	public boolean chooseCardFromSecretBet(ArrayList<Card> finalHand, Player player) {
+	/*public boolean chooseCardFromSecretBet(ArrayList<Card> finalHand, Player player) {
 		int indexPlayer = findIndexPlayer(player);
 		if(indexPlayer != -1) {
 			if(this.players[indexPlayer] != null && 
@@ -52,24 +40,25 @@ public class Game {
 		}
 
 		return false;
-	}
+	}*/
 
 	public ArrayList<Bet> getPlayableBets(Player player) {
 		int indexPlayer = findIndexPlayer(player);
 		Bet first = null;
 		ArrayList<Bet> bets = new ArrayList<Bet>(25);
-
+		int suitIndex = 0;
+		
 		if(indexPlayer == 0) {
-			first = new Bet(5, Suit.NONE);
+			first = new Bet(6, Suit.SPADES);
+			suitIndex = first.getSuit().ordinal();
 		}
-		else if(indexPlayer != -1){
+		else if(indexPlayer != -1) {
 			first = this.players[indexPlayer - 1] != null ? this.players[indexPlayer - 1].getOriginalBet() : null;
+			suitIndex = first.getSuit().ordinal() + 1;
 		}
 
 
 		if(first != null) {
-			int suitIndex= first.getSuit().ordinal() + 1;
-
 			Suit suits[] = Suit.values();
 
 			for(int j = first.getNbRounds(); j <= 10; ++j) {
@@ -93,7 +82,7 @@ public class Game {
 			if(isValidBet(bet, player)) {
 				this.players[indexPlayer].setOriginalBet(bet);
 				if(bet != null) {
-					this.indexPlayerWinner = indexPlayer;
+					this.indexPlayerBetWinner = indexPlayer;
 				}
 
 				return true;
@@ -149,17 +138,5 @@ public class Game {
 		}
 
 		return -1;
-	}
-
-	public static void main(String[] args) throws Exception {
-		Game game = new Game();
-		Player players[] = new Player[4];
-		for(int i = 0; i < players.length; ++i) {
-			players[i] = new Player("Fred" + i);
-		}
-		game.setPlayers(players);
-		ArrayList<Bet> bets = game.getPlayableBets(players[0]);
-		boolean result = game.setBet(new Bet(7, Suit.CLUBS), players[0]);
-		bets = game.getPlayableBets(players[1]);
 	}
 }
