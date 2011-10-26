@@ -53,22 +53,100 @@ public interface ClientInterface extends Remote {
 	 */
 	public Card notifyYourTurn( Suit suit ) throws RemoteException;
 	
+	/**
+	 * Événement lancé lorsqu'un joueur se déconnecte du serveur. Une partie
+	 * ne peut continuer s'il manque un joueur, donc si un joueur se déconnecte 
+	 * avant la fin de la partie, le jeu ne peut plus continuer.
+	 * 
+	 * TODO: Pour les besoins du prototype cette fonction n'est pas encore
+	 * implémenté.
+	 * 
+	 * @param player Le joueur qui c'est déconnecté.
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public void notifyPlayerDisconnect( Player player ) throws RemoteException;
 	
+	/**
+	 * Événement lancé lorsqu'un joueur se connecte au serveur. Un joueur peut
+	 * seulement se connecter avant le début d'une partie.
+	 * 
+	 * @param player Le joueur de connecté
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public void notifyPlayerConnect( Player player ) throws RemoteException;
 	
+	/**
+	 * Événement lancé lorsqu'il est rendu temps aux joueurs de faire une mise.
+	 * La période de mise peut seulement s'enclencher après la connexion de tout
+	 * les joueurs. Une mise ne peut être fait après le début de la partie. C'est
+	 * aussi lors de cet événement que le serveur distribue les cartes à chaque joueur.
+	 *  
+	 * @param hand Les cartes distribués au joueur.
+	 * @return La mise fait par ce client.
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public Bet notifyBettingTime( Hand hand ) throws RemoteException;
 	
+	/**
+	 * Événement lancé à la fin d'une partie pour indiquer les joueurs qui ont
+	 * gagné le jeu. Cet événement est appelé seulement lorsque tout les joueurs 
+	 * ont joué dix tours.
+	 * 
+	 * @param player Le premier joueur de l'équipe à avoir gagné
+	 * @param player2 Le deuxième joueur de l'équipe à avoir gagné.
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public void notifyWinner( Player player, Player player2 ) throws RemoteException;
 	
+	/**
+	 * Événement lancé lorsque le serveur s'apprête à se fermer (Shutdown).
+	 * Tout les clients doivent se déconnecter en recevant cet événement.
+	 * 
+	 * TODO: Pour les besoins du protoype, cette fonction n'est pas encore implémenté.
+	 * 
+	 * @throws RemoteException
+	 */
 	public void notifyExit() throws RemoteException;
 	
-	public void notifyPlayerBet( Player player, Bet bet );
+	/**
+	 * Événement lancé lorsqu'un joueur fait une mise. Un joueur peut seulement
+	 * faire une mise lorsque c'est son tour de le faire.
+	 * 
+	 * @param player Le joueur à avoir misé
+	 * @param bet La mise du joueur.
+	 * @throws RemoteException Erreurs RMI.
+	 */
+	public void notifyPlayerBet( Player player, Bet bet ) throws RemoteException;
 	
-	public void notifyChangeCardsAfterBet( Card[] newCards );
+	/**
+	 * Événement lancé lorsqu'un joueur a remporté la mise et qu'il peut maintenant
+	 * changer les cartes dans sa main si désiré. Cet événement retourne aussi les 
+	 * nouvelles cartes de la main pour ce joueur, après avoir sélectionné les nouvelles
+	 * cartes.
+	 * 
+	 * @param newCards Nouvelles cartes disponibles.
+	 * @throws RemoteException Erreurs RMI.
+	 */
+	public void notifyChangeCardsAfterBet( Card[] newCards ) throws RemoteException;
 	
-	public void notifyBetWinner( Player player, Suit gameSuit );
+	/**
+	 * Événement lancé lorsque la période de mises est terminé. Cet événement
+	 * signale au client lequel des joueurs a remporté la mise, et donc lequel 
+	 * des joueurs commencera le premier tour de la partie.
+	 * 
+	 * @param player Le joueur avec la plus haute mise.
+	 * @param gameSuit L'atout du jeu, déterminé à partir de la mise du gagnant
+	 * @throws RemoteException Erreurs RMI.
+	 */
+	public void notifyBetWinner( Player player, Suit gameSuit ) throws RemoteException;
 	
-	public void notifyTurnWinner( Player player );
+	/**
+	 * Événement lancé à la fin d'un tour pour indiquer quel joueur a remporté le tour.
+	 * Le gagnant sera le joueur qui débutera le prochain tour
+	 * 
+	 * @param player Le joueur ayant remporté le tour.
+	 * @throws RemoteException Erreurs RMI.
+	 */
+	public void notifyTurnWinner( Player player ) throws RemoteException;
 	
 }
