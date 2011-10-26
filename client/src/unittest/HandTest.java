@@ -119,14 +119,6 @@ public class HandTest extends TestCase {
 		ArrayList<Card> playables;
 		
 		playables = h.getPlayableCard(Suit.HEARTS);
-		Assert.assertEquals(playables.size(), 3);
-		Assert.assertTrue(playables.contains(new Card(Suit.HEARTS, CardValue.FOUR)));
-		Assert.assertTrue(playables.contains(new Card(Suit.HEARTS, CardValue.NINE)));
-		Assert.assertTrue(playables.contains(new Card(Suit.COLOR, CardValue.JOKER)));
-		
-		h.playCard(new Card(Suit.COLOR, CardValue.JOKER));
-		
-		playables = h.getPlayableCard(Suit.HEARTS);
 		Assert.assertEquals(playables.size(), 2);
 		Assert.assertTrue(playables.contains(new Card(Suit.HEARTS, CardValue.FOUR)));
 		Assert.assertTrue(playables.contains(new Card(Suit.HEARTS, CardValue.NINE)));
@@ -135,20 +127,7 @@ public class HandTest extends TestCase {
 		h.playCard(new Card(Suit.HEARTS, CardValue.NINE));
 		
 		playables = h.getPlayableCard(Suit.HEARTS);
-		Assert.assertEquals(playables.size(), 2);
-		Assert.assertTrue(playables.contains(new Card(Suit.CLUBS, CardValue.EIGHT)));
-		Assert.assertTrue(playables.contains(new Card(Suit.CLUBS, CardValue.SIX)));
-		
-		h.playCard(new Card(Suit.CLUBS, CardValue.EIGHT));
-		
-		playables = h.getPlayableCard(Suit.HEARTS);
-		Assert.assertEquals(playables.size(), 1);
-		Assert.assertTrue(playables.contains(new Card(Suit.CLUBS, CardValue.SIX)));
-		
-		h.playCard(new Card(Suit.CLUBS, CardValue.SIX));
-		
-		playables = h.getPlayableCard(Suit.HEARTS);
-		Assert.assertEquals(playables.size(), 5);
+		Assert.assertEquals(playables.size(), 8);
 		
 		playables = h.getPlayableCard(Suit.SPADES);
 		Assert.assertEquals(playables.size(), 3);
@@ -159,6 +138,9 @@ public class HandTest extends TestCase {
 		playables = h.getPlayableCard(Suit.DIAMONDS);
 		Assert.assertTrue(playables.contains(new Card(Suit.DIAMONDS, CardValue.ACE)));
 		Assert.assertTrue(playables.contains(new Card(Suit.DIAMONDS, CardValue.KING)));
+		
+		playables = h.getPlayableCard(Suit.HEARTS);
+		Assert.assertEquals(playables.size(), 8);
 	}
 
 	public void testGetNumberOfCard() throws Exception {
