@@ -22,16 +22,49 @@ import server.Server;
 import server.ServerInterface;
 import view.ConsoleView;
 
+/**
+ * La classe App se charge d'initialisé le programme avec les
+ * arguments passés en paramètre.
+ * @author Gregory Eric Sanderson
+ */
 public class App {
 	
+	/**
+	 * L'adresse de l'hôte par défaut du régistraire RMI.
+	 */
 	final public static String 	DEFAULT_HOST = "localhost";
+	
+	/**
+	 * Le port de l'hôte par défaut du régistraire RMI.
+	 */
 	final public static int 	DEFAULT_PORT = 2222;
+	
+	/**
+	 * Le nom du programme
+	 */
 	final public static String 	PROGRAM_NAME = "Cartes500";
 	
+	/**
+	 * L'interface Stub du serveur
+	 */
 	private static ServerInterface server = null;
+	
+	/**
+	 * L'instance du régistraire RMI
+	 */
 	private static Registry registry = null;
+	
+	/**
+	 * L'instance du jeu
+	 */
 	private static Game game = null;
 	
+	/**
+	 * Cette méthode se charge de lire les arguments.
+	 * @param args Les arguments du programme
+	 * @return Retourne sous forme d'objet les arguments de la ligne
+	 *         de commande
+	 */
 	private static CommandLine parseArgs(String[] args) {
 		
 		Options options = new Options();		
@@ -79,6 +112,13 @@ public class App {
 		return cmd;
 	}
 	
+	/**
+	 * Cette méthode se charge d'effectuer la connexion avec
+	 * les régistraire RMI.
+	 * @param host L'hôte du régistraire
+	 * @param port Le port du régistraire
+	 * @return Retourne vrai si la connexion a pu être effectuée; sinon faux.
+	 */
 	private static boolean connectToServer( String host, int port ) {
 		
 		App.server = new Server();
@@ -106,7 +146,9 @@ public class App {
 	}
 
 	/**
-	 * @param args
+	 * Le main du programme se charge d'initialiser le jeu et lire les
+	 * arguments du programme en les interprétant.
+	 * @param args Les arguments de la ligne de commande
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
