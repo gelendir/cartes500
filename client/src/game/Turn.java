@@ -241,17 +241,21 @@ public class Turn {
 		
 		Card search = null;
 		
-		if( turnSuit == Suit.CLUBS ) {
+		if( strongSuit.equals( Suit.NONE ) ) {
+			strongSuit = turnSuit;
+		}
+		
+		if( strongSuit == Suit.CLUBS ) {
 			weakSuit = Suit.SPADES;
-		} else if ( turnSuit == Suit.SPADES ) {
+		} else if ( strongSuit == Suit.SPADES ) {
 			weakSuit = Suit.CLUBS;
-		} else if ( turnSuit == Suit.DIAMONDS ) {
+		} else if ( strongSuit == Suit.DIAMONDS ) {
 			weakSuit = Suit.HEARTS;
-		} else if ( turnSuit == Suit.HEARTS ) {
+		} else if ( strongSuit == Suit.HEARTS ) {
 			weakSuit = Suit.DIAMONDS;
 		}
 		
-		Card strongJack = new Card( turnSuit, CardValue.JACK );
+		Card strongJack = new Card( strongSuit, CardValue.JACK );
 		Card weakJack = new Card( weakSuit, CardValue.JACK  );
 
 		//Determine if a player has a joker
@@ -269,7 +273,7 @@ public class Turn {
 			return this.playerFromCard( search );
 		}
 		
-		if ( !strongSuit.equals( Suit.NONE ) ) {
+		if ( !this.gameSuit.equals( Suit.NONE ) ) {
 			
 			strongCards = this.filterCards( strongSuit );
 			if( strongCards.size() > 0 ) {
