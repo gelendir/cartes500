@@ -19,6 +19,8 @@ import view.AbstractView;
  * en utilisant le patron de conception "Observeur Observé". Le client observe le serveur,
  * et reçoit des notifications d'événements lors des divers actions dans le jeu.
  * Les fonctions événements de la classe client sont préfixés avec le mot "notify".
+ * Cette classe représente la partie "Controlleur" dans le modèle MVC de l'application
+ * client.
  * 
  * @see ClientInterface
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
