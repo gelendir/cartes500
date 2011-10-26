@@ -14,16 +14,48 @@ import game.Player;
 import game.Turn;
 import game.enumeration.Suit;
 
+/**
+ * Classe s'occupant d'interagir avec un joueur humain en mode texte (console).
+ * Pour plus de détails sur le fonctionnement de cette vue, veuillez consulter 
+ * la documentation de la classe AbstractView
+ * 
+ * @see AbstractView
+ * @author Gregory Eric Sanderson <gzou2000@gmail.com>
+ *
+ */
 public class ConsoleView extends AbstractView {
 	
+	/**
+	 * Fichier de langues à utiliser lors de l'affichage.
+	 */
 	final private static String BUNDLE = "console";
 	
+	/**
+	 * Indiquateur des cartes qu'un joueur peut jouer durant le tour.
+	 */
 	final private static String PLAYABLE = "(*)";
 	
+	/**
+	 * Interface utilisé pour lire les charactères tappés sur le clavier par l'utilisateur.
+	 */
 	protected Scanner in;
+	
+	/**
+	 * Interface utilisé pour afficher du texte à l'écran.
+	 */
 	protected PrintStream out;
+	
+	/**
+	 * Fichier ressource utilisé pour récupérer du texte et des libelés affichés à l'écran.
+	 */
 	protected PropertyResourceBundle bundle;
 	
+	/**
+	 * Constructeur. Crée une nouvelle instance de la vue console.
+	 * 
+	 * @param in Le stream à lire en entrée
+	 * @param out Le stream à utiliser en sortie
+	 */
 	public ConsoleView( Scanner in, PrintStream out ) {
 		
 		super();
@@ -33,16 +65,24 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Affiche un message de bienvenue.
+	 * Voir La classe AbstractView pour plus de détails.
+	 * 
+	 * @see AbstractView#welcome()
+	 */
 	public void welcome() {
 		
 		this.out.println( bundle.getString("banner") );
 
 	}
 	
-	public void gameStarted() {
-		
-	}
-	
+	/**
+	 * Crée un nouveau profil de joueur.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#createPlayer()
+	 */
 	public Player createPlayer()
 	{
 		
@@ -63,26 +103,40 @@ public class ConsoleView extends AbstractView {
 		return player;
 	}
 	
-	
-	public void printTurn( Turn turn ) {
-		
-		this.out.println( this.bundle.getString("currentGameBoardBanner") );
-		this.out.println( turn.toString() );
-		
-	}
-		
+	/**
+	 * Fonction utilitaire pour imprimer toutes les
+	 * cartes dans une main.
+	 * 
+	 * @param hand Les cartes à afficher
+	 * @param suit La sorte demandé. Utilisé pour afficher une étoile
+	 * à côté des cartes que le joueur peut déposer.
+	 */
 	public void printHand( Hand hand, Suit suit ) {
 		
 		this.printCards( hand.getCards(), hand.getPlayableCard( suit ) );
 		
 	}
-				
+		
+	/**
+	 * Fonction utilitaire pour imprimer toutes les
+	 * cartes dans une main.
+	 * 
+	 * @param cards Les cartes à afficher
+	 */
 	public void printCards( Card[] cards ) {
 
 		this.printCards( cards, new ArrayList<Card>() );
 		
 	}
 	
+	/**
+	 * Fonction utilitaire pour imprimer toutes les
+	 * cartes dans une main.
+	 * 
+	 * @param cards Les cartes à afficher
+	 * @param playable Les cartes qu'un joueur peut déposer. Utilisé
+	 * pour afficher une étoile à coté des cartes jouables.
+	 */
 	public void printCards( Card[] cards, ArrayList<Card> playable ) {
 		
 		Card card = null;
@@ -116,6 +170,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Affiche un message indiquant qu'un joueur c'est connecté.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#playerConnected(Player)
+	 */
 	public void playerConnected( Player player ) {
 		
 		String msg = MessageFormat.format( 
@@ -128,6 +188,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Notification qu'un joueur a fait une mise.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#playerHasBet(Player, Bet)
+	 */
 	public void playerHasBet( Player player, Bet bet ) {
 		
 		String msg = MessageFormat.format(
@@ -141,12 +207,22 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Affiche un message en attente de la connexion des autres joueurs.
+	 * 
+	 */
 	public void printWaitingForOtherPlayers() {
 		
 		this.out.println( this.bundle.getString("waitingForOtherPlayers") );
 		
 	}
 	
+	/**
+	 * Demande une mise au joueur.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#askBet(Hand)
+	 */
 	public Bet askBet( Hand hand ) {
 				
 		this.out.println( this.bundle.getString("allPlayersConnected" ) );
@@ -186,6 +262,11 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Affiche une liste de toutes les sortes de cartes disponibles.
+	 * Utilisé lorsqu'on demande à l'utilisateur de faire une mise.
+	 * 
+	 */
 	public void printSuits() {
 		
 		String template = this.bundle.getString( "suitSelectionTemplate" );
@@ -201,6 +282,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Demande à l'utilisateur quel carte jouer.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#getCardToPlay(Hand, Suit)
+	 */
 	public Card getCardToPlay( Hand hand, Suit suit ) {
 		
 		int cardNumber = -1;
@@ -227,6 +314,12 @@ public class ConsoleView extends AbstractView {
 
 	}
 	
+	/**
+	 * Affiche la carte déposé par un joueur.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#showPlayerTurn(Player, Card)
+	 */
 	public void showPlayerTurn( Player player, Card card ) {
 			
 		String template = this.bundle.getString("playerTurn");
@@ -240,6 +333,14 @@ public class ConsoleView extends AbstractView {
 		
 	}
 	
+	/**
+	 * Valide qu'un utilisateur a bien entré une liste de chiffres
+	 * séparé par une virgule. Utilisé pour validé la saisie des cartes
+	 * qu'un utilisateur veut échanger.
+	 * 
+	 * @param list Le texte entré par l'utilisateur.
+	 * @return Vrai si la liste est valide.
+	 */
 	public boolean validateCommaList( String list ) {
 		
 		int number;
@@ -262,6 +363,12 @@ public class ConsoleView extends AbstractView {
 		return true;
 	}
 	
+	/**
+	 * demande à l'utilisateur d'échanger des nouvelles cartes.
+	 * Voir la classe AbstractView pour plus de détails 
+	 * 
+	 * @see AbstractView#changeCards(Hand, Card[])
+	 */
 	public ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards ) {
 		
 		Card[] oldCards = oldHand.getCards();
@@ -332,6 +439,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 
+	/**
+	 * Affiche le gagnant de la mise.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#showBetWinner(Player, Suit)
+	 */
 	@Override
 	public void showBetWinner(Player player, Suit gameSuit) {
 		
@@ -341,6 +454,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 
+	/**
+	 * Affiche un message de début de partie.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#showGameStart(Player)
+	 */
 	@Override
 	public void showGameStart(Player first) {
 		
@@ -350,6 +469,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 
+	/**
+	 * Affiche les gagnants de la partie.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#showWinners(Player, Player)
+	 */
 	@Override
 	public void showWinners(Player player, Player player2) {
 		
@@ -361,6 +486,12 @@ public class ConsoleView extends AbstractView {
 		
 	}
 
+	/**
+	 * Affiche le gagnant du tour.
+	 * Voir la classe AbstractView pour plus de détails
+	 * 
+	 * @see AbstractView#showTurnWinner(Player)
+	 */
 	@Override
 	public void showTurnWinner(Player player) {
 		
