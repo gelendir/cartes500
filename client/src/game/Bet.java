@@ -1,7 +1,6 @@
 package game;
 
 import game.enumeration.Suit;
-import java.util.Arrays;
 
 /**
  * Mise d'un joueur fait au début d'une partie.
