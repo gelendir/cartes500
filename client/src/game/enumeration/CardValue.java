@@ -1,5 +1,9 @@
 package game.enumeration;
 
+/**
+ * Cet enum représente la valeur de la carte.
+ * @author Frédérik Paradis
+ */
 public enum CardValue {
 	TWO (1),
 	THREE (2),
@@ -16,11 +20,23 @@ public enum CardValue {
 	ACE (13),
 	JOKER (14);
 	
+	/**
+	 * La valeur de la carte en entier.
+	 */
 	private final int value;
+	
+	/**
+	 * Le constructeur initialise la valeur avec l'entier la représentant.
+	 * @param value La valeur entière
+	 */
 	private CardValue(int value) {
 		this.value =  value;
 	}
-	
+
+	/**
+	 * Cette méthode retourne la valeur de la carte.
+	 * @return Retourne la valeur de la carte.
+	 */
 	public int getValue() {
 		return this.value;			
 	}
