@@ -230,10 +230,9 @@ public class Turn {
 			throw new Exception("Not all players have played a card in this turn");
 		}
 		
-		Suit strongSuit = this.gameSuit;
+		Suit gameSuit = this.gameSuit;
 		Suit turnSuit = this.getTurnSuit();
-		Suit weakSuit = null;
-		
+				
 		Card colorJoker = new Card( Suit.COLOR, CardValue.JOKER );
 		Card blackJoker = new Card( Suit.BLACK, CardValue.JOKER );
 		
@@ -241,31 +240,33 @@ public class Turn {
 		
 		Card search = null;
 		
-		if( strongSuit.equals( Suit.NONE ) ) {
-			strongSuit = turnSuit;
+		
+		Card strongJack = null;
+		Card weakJack = null;
+		
+		if( !gameSuit.equals( Suit.NONE ) ) {
+			
+			strongJack = new Card( gameSuit, CardValue.JACK );
+				
+			if( gameSuit == Suit.CLUBS ) {
+				weakJack =  new Card( Suit.SPADES, CardValue.JACK );
+			} else if ( gameSuit == Suit.SPADES ) {
+				weakJack =  new Card( Suit.CLUBS, CardValue.JACK );
+			} else if ( gameSuit == Suit.DIAMONDS ) {
+				weakJack =  new Card( Suit.HEARTS, CardValue.JACK );
+			} else if ( gameSuit == Suit.HEARTS ) {
+				weakJack =  new Card( Suit.DIAMONDS, CardValue.JACK );
+			}
 		}
 		
-		if( strongSuit == Suit.CLUBS ) {
-			weakSuit = Suit.SPADES;
-		} else if ( strongSuit == Suit.SPADES ) {
-			weakSuit = Suit.CLUBS;
-		} else if ( strongSuit == Suit.DIAMONDS ) {
-			weakSuit = Suit.HEARTS;
-		} else if ( strongSuit == Suit.HEARTS ) {
-			weakSuit = Suit.DIAMONDS;
-		}
-		
-		Card strongJack = new Card( strongSuit, CardValue.JACK );
-		Card weakJack = new Card( weakSuit, CardValue.JACK  );
-
 		//Determine if a player has a joker
 		if ( this.cards.containsValue( colorJoker ) ) {
 			search = colorJoker;
 		} else if ( this.cards.containsValue( blackJoker ) ) {
 			search = blackJoker;
-		} else if( this.cards.containsValue( strongJack ) ) {
+		} else if( strongJack != null && this.cards.containsValue( strongJack ) ) {
 			search = strongJack;
-		} else if ( this.cards.containsValue( weakJack ) ) {
+		} else if ( weakJack != null && this.cards.containsValue( weakJack ) ) {
 			search = weakJack;
 		}
 		
@@ -273,17 +274,16 @@ public class Turn {
 			return this.playerFromCard( search );
 		}
 		
-		if ( !this.gameSuit.equals( Suit.NONE ) ) {
+		if( gameSuit.equals( Suit.NONE ) ) {
+			gameSuit = turnSuit;
+		}
+						
+		strongCards = this.filterCards( gameSuit );
+		if( strongCards.size() > 0 ) {
+			return this.playerFromCard( strongCards.get( strongCards.size() - 1 ) );
+		}
 			
-			strongCards = this.filterCards( strongSuit );
-			if( strongCards.size() > 0 ) {
-				return this.playerFromCard( strongCards.get( strongCards.size() - 1 ) );
-			}
-			
-		} 
-		
-		strongSuit = turnSuit;
-		strongCards = this.filterCards( strongSuit );
+		strongCards = this.filterCards( turnSuit );
 		return this.playerFromCard( strongCards.get( strongCards.size() - 1 ) );
 		
 	}
