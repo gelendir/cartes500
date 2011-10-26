@@ -1,15 +1,14 @@
 package unittest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import game.Card;
 import game.Deck;
 import game.Hand;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
-import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class HandTest extends TestCase {
 

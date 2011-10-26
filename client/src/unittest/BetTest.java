@@ -1,7 +1,6 @@
 package unittest;
 
 import junit.framework.TestCase;
-import junit.framework.Assert;
 
 import game.Bet;
 import game.enumeration.Suit;

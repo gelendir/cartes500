@@ -1,10 +1,11 @@
 package unittest;
 
+import junit.framework.TestCase;
+import org.junit.Assert;
+
 import game.Card;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 public class CardTest extends TestCase {
 	

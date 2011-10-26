@@ -5,8 +5,8 @@ import game.Deck;
 import game.Hand;
 import game.Player;
 import game.enumeration.Suit;
-import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class PlayerTest extends TestCase {
 

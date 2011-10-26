@@ -7,8 +7,8 @@ import game.enumeration.Suit;
 
 import java.util.ArrayList;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class GameTest extends TestCase {
 
