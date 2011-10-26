@@ -6,20 +6,20 @@ import java.util.ArrayList;
 /**
  * La classe Game sert à gérer le jeu.
  * @author Frédérik Paradis
-*/
+ */
 public class Game {
 
 	/**
 	 * Le tableau des joueurs de la partie
 	 */
 	private Player players[] = null;
-	
+
 	/**
 	 * L'index dans le tableau des joueurs du joueur 
 	 * qui a gagné la mise.
 	 */
 	private int indexPlayerBetWinner = -1;
-	
+
 	/**
 	 * Le constructeur initialise le jeu avec des valeurs par défaut.
 	 */
@@ -50,7 +50,7 @@ public class Game {
 	public Suit getGameSuit() {
 		return this.players[this.indexPlayerBetWinner].getOriginalBet().getSuit();
 	}
-	
+
 	/**
 	 * Cette méthode retourne le joueur qui a gagné la mise de départ..
 	 * @return Retourne le joueur qui a gagné la mise de départ.
@@ -91,30 +91,26 @@ public class Game {
 		Bet first = null;
 		ArrayList<Bet> bets = new ArrayList<Bet>(25);
 		int suitIndex = 0;
-		
-		if(indexPlayer == 0) {
+
+		if(indexPlayer > 0) {
+			first = this.players[indexPlayer - 1] != null ? this.players[indexPlayer - 1].getOriginalBet() : null;
+		}
+
+		if(first == null) {
 			first = new Bet(6, Suit.SPADES);
 			suitIndex = first.getSuit().ordinal();
 		}
-		else if(indexPlayer != -1) {
-			first = this.players[indexPlayer - 1] != null ? this.players[indexPlayer - 1].getOriginalBet() : null;
+		else {
 			suitIndex = first.getSuit().ordinal() + 1;
 		}
 
-
-		if(first != null) {
-			Suit suits[] = Suit.values();
-
-			for(int j = first.getNbRounds(); j <= 10; ++j) {
-
-				for(int i = suitIndex; i <= Suit.NONE.ordinal(); ++i) {
-					bets.add(new Bet(j, suits[i]));
-				}
-
-				suitIndex = Suit.SPADES.ordinal();
-
+		Suit suits[] = Suit.values();
+		for(int j = first.getNbRounds(); j <= 10; ++j) {
+			for(int i = suitIndex; i <= Suit.NONE.ordinal(); ++i) {
+				bets.add(new Bet(j, suits[i]));
 			}
-
+			
+			suitIndex = Suit.SPADES.ordinal();
 		}
 
 		return bets;
