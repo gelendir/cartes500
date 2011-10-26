@@ -1,7 +1,6 @@
 package game;
 
 import game.enumeration.Suit;
-import java.util.Arrays;
 
 /**
  * Mise d'un joueur fait au début d'une partie.
@@ -91,6 +90,21 @@ public class Bet {
 	 */
 	public String toString() {
 		return "Bet[" + this.suit.toString() + "," + Integer.toString( this.nbRounds ) + "]";
+	}
+	
+	/**
+	 * Vérifie si l'objet passé en paramètre a bien les mêmes valeurs que l'objet
+	 * courant.
+	 * @return Retourne vrai si l'objet est le même; sinon faux.
+	 */
+	public boolean equals(Object obj) {
+		if(obj instanceof Bet) {
+			Bet bet = (Bet)obj;
+			if(this.suit == bet.suit && this.nbRounds == bet.nbRounds) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

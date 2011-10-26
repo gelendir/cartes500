@@ -6,8 +6,8 @@ import java.util.Stack;
 
 import game.Card;
 import game.Deck;
-import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class DeckTest extends TestCase {
 
