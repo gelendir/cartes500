@@ -2,10 +2,8 @@ package view;
 
 import java.util.ArrayList;
 
-import server.Server;
 import game.Bet;
 import game.Card;
-import game.Game;
 import game.Hand;
 import game.Player;
 import game.enumeration.Suit;
