@@ -117,6 +117,9 @@ public class HandTest extends TestCase {
 		
 		ArrayList<Card> playables;
 		
+		playables = h.getPlayableCard(Suit.NONE);
+		Assert.assertEquals(playables.size(), 10);
+		
 		playables = h.getPlayableCard(Suit.HEARTS);
 		Assert.assertEquals(playables.size(), 2);
 		Assert.assertTrue(playables.contains(new Card(Suit.HEARTS, CardValue.FOUR)));

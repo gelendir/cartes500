@@ -128,7 +128,7 @@ public class Hand {
 	 * @return Retourne la collection de cartes jouables.
 	 */
 	public ArrayList<Card> getPlayableCard(Suit turn) {
-		if(this.suit !=  null && !this.suit.equals(Suit.NONE) && this.hand != null && turn != null) {
+		if(/*this.suit !=  null && !this.suit.equals(Suit.NONE) && */this.hand != null && turn != null && turn != Suit.NONE) {
 			ArrayList<Card> ret = new ArrayList<Card>();
 			Iterator<Card> itr = this.hand.iterator(); 
 			Card add = null;
