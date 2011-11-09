@@ -72,7 +72,7 @@ public abstract class AbstractView {
 	 * à faire une mise
 	 * @return La mise fait par le joueur.
 	 */
-	public abstract Bet askBet( Hand hand );
+	public abstract Bet askBet( Hand hand ) throws Exception;
 	
 	/**
 	 * Met à jour l'affichage pour indiquer à l'utilisateur qu'un joueur

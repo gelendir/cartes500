@@ -84,9 +84,10 @@ public class Game {
 	 * Cette méthode retourne une collection de Bet que le joueur peut jouer.
 	 * @param player Le joueur en question
 	 * @return Retourne une collection de Bet que le joueur peut jouer.
+	 * @throws Exception 
 	 * @see Bet
 	 */
-	public ArrayList<Bet> getPlayableBets(Player player) {
+	public ArrayList<Bet> getPlayableBets(Player player) throws Exception {
 		int indexPlayer = findIndexPlayer(player);
 		Bet first = null;
 		ArrayList<Bet> bets = new ArrayList<Bet>(25);

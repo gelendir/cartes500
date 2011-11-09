@@ -15,7 +15,7 @@ public class PlayerTest extends TestCase {
 		Assert.assertEquals(player.getName(), "Fred");
 	}
 
-	public final void testGetSetOriginalBet() {
+	public final void testGetSetOriginalBet() throws Exception {
 		Bet bet = new Bet(6, Suit.HEARTS);
 		Player player = new Player("Fred");
 		player.setOriginalBet(bet);

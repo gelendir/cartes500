@@ -26,7 +26,7 @@ public class GameTest extends TestCase {
 		}
 	}
 
-	public void testGetGameSuit() {
+	public void testGetGameSuit() throws Exception {
 		Game game = new Game();
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
@@ -42,7 +42,7 @@ public class GameTest extends TestCase {
 		Assert.assertTrue(game.getGameSuit().equals(Suit.DIAMONDS));
 	}
 
-	public void testGetBestPlayerBet() {
+	public void testGetBestPlayerBet() throws Exception {
 		Game game = new Game();
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
@@ -58,7 +58,7 @@ public class GameTest extends TestCase {
 		Assert.assertTrue(game.getBestPlayerBet().equals(players[2]));
 	}
 
-	public void testGetPlayableBets() {
+	public void testGetPlayableBets() throws Exception {
 		ArrayList<Bet> bets;
 		Game game = new Game();
 		Player players[] = new Player[4];
@@ -90,7 +90,7 @@ public class GameTest extends TestCase {
 		game.setBet(null, players[3]);
 	}
 
-	public void testSetBet() {
+	public void testSetBet() throws Exception {
 		Game game = new Game();
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
@@ -105,7 +105,7 @@ public class GameTest extends TestCase {
 		Assert.assertTrue(game.setBet(null, players[3]));
 	}
 
-	public void testIsValidBet() {
+	public void testIsValidBet() throws Exception {
 		Game game = new Game();
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {

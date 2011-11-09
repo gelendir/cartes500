@@ -85,7 +85,7 @@ public interface ClientInterface extends Remote {
 	 * @return La mise fait par ce client.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public Bet notifyBettingTime( Hand hand ) throws RemoteException;
+	public Bet notifyBettingTime( Hand hand ) throws Exception;
 	
 	/**
 	 * Événement lancé à la fin d'une partie pour indiquer les joueurs qui ont

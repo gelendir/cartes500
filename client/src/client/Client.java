@@ -185,11 +185,12 @@ public class Client implements ClientInterface {
 	 * Notification de la période de mise.
 	 * Veuillez vous référer à la documentation de la classe ClientInterface
 	 * pour plus de détails.
+	 * @throws Exception 
 	 * 
 	 * @see ClientInterface#notifyBettingTime(Hand)
 	 */
 	@Override
-	public Bet notifyBettingTime( Hand hand ) throws RemoteException {
+	public Bet notifyBettingTime( Hand hand ) throws Exception {
 		
 		this.player.setHand( hand );
 		Bet bet = this.view.askBet( hand );

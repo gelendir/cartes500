@@ -219,10 +219,11 @@ public class ConsoleView extends AbstractView {
 	/**
 	 * Demande une mise au joueur.
 	 * Voir la classe AbstractView pour plus de détails
+	 * @throws Exception 
 	 * 
 	 * @see AbstractView#askBet(Hand)
 	 */
-	public Bet askBet( Hand hand ) {
+	public Bet askBet( Hand hand ) throws Exception {
 				
 		this.out.println( this.bundle.getString("allPlayersConnected" ) );
 		
