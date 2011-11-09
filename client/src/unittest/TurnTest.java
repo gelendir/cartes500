@@ -9,11 +9,12 @@ import game.enumeration.Suit;
 import game.enumeration.CardValue;
 
 public class TurnTest extends TestCase {
+	
+	static public int MAX_PLAYERS = 4;
 
 	private Player p;
 	
-	private
-	Card[] diamondCards;
+	private Card[] diamondCards;
 	private Card[] heartCards;
 	private Card[] spadeCards;
 	private Card[] clubCards;
@@ -22,6 +23,7 @@ public class TurnTest extends TestCase {
 	private Card blackJoker;
 	
 	private Player[] dummyPlayers;
+	
 
 	protected void setUp() throws Exception {
 		
@@ -103,7 +105,7 @@ public class TurnTest extends TestCase {
 	
 	private void fillTurn( Turn t, Card[] cards, Player[] players ) {
 		
-		for( int i = 0; i < 4; i++ ) {
+		for( int i = 0; i < TurnTest.MAX_PLAYERS; i++ ) {
 			
 			try {
 				t.addCard( players[i], cards[i] );
@@ -123,7 +125,7 @@ public class TurnTest extends TestCase {
 		
 		assertEquals( 0, t.nbCards() );
 		
-		for( int i = 0; i < 4; i++ ) {
+		for( int i = 0; i < TurnTest.MAX_PLAYERS; i++ ) {
 			
 			t.addCard( this.dummyPlayers[i], this.diamondCards[i] );
 			assertEquals( i + 1, t.nbCards() );
@@ -451,6 +453,52 @@ public class TurnTest extends TestCase {
 		
 		assertEquals( this.dummyPlayers[2], t.getWinner() );
 		
-	}		
-
+	}
+	
+	public void testGetTurnSuitJokerOnly() throws Exception {
+		
+		Turn t = new Turn( Suit.NONE );
+		
+		t.addCard( this.dummyPlayers[0], this.colorJoker );
+		
+		assertEquals( null, t.getTurnSuit() );		
+		
+	}
+	
+	public void testGetTurnSuitCardAfterJoker() throws Exception {
+		
+		Turn t = new Turn( Suit.NONE );
+		
+		t.addCard( this.dummyPlayers[0], this.colorJoker );
+		t.addCard( this.dummyPlayers[1], this.diamondCards[0] );
+		
+		assertEquals( Suit.DIAMONDS, t.getTurnSuit() );
+		
+	}
+	
+	public void testGetTurnSuitCardsAfterJoker() throws Exception {
+		
+		Turn t = new Turn( Suit.NONE );
+		
+		t.addCard( this.dummyPlayers[0], this.colorJoker );
+		t.addCard( this.dummyPlayers[1], this.heartCards[0] );
+		t.addCard( this.dummyPlayers[2], this.diamondCards[1] );
+		
+		assertEquals( Suit.HEARTS, t.getTurnSuit() );
+		
+	}
+	
+	public void testGetTurnSuitBothJokers() throws Exception {
+		
+		Turn t = new Turn( Suit.NONE );
+		
+		t.addCard( this.dummyPlayers[0], this.colorJoker );
+		t.addCard( this.dummyPlayers[1], this.blackJoker );
+		t.addCard( this.dummyPlayers[2], this.spadeCards[0] );
+		t.addCard( this.dummyPlayers[3], this.diamondCards[0] );
+		
+		assertEquals( Suit.SPADES, t.getTurnSuit() );
+		
+	}
+;
 }

@@ -5,6 +5,7 @@ import game.enumeration.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -99,7 +100,18 @@ public class Turn {
 			return null;
 		}
 		
-		return this.cards.values().iterator().next().getSuit();
+		Iterator<Card> iterator = this.cards.values().iterator();
+		Card card = iterator.next();
+		
+		if( this.cards.size() <= 1 && card.getCardValue() == CardValue.JOKER ) {
+			return null;
+		}
+		
+		while( card.getCardValue() == CardValue.JOKER ) {
+			card = iterator.next();
+		}
+		
+		return card.getSuit();
 		
 	}
 	
@@ -239,11 +251,12 @@ public class Turn {
 		ArrayList<Card> strongCards = null;
 		
 		Card search = null;
-		
-		
+				
 		Card strongJack = null;
 		Card weakJack = null;
 		
+		//If this turn has a game suit, then the jacks of the same
+		//color as the game suit have priority over other cards
 		if( !gameSuit.equals( Suit.NONE ) ) {
 			
 			strongJack = new Card( gameSuit, CardValue.JACK );
@@ -259,7 +272,7 @@ public class Turn {
 			}
 		}
 		
-		//Determine if a player has a joker
+		//Determine if a player has a joker or a jack
 		if ( this.cards.containsValue( colorJoker ) ) {
 			search = colorJoker;
 		} else if ( this.cards.containsValue( blackJoker ) ) {
