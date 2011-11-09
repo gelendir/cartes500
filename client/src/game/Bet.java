@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Arrays;
+
 import game.enumeration.Suit;
 
 /**
@@ -51,15 +53,14 @@ public class Bet {
 	 * @param suit L'atout que le joueur désire.
 	 * @throws Exception 
 	 */
-	public Bet( int nbRounds, Suit suit ) { //throws Exception {
+	public Bet( int nbRounds, Suit suit ) throws Exception {
 		
-		/*
+		
 		if( nbRounds < Bet.MIN_BET || nbRounds > Bet.MAX_BET ) {
 			throw new Exception("number of bets must be between " + Bet.MIN_BET + " and " + Bet.MAX_BET );
 		} else if ( ! Arrays.asList( Bet.SUITS ).contains( suit ) ) {
 			throw new Exception("cannot use this suit in a bet");
 		}
-		*/
 		
 		this.nbRounds = nbRounds;
 		this.suit = suit;
