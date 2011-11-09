@@ -1,5 +1,6 @@
 package game;
 
+import exception.EmptyDeckException;
 import game.enumeration.Suit;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class Hand {
 	public Hand(Deck deck) throws Exception {
 		for(int i = 0; i < MAX_CARDS; ++i) {
 			if(deck.isEmpty()) {
-				throw new Exception("The deck is empty.");
+				throw new EmptyDeckException();
 			}
 			else {
 				this.hand.add(deck.takeCard());

@@ -1,5 +1,6 @@
 package game;
 
+import exception.InvalidBetException;
 import game.enumeration.Suit;
 import java.util.ArrayList;
 
@@ -84,10 +85,11 @@ public class Game {
 	 * Cette méthode retourne une collection de Bet que le joueur peut jouer.
 	 * @param player Le joueur en question
 	 * @return Retourne une collection de Bet que le joueur peut jouer.
+	 * @throws InvalidBetException 
 	 * @throws Exception 
 	 * @see Bet
 	 */
-	public ArrayList<Bet> getPlayableBets(Player player) throws Exception {
+	public ArrayList<Bet> getPlayableBets(Player player) throws InvalidBetException {
 		int indexPlayer = findIndexPlayer(player);
 		Bet first = null;
 		ArrayList<Bet> bets = new ArrayList<Bet>(25);
