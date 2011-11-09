@@ -1,5 +1,6 @@
 package game;
 
+import exception.GameException;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
@@ -41,7 +42,7 @@ public class Deck {
 
 						try {
 							cards.add(new Card(suits[i], values[j]));
-						} catch (Exception e) {
+						} catch (GameException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}

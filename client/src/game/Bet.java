@@ -2,6 +2,8 @@ package game;
 
 import java.util.Arrays;
 
+import exception.InvalidBetException;
+
 import game.enumeration.Suit;
 
 /**
@@ -51,15 +53,15 @@ public class Bet {
 	 * Constructeur. Crée une nouvelle mise.
 	 * @param nbRounds Le nombre de tours que le joueur désire remporter
 	 * @param suit L'atout que le joueur désire.
-	 * @throws Exception 
+	 * @throws InvalidBetException 
 	 */
-	public Bet( int nbRounds, Suit suit ) throws Exception {
+	public Bet( int nbRounds, Suit suit ) throws InvalidBetException {
 		
 		
 		if( nbRounds < Bet.MIN_BET || nbRounds > Bet.MAX_BET ) {
-			throw new Exception("number of bets must be between " + Bet.MIN_BET + " and " + Bet.MAX_BET );
+			throw new InvalidBetException("number of bets must be between " + Bet.MIN_BET + " and " + Bet.MAX_BET );
 		} else if ( ! Arrays.asList( Bet.SUITS ).contains( suit ) ) {
-			throw new Exception("cannot use this suit in a bet");
+			throw new InvalidBetException("cannot use this suit in a bet");
 		}
 		
 		this.nbRounds = nbRounds;

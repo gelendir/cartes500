@@ -1,5 +1,7 @@
 package game;
 
+import exception.InvalidCardException;
+import exception.TurnException;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
@@ -69,15 +71,15 @@ public class Turn {
 	 * 
 	 * @param player Le joueur qui a déposé la carte
 	 * @param card La carte à jouer lors de ce tour
-	 * @throws Exception Erreur si le joueur a déja joué une carte 
+	 * @throws TurnException Erreur si le joueur a déja joué une carte 
 	 * ou si tout les joueurs ont déja joué
 	 */
-	public void addCard( Player player, Card card ) throws Exception {
+	public void addCard( Player player, Card card ) throws TurnException {
 		
 		if( this.cards.size() >= Turn.MAX_CARDS ) {
-			throw new Exception("Cannot add more cards to this turn");
+			throw new TurnException("Cannot add more cards to this turn");
 		} else if ( this.cards.containsKey( player ) ) {
-			throw new Exception("Player has already played a card");
+			throw new TurnException("Player has already played a card");
 		}
 		
 		this.cards.put( player, card );
@@ -202,10 +204,11 @@ public class Turn {
 	 * Ajoute une partie de plus au nombres de parties remportés par le gagnant du tour.
 	 * Utilisé à la fin du tour pour mettre à jour le pointage de la partie.
 	 * 
-	 * @throws Exception Retourne les mêmes exceptions que getWinner()
+	 * @throws TurnException Retourne les mêmes exceptions que getWinner()
+	 * @throws InvalidCardException 
 	 * @see getWinner
 	 */
-	public void incrementWinner() throws Exception {
+	public void incrementWinner() throws TurnException, InvalidCardException {
 		
 		Player winner = this.getWinner();
 		winner.addTurnWin();
@@ -234,12 +237,13 @@ public class Turn {
 	 *  - La carte la plus forte de Coeur
 	 *  
 	 * @return Le joueur ayant déposé la carte la plus forte.
-	 * @throws Exception Erreur si des joueurs n'ont pas encore déposé leur cartes.
+	 * @throws TurnException Erreur si des joueurs n'ont pas encore déposé leur cartes.
+	 * @throws InvalidCardException 
 	 */
-	public Player getWinner() throws Exception {
+	public Player getWinner() throws TurnException, InvalidCardException {
 		
 		if( this.cards.size() != Turn.MAX_CARDS ) {
-			throw new Exception("Not all players have played a card in this turn");
+			throw new TurnException("Not all players have played a card in this turn");
 		}
 		
 		Suit gameSuit = this.gameSuit;
