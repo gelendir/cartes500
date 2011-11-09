@@ -126,27 +126,30 @@ public class MockServer extends Server {
 				break;
 			}
 		}
+		
+		int otherTeammate1;
+		int otherTeammate2;
 
 		int teammate = 0;
-		if(indexPlayer == 0) {
+		if(indexPlayer == 0 || indexPlayer == 2) {
+			indexPlayer = 0;
 			teammate = 2;
+			otherTeammate1 = 1;
+			otherTeammate2 = 3;
 		}
-		else if(indexPlayer == 1) {
+		else { // if(indexPlayer == 1 || indexPlayer == 3) {
+			indexPlayer = 1;
 			teammate = 3;
-		}
-		else if(indexPlayer == 2) {
-			teammate = 0;
-		}
-		else if(indexPlayer == 3) {
-			teammate = 1;
+			otherTeammate1 = 0;
+			otherTeammate2 = 2;
 		}
 		
-		//if(players[indexPlayer].getTurnWin() + players[teammate].getTurnWin() >= this.game.getBestPlayerBet().getOriginalBet().getNbRounds()) {
-		//	this.client.notifyWinner(players[indexPlayer], players[teammate]);
-		//}
-		
-		this.client.notifyWinner( players[indexPlayer], players[teammate] );
-		
+		if(this.players[indexPlayer].getTurnWin() + this.players[teammate].getTurnWin() >= this.game.getBestPlayerBet().getOriginalBet().getNbRounds()) {
+			this.client.notifyWinner(this.players[indexPlayer], this.players[teammate]);
+		}
+		else {
+			this.client.notifyWinner( players[otherTeammate1], players[otherTeammate2] );
+		}
 	}
 	
 	private Player[] playingOrder( Player winner ) {
