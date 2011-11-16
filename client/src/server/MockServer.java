@@ -1,5 +1,8 @@
 package server;
 
+import exception.EmptyDeckException;
+import exception.GameException;
+import exception.TurnException;
 import game.Bet;
 import game.Card;
 import game.Deck;
@@ -16,12 +19,12 @@ import java.util.Arrays;
 import client.Client;
 
 public class MockServer extends Server {
-	
+
 	final static public int MAX_TURNS = 10;
 	final static public int MAX_PLAYERS = 4;
 	final static public int MIN_BET = 6;
 	final static public int NB_CARDS_NEW_HAND = 6;
-	
+
 
 	private Deck deck;
 	private Client client = null;
@@ -36,89 +39,89 @@ public class MockServer extends Server {
 		this.deck = new Deck();
 		this.deck.mixCards();
 	}
-	
+
 	public void setClient( Client client ) {
 		this.client = client;
 		this.player = client.getPlayer();
 	}
-	
+
 	private void connectPlayers() throws RemoteException {
-		
+
 		this.players = new Player[]{ this.player, new Player("bot2"), new Player("bot3"), new Player("bot4") };
-		
+
 		this.client.connect();
-		
+
 		//Connections
 		this.game.setPlayers( this.players );
-				
+
 		//Start i and 1 to skip the first player since it's us
 		for( int i = 1; i < this.players.length; i++ ) {
 			client.notifyPlayerConnect( this.players[i] );
 		}
-		
+
 	}
-	
-	private Bet createHands() throws Exception {
-		
+
+	private Bet createHands() throws EmptyDeckException {
+
 		Hand hand = new Hand( deck );
 		Bet bet = this.client.notifyBettingTime( hand );
-		
+
 		System.out.println("SERVER: Player " + this.player.getName() + " has bet " + bet );
-		
+
 		//Bot hands
 		this.players[1].setHand( new Hand( this.deck ) );
 		this.players[2].setHand( new Hand( this.deck ) );
 		this.players[3].setHand( new Hand( this.deck ) );
-		
-		
+
+
 		return bet;
-		
+
 	}
-	
-	private void createAndManageBets() throws Exception {
-		
+
+	private void createAndManageBets() throws EmptyDeckException {
+
 		//Client bet
 		Bet bet = this.createHands();
 		this.game.setBet( bet, this.player );
-		
+
 		//Bot bets		
 		for( int i = 1; i < MockServer.MAX_PLAYERS; i++ ) {
-			
+
 			ArrayList<Bet> botBets = this.game.getPlayableBets( this.players[i] );
 			Bet botBet = null;
-			
+
 			if( botBets.size() > 0 ) {
 				botBet = botBets.get(0);
 			}
-			
+
 			this.game.setBet( botBet, this.players[i] );
 			this.client.notifyPlayerBet( this.players[i], botBet );
-			
+
 		}
-		
+
 		Player betWinner = this.game.getBestPlayerBet();
 		Suit gameSuit = this.game.getGameSuit();
 		this.client.notifyBetWinner( betWinner, gameSuit );
-		
+
 		for( Player p : this.players ) {
 			p.getHand().setGameSuit( gameSuit );
 		}
-		
+
 		if( betWinner == this.player ) {
-			
+
 			Card newCards[] = new Card[ MockServer.NB_CARDS_NEW_HAND ];
 
 			for( int i = 0; i < 6; i++ ) {
 				newCards[i] = deck.takeCard();
 			}
-			
+
 			this.client.notifyChangeCardsAfterBet( newCards );
 		}
-		
+
 	}
-	
+
 	private void showWinner() throws RemoteException {
-		
+
 		int indexPlayer = 0;
 		for(int i = 0; i < this.players.length; ++i) {
 			if(players[i].equals(this.game.getBestPlayerBet())) {
@@ -126,7 +129,7 @@ public class MockServer extends Server {
 				break;
 			}
 		}
-		
+
 		int otherTeammate1;
 		int otherTeammate2;
 
@@ -143,7 +146,7 @@ public class MockServer extends Server {
 			otherTeammate1 = 0;
 			otherTeammate2 = 2;
 		}
-		
+
 		if(this.players[indexPlayer].getTurnWin() + this.players[teammate].getTurnWin() >= this.game.getBestPlayerBet().getOriginalBet().getNbRounds()) {
 			this.client.notifyWinner(this.players[indexPlayer], this.players[teammate]);
 		}
@@ -151,97 +154,97 @@ public class MockServer extends Server {
 			this.client.notifyWinner( players[otherTeammate1], players[otherTeammate2] );
 		}
 	}
-	
+
 	private Player[] playingOrder( Player winner ) {
-		
+
 		Player[] order = new Player[ MockServer.MAX_PLAYERS ];
 		int orderPos = 1;
-		
+
 		int pos = -1;
 		for( int i = 0; i < this.players.length && pos < 0; i++ ) {
 			if( this.players[i] == winner ) {
 				pos = i;
 			}
 		}
-		
+
 		order[0] = this.players[pos];
-		
+
 		for( int i = pos + 1; i < this.players.length; i++ ) {
 			order[orderPos] = this.players[i];
 			orderPos++;
 		}
-		
+
 		for( int i = 0; i < pos; i++ ) {
 			order[orderPos] = this.players[i];
 			orderPos++;
 		}
-		
+
 		return order;
-		
+
 	}
-	
-	public void startGame() throws RemoteException, Exception {
-		
+
+	public void startGame() throws RemoteException, GameException {
+
 		this.connectPlayers();
 		this.createAndManageBets();
-		
+
 		ArrayList<Player> playingOrder = new ArrayList<Player>(Arrays.asList( players ));
 		this.client.notifyStartNewGame( playingOrder );
-				
+
 		this.turn = new Turn( this.game.getGameSuit() );
 		Player[] turnOrder = this.playingOrder( this.game.getBestPlayerBet() );
-		
+
 		while( this.nbTurn < MockServer.MAX_TURNS ) {
-			
+
 			for( Player currentPlayer : turnOrder ) {
-								
+
 				if( currentPlayer == this.player ) {
-					
+
 					Card card = this.client.notifyYourTurn( this.turn.getTurnSuit() );
 					this.turn.addCard( currentPlayer , card );
-					
+
 				} else {
-					
+
 					Card botCard = currentPlayer.getHand().getPlayableCard( this.turn.getTurnSuit() ).get(0);				
 					this.turn.addCard( currentPlayer, botCard );
 					currentPlayer.getHand().playCard( botCard );
 					this.client.notifyPlayerTurn( currentPlayer, botCard );
 				}
-				
+
 			}
-			
+
 			Player turnWinner = this.turn.getWinner();
 			this.client.notifyTurnWinner( turnWinner );
-			
+
 			turnOrder = this.playingOrder(  turnWinner );
 			this.turn = new Turn( this.game.getGameSuit() );
 			this.nbTurn++;
 
-			
+
 		}
-		
+
 		this.showWinner();
-		
+
 	}
 
 	@Override
 	public boolean connectClient(Client client, Player player)
-	throws RemoteException {
+			throws RemoteException {
 
 		System.out.println("SERVER: Client with player " + player.getName() + " has connected.");
 		this.player = player;
 		return true;
-		
+
 	}
 
 	@Override
 	public void playCard(Client client, Card card) throws RemoteException {
-		
+
 		System.out.println("SERVER: player " + client.getPlayer().toString() + " has played card " + card.toString() );
 
 		try {
 			this.turn.addCard( client.getPlayer() , card );
-		} catch (Exception e) {
+		} catch (TurnException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

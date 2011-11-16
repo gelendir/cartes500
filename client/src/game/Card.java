@@ -1,5 +1,6 @@
 package game;
 
+import exception.InvalidCardException;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
@@ -25,16 +26,16 @@ public class Card {
 	 * qui n'existe pas. Par exemple, un Joker de Pique lèverait une exception.
 	 * @param suit La sorte de la carte
 	 * @param value La valeur de la carte 
-	 * @throws Exception
+	 * @throws InvalidCardException
 	 */
-	public Card(Suit suit, CardValue value) throws Exception {
+	public Card(Suit suit, CardValue value) throws InvalidCardException {
 		if(value.equals(CardValue.JOKER)) {
 			if(!suit.equals(Suit.BLACK) && !suit.equals(Suit.COLOR)) {
-				throw new Exception("Playing Card does not exist.");
+				throw new InvalidCardException();
 			}
 		}
 		else if(suit.equals(Suit.BLACK) || suit.equals(Suit.COLOR)) {
-			throw new Exception("Playing Card does not exist.");
+			throw new InvalidCardException();
 		}
 		
 		this.suit = suit;

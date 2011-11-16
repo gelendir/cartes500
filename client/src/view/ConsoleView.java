@@ -19,11 +19,11 @@ import game.enumeration.Suit;
  * Pour plus de détails sur le fonctionnement de cette vue, veuillez consulter 
  * la documentation de la classe AbstractView
  * 
- * @see AbstractView
+ * @see IView
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
  *
  */
-public class ConsoleView extends AbstractView {
+public class ConsoleView implements IView {
 	
 	/**
 	 * Fichier de langues à utiliser lors de l'affichage.
@@ -69,7 +69,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche un message de bienvenue.
 	 * Voir La classe AbstractView pour plus de détails.
 	 * 
-	 * @see AbstractView#welcome()
+	 * @see IView#welcome()
 	 */
 	public void welcome() {
 		
@@ -81,7 +81,7 @@ public class ConsoleView extends AbstractView {
 	 * Crée un nouveau profil de joueur.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#createPlayer()
+	 * @see IView#createPlayer()
 	 */
 	public Player createPlayer()
 	{
@@ -172,7 +172,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche un message indiquant qu'un joueur c'est connecté.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#playerConnected(Player)
+	 * @see IView#playerConnected(Player)
 	 */
 	public void playerConnected( Player player ) {
 		
@@ -189,7 +189,7 @@ public class ConsoleView extends AbstractView {
 	 * Notification qu'un joueur a fait une mise.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#playerHasBet(Player, Bet)
+	 * @see IView#playerHasBet(Player, Bet)
 	 */
 	public void playerHasBet( Player player, Bet bet ) {
 		
@@ -265,9 +265,8 @@ public class ConsoleView extends AbstractView {
 	/**
 	 * Demande une mise au joueur.
 	 * Voir la classe AbstractView pour plus de détails
-	 * @throws Exception 
 	 * 
-	 * @see AbstractView#askBet(Hand)
+	 * @see IView#askBet(Hand)
 	 */
 	public Bet askBet( Hand hand ) {
 				
@@ -379,7 +378,7 @@ public class ConsoleView extends AbstractView {
 	 * Demande à l'utilisateur quel carte jouer.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#getCardToPlay(Hand, Suit)
+	 * @see IView#getCardToPlay(Hand, Suit)
 	 */
 	public Card getCardToPlay( Hand hand, Suit suit ) {
 			
@@ -416,7 +415,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche la carte déposé par un joueur.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#showPlayerTurn(Player, Card)
+	 * @see IView#showPlayerTurn(Player, Card)
 	 */
 	public void showPlayerTurn( Player player, Card card ) {
 			
@@ -465,7 +464,7 @@ public class ConsoleView extends AbstractView {
 	 * demande à l'utilisateur d'échanger des nouvelles cartes.
 	 * Voir la classe AbstractView pour plus de détails 
 	 * 
-	 * @see AbstractView#changeCards(Hand, Card[])
+	 * @see IView#changeCards(Hand, Card[])
 	 */
 	public ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards ) {
 		
@@ -541,7 +540,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche le gagnant de la mise.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#showBetWinner(Player, Suit)
+	 * @see IView#showBetWinner(Player, Suit)
 	 */
 	@Override
 	public void showBetWinner(Player player, Suit gameSuit) {
@@ -556,7 +555,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche un message de début de partie.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#showGameStart(Player)
+	 * @see IView#showGameStart(Player)
 	 */
 	@Override
 	public void showGameStart(Player first) {
@@ -571,7 +570,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche les gagnants de la partie.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#showWinners(Player, Player)
+	 * @see IView#showWinners(Player, Player)
 	 */
 	@Override
 	public void showWinners(Player player, Player player2) {
@@ -588,7 +587,7 @@ public class ConsoleView extends AbstractView {
 	 * Affiche le gagnant du tour.
 	 * Voir la classe AbstractView pour plus de détails
 	 * 
-	 * @see AbstractView#showTurnWinner(Player)
+	 * @see IView#showTurnWinner(Player)
 	 */
 	@Override
 	public void showTurnWinner(Player player) {
