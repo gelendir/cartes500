@@ -3,6 +3,7 @@ package view;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -142,24 +143,22 @@ public class ConsoleView extends AbstractView {
 		
 		String cardTemplate = this.bundle.getString("cardSelectionTemplate");
 		String cardLine = "";
+		String suffix = "";
 				
 		for( int i = 0; i < cards.length; ++i ) {
 			
-			card = cards[i];
+			card = cards[i];		
+			suffix = "";
 			
 			if( playable.contains( card ) ) {
-				cardLine = MessageFormat.format( 
-						cardTemplate, 
-						Integer.toString( i ), 
-						card.toString(), 
-						ConsoleView.PLAYABLE );
-			} else {
-				cardLine = MessageFormat.format( 
-						cardTemplate, 
-						Integer.toString( i ), 
-						card.toString(),
-						"" );
+				suffix = ConsoleView.PLAYABLE;
 			}
+			
+			cardLine = MessageFormat.format( 
+					cardTemplate, 
+					Integer.toString( i ), 
+					card.toString(), 
+					suffix );
 			
 			this.out.println( cardLine );
 			
@@ -181,8 +180,7 @@ public class ConsoleView extends AbstractView {
 				this.bundle.getString("playerConnected"),
 				player.getName() 
 				);
-		
-		
+				
 		this.out.println( msg );
 		
 	}
@@ -195,11 +193,19 @@ public class ConsoleView extends AbstractView {
 	 */
 	public void playerHasBet( Player player, Bet bet ) {
 		
+		int nbRounds = 0;
+		String suit = this.bundle.getString("nothing");
+		
+		if( bet != null ) {
+			nbRounds = bet.getNbRounds();
+			suit = bet.getSuit().toString();
+		}
+		
 		String msg = MessageFormat.format(
 				this.bundle.getString("playerBet"),
 				player.getName(),
-				bet == null ? 0 : Integer.toString( bet.getNbRounds() ),
-				bet == null ? "Nothing" : bet.getSuit().toString()
+				Integer.toString( nbRounds ),
+				suit
 				);
 		
 		this.out.println( msg );
@@ -217,48 +223,135 @@ public class ConsoleView extends AbstractView {
 	}
 	
 	/**
+	 * Affiche à l'écran un message et demande à l'utilisateur de rentrer
+	 * un chiffre à la console. Redemande le message à boucle tant et autant
+	 * que ce qui est saisi comme texte n'est pas un chiffre ou n'est pas
+	 * compris inclusivement entre le minimum et le maximum.
+	 * 
+	 * @param message Le message à afficher à la console
+	 * @param min Le chiffre minimum que l'utilisateur doit entrer
+	 * @param max Le chiffre maximum que l'utilisateur doit entrer
+	 * @return Le chiffre entré par l'utilisateur
+	 */
+	private int askInt( String message, int min, int max ) {
+		
+		boolean answered = false;
+		int answer = 0;
+		
+		while( !answered ) {
+			
+			this.out.println( message );
+			
+			try{
+				
+				answer = this.in.nextInt();
+				if( answer >= min && answer <= max ) {
+					answered = true;
+				}
+				
+			} catch( InputMismatchException e ) {
+				
+				this.in.skip(".*");
+				
+			}
+			
+			
+		}
+		
+		return answer;
+		
+	}
+	
+	/**
 	 * Demande une mise au joueur.
 	 * Voir la classe AbstractView pour plus de détails
 	 * @throws Exception 
 	 * 
 	 * @see AbstractView#askBet(Hand)
 	 */
-	public Bet askBet( Hand hand ) throws Exception {
+	public Bet askBet( Hand hand ) {
 				
-		this.out.println( this.bundle.getString("allPlayersConnected" ) );
-		
-		int nbRounds = -1;
-		int nbSuit = -1;		
-		
 		Bet bet = null;
+		boolean validBet = false;
 		
+		this.out.println( this.bundle.getString("allPlayersConnected" ) );
 		this.out.println( this.bundle.getString("currentHandBanner") );
 		this.printCards( hand.getCards() );
 		
-		while ( ! ( nbRounds == 0 || (nbRounds >= Bet.MIN_BET && nbRounds <= Bet.MAX_BET ) ) ) {
-			
-			this.out.println( this.bundle.getString( "playerAskBetNbCards" ) );
-			nbRounds = this.in.nextInt();
-			
-		}
+		while( !validBet ) {
 		
-		this.printSuits();
-		
-		if( nbRounds > 0 ) {
+			int nbRounds = this.askBetNbRounds();	
 			
-			while( nbSuit < 0 || nbSuit > Bet.SUITS.length ) {
+			if( nbRounds > 0 ) {
 				
-				this.out.println( this.bundle.getString( "playerAskBetSuit" ) );
-				nbSuit = this.in.nextInt();
+				this.printSuits();
+				Suit suit = this.askBetSuit();
+				
+				try {
+					bet = new Bet( nbRounds, suit );
+					validBet = true;
+				} catch (Exception e) {
+					
+					this.out.println( this.bundle.getString("invalidBet") );
+					
+				}
+				
+			} else {
+				
+				validBet = true;
+				
 			}
-			
-			Suit suit = Bet.SUITS[ nbSuit ];
-			
-			bet  = new Bet( nbRounds, suit );
 			
 		}
 		
 		return bet;
+		
+	}
+
+	/**
+	 * Demande à l'utilisateur le nombre de tours qu'il veut miser.
+	 * 
+	 * @see askBet
+	 * @return le nombre de tours.
+	 */
+	private int askBetNbRounds() {
+		
+		int nbRounds = -1;
+
+		while( !(
+					nbRounds == 0 || 
+					( nbRounds >= Bet.MIN_BET && nbRounds <= Bet.MAX_BET ) 
+				) 
+		)
+		{
+		
+			nbRounds = this.askInt(
+					this.bundle.getString( "playerAskBetNbCards" ), 
+					0,
+					Bet.MAX_BET
+					);
+		}
+		
+		return nbRounds;
+	}
+	
+	/**
+	 * Demande à l'utilisateur la sorte qu'il veut miser
+	 * 
+	 * @see askBet
+	 * @return La suite.
+	 */
+	private Suit askBetSuit() {
+		
+		int nbSuit = this.askInt(
+				this.bundle.getString( "playerAskBetSuit" ),
+				0,
+				Bet.SUITS.length
+				);
+		
+		Suit suit = Bet.SUITS[ nbSuit ];
+		
+		return suit;
 		
 	}
 	
@@ -289,9 +382,8 @@ public class ConsoleView extends AbstractView {
 	 * @see AbstractView#getCardToPlay(Hand, Suit)
 	 */
 	public Card getCardToPlay( Hand hand, Suit suit ) {
-		
-		int cardNumber = -1;
-		
+			
+		int cardNumber = -1;		
 		Card[] cards = hand.getCards();
 		ArrayList<Card> playableCards = hand.getPlayableCard( suit );
 		
@@ -299,15 +391,21 @@ public class ConsoleView extends AbstractView {
 		this.out.println( this.bundle.getString("currentHandBanner") );
 		
 		this.printHand( hand, suit );
-				
-		while( 
-			cardNumber < 0 
-			|| !( playableCards.contains( cards[ cardNumber ] ) ) 
-		) {
-			this.out.println( this.bundle.getString("playerSelectCard") );
-			cardNumber = this.in.nextInt();
-		}
 		
+		while( 
+				cardNumber < 0
+				|| !( playableCards.contains( cards[ cardNumber ] ) ) 
+		)
+		{
+		
+			cardNumber = this.askInt(
+				this.bundle.getString( "playerSelectCard" ),
+				0,
+				cards.length - 1 
+				);
+			
+		}
+				
 		Card card = cards[ cardNumber ];
 		
 		return card;
