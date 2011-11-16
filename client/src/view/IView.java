@@ -9,25 +9,17 @@ import game.Player;
 import game.enumeration.Suit;
 
 /**
- * Classe abstraite pour interagir avec le joueur humain. Dans la version
+ * Interface pour interagir avec le joueur humain. Dans la version
  * finale de ce projet, le joueur pourra choisir d'utiliser une interface graphique
  * ou une interface en mode texte (console). Cette classe représente la partie "Vue"
- * dans le modèle MVC de l'application client. Pour les besoins du protoype, cette classe
+ * dans le modèle MVC de l'application client. Pour les besoins du protoype, cette interface
  * agit en mode "Dumb view". C'est-à-dire qu'elle attend de recevoir de l'information
  * à afficher au lieu d'interroger le modèle.
  * 
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
  *
  */
-public abstract class AbstractView {
-	
-	/**
-	 * Constructeur. Crée une nouvelle instance de la classe.
-	 * 
-	 */
-	public AbstractView() {
-		
-	}
+public interface IView {
 	
 	/**
 	 * Demande à l'utilisateur de créer un nouveau profil de joueur.
@@ -35,7 +27,7 @@ public abstract class AbstractView {
 	 * 
 	 * @return Le profil du joueur.
 	 */
-	public abstract Player createPlayer();
+	public Player createPlayer();
 	
 	/**
 	 * Demande à l'utilisateur quel carte qu'il voudrait jouer lors de son
@@ -45,7 +37,7 @@ public abstract class AbstractView {
 	 * @param suit La sorte demandé pour le tour
 	 * @return La carte que le joueur veut jouer
 	 */
-	public abstract Card getCardToPlay( Hand hand, Suit suit );
+	public Card getCardToPlay( Hand hand, Suit suit );
 	
 	/**
 	 * Met à jour l'affichage pour indiquer ce qu'un joueur a
@@ -54,7 +46,7 @@ public abstract class AbstractView {
 	 * @param player Le joueur qui a joué
 	 * @param card La carte déposé
 	 */
-	public abstract void showPlayerTurn( Player player, Card card );
+	public void showPlayerTurn( Player player, Card card );
 
 	/**
 	 * Met à jour l'affichage pour indique qu'un joueur vient juste
@@ -62,7 +54,7 @@ public abstract class AbstractView {
 	 * 
 	 * @param player Le joueur qui c'est connecté
 	 */
-	public abstract void playerConnected( Player player );
+	public void playerConnected( Player player );
 	
 	/**
 	 * Demande au joueur quel mise qu'il voudrait faire avant le début
@@ -72,7 +64,7 @@ public abstract class AbstractView {
 	 * à faire une mise
 	 * @return La mise fait par le joueur.
 	 */
-	public abstract Bet askBet( Hand hand );
+	public Bet askBet( Hand hand );
 	
 	/**
 	 * Met à jour l'affichage pour indiquer à l'utilisateur qu'un joueur
@@ -81,13 +73,13 @@ public abstract class AbstractView {
 	 * @param player Le joueur ayant fait la mise
 	 * @param bet La mise du joueur
 	 */
-	public abstract void playerHasBet( Player player, Bet bet );
+	public void playerHasBet( Player player, Bet bet );
 
 	/**
 	 * Message de bienvenue affiché au joueur avant de se connecter au serveur.
 	 * 
 	 */
-	public abstract void welcome();
+	public void welcome();
 	
 	/**
 	 * Demande au joueur d'échanger ses cartes (si désiré) si ce joueur a la plus grande mise 
@@ -97,7 +89,7 @@ public abstract class AbstractView {
 	 * @param availableCards Les nouvelles cartes disponibles pour échanger
 	 * @return La nouvelle main du joueur, nouvelles cartes incluses.
 	 */
-	public abstract ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards );
+	public ArrayList<Card> changeCards( Hand oldHand, Card[] availableCards );
 	
 	/**
 	 * Met à jour l'affichage pour indiquer quel joueur a la plus grande mise de fait à la 
@@ -106,14 +98,14 @@ public abstract class AbstractView {
 	 * @param player Le joueur avec la plus grande mise.
 	 * @param gameSuit L'atout du jeu, déterminé à partir de la mise du gagnant
 	 */
-	public abstract void showBetWinner( Player player, Suit gameSuit );
+	public void showBetWinner( Player player, Suit gameSuit );
 	
 	/**
 	 * Indique à l'utilisateur que la partie démarrera sous peu.
 	 * 
 	 * @param first Le premier joueur à jouer dans le premier tour.
 	 */
-	public abstract void showGameStart( Player first );
+	public void showGameStart( Player first );
 	
 	/**
 	 * Indique à l'utilisateur quels sont les joueurs qui ont gagné le jeu
@@ -122,7 +114,7 @@ public abstract class AbstractView {
 	 * @param player Le premier gagnant
 	 * @param player2 Le deuxième gagnant
 	 */
-	public abstract void showWinners( Player player, Player player2 );
+	public void showWinners( Player player, Player player2 );
 	
 	/**
 	 * Met à jour l'affichage pour indiquer quel joueur a remporté le tour,
@@ -130,6 +122,6 @@ public abstract class AbstractView {
 	 * 
 	 * @param player Le joueur ayant remporté le tour
 	 */
-	public abstract void showTurnWinner( Player player );
+	public void showTurnWinner( Player player );
 	
 }

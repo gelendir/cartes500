@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import server.Server;
-import view.AbstractView;
+import view.IView;
 /**
  * Client du jeu de 500. La classe Client est en charge de se
  * connecter au serveur de jeu, d'agir en tant qu'intermédiaire entre
@@ -36,7 +36,7 @@ public class Client implements ClientInterface {
 	/**
 	 * La vue (console ou graphique) à utiliser
 	 */
-	private AbstractView view;
+	private IView view;
 	
 	/**
 	 * Le profil du joueur géré par ce client
@@ -66,7 +66,7 @@ public class Client implements ClientInterface {
 	 * @param view La vue à utiliser pour interagir avec le joueur.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public Client( Server server, AbstractView view ) throws RemoteException {
+	public Client( Server server, IView view ) throws RemoteException {
 		
 		this.server = server;
 		this.view = view;
