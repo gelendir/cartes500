@@ -2,9 +2,9 @@ package unittest;
 
 import junit.framework.TestCase;
 
-import game.Card;
 import game.Player;
 import game.Turn;
+import game.card.Card;
 import game.enumeration.Suit;
 import game.enumeration.CardValue;
 

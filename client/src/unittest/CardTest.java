@@ -3,7 +3,7 @@ package unittest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-import game.Card;
+import game.card.Card;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 

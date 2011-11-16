@@ -1,6 +1,8 @@
 package game;
 
 import exception.EmptyDeckException;
+import game.card.Card;
+import game.card.Deck;
 import game.enumeration.Suit;
 
 import java.util.ArrayList;

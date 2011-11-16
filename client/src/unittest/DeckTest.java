@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-import game.Card;
-import game.Deck;
+import game.card.Card;
+import game.card.Deck;
 import junit.framework.TestCase;
 import org.junit.Assert;
 

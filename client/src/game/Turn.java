@@ -2,6 +2,8 @@ package game;
 
 import exception.InvalidCardException;
 import exception.TurnException;
+import game.card.Card;
+import game.card.CardComparator;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 

@@ -2,8 +2,8 @@ package unittest;
 
 import junit.framework.TestCase;
 
-import game.Card;
-import game.CardComparator;
+import game.card.Card;
+import game.card.CardComparator;
 import game.enumeration.Suit;
 import game.enumeration.CardValue;
 

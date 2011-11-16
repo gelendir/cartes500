@@ -1,9 +1,9 @@
 package client;
 
 import game.Bet;
-import game.Card;
 import game.Hand;
 import game.Player;
+import game.card.Card;
 import game.enumeration.Suit;
 
 import java.rmi.RemoteException;

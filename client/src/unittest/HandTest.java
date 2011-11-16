@@ -2,9 +2,9 @@ package unittest;
 
 import java.util.ArrayList;
 
-import game.Card;
-import game.Deck;
 import game.Hand;
+import game.card.Card;
+import game.card.Deck;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 import junit.framework.TestCase;

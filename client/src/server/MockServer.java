@@ -4,12 +4,12 @@ import exception.EmptyDeckException;
 import exception.GameException;
 import exception.TurnException;
 import game.Bet;
-import game.Card;
-import game.Deck;
 import game.Game;
 import game.Hand;
 import game.Player;
 import game.Turn;
+import game.card.Card;
+import game.card.Deck;
 import game.enumeration.Suit;
 
 import java.rmi.RemoteException;

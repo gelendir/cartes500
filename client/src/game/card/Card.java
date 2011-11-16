@@ -1,4 +1,4 @@
-package game;
+package game.card;
 
 import exception.InvalidCardException;
 import game.enumeration.CardValue;

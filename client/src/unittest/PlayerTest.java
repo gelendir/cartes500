@@ -1,9 +1,9 @@
 package unittest;
 
 import game.Bet;
-import game.Deck;
 import game.Hand;
 import game.Player;
+import game.card.Deck;
 import game.enumeration.Suit;
 import junit.framework.TestCase;
 import org.junit.Assert;

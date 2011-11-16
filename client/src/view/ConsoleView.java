@@ -9,9 +9,9 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import game.Bet;
-import game.Card;
 import game.Hand;
 import game.Player;
+import game.card.Card;
 import game.enumeration.Suit;
 
 /**

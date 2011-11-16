@@ -1,8 +1,8 @@
 package server;
 
 import game.Bet;
-import game.Card;
 import game.Player;
+import game.card.Card;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
