@@ -223,7 +223,7 @@ public class ConsoleView extends AbstractView {
 	 * 
 	 * @see AbstractView#askBet(Hand)
 	 */
-	public Bet askBet( Hand hand ) throws Exception {
+	public Bet askBet( Hand hand ) {
 				
 		this.out.println( this.bundle.getString("allPlayersConnected" ) );
 		

@@ -190,7 +190,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyBettingTime(Hand)
 	 */
 	@Override
-	public Bet notifyBettingTime( Hand hand ) throws Exception {
+	public Bet notifyBettingTime( Hand hand ) {
 		
 		this.player.setHand( hand );
 		Bet bet = this.view.askBet( hand );
