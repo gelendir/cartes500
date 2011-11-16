@@ -1,6 +1,7 @@
 package game;
 
 import exception.GameException;
+import exception.InvalidCardException;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
@@ -58,7 +59,7 @@ public class Deck {
 		try {
 			this.cards.add(new Card(Suit.BLACK, CardValue.JOKER));
 			this.cards.add(new Card(Suit.COLOR, CardValue.JOKER));
-		} catch (Exception e) {
+		} catch (InvalidCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -85,11 +85,9 @@ public class Game {
 	 * Cette méthode retourne une collection de Bet que le joueur peut jouer.
 	 * @param player Le joueur en question
 	 * @return Retourne une collection de Bet que le joueur peut jouer.
-	 * @throws InvalidBetException 
-	 * @throws Exception 
 	 * @see Bet
 	 */
-	public ArrayList<Bet> getPlayableBets(Player player) throws InvalidBetException {
+	public ArrayList<Bet> getPlayableBets(Player player) {
 		int indexPlayer = findIndexPlayer(player);
 		Bet first = null;
 		ArrayList<Bet> bets = new ArrayList<Bet>(25);
@@ -100,8 +98,13 @@ public class Game {
 		}
 
 		if(first == null) {
-			first = new Bet(6, Suit.SPADES);
-			suitIndex = first.getSuit().ordinal();
+			try {
+				first = new Bet(6, Suit.SPADES);
+				suitIndex = first.getSuit().ordinal();
+			} catch (InvalidBetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else {
 			suitIndex = first.getSuit().ordinal() + 1;
@@ -110,7 +113,12 @@ public class Game {
 		Suit suits[] = Suit.values();
 		for(int j = first.getNbRounds(); j <= 10; ++j) {
 			for(int i = suitIndex; i <= Suit.NONE.ordinal(); ++i) {
-				bets.add(new Bet(j, suits[i]));
+				try {
+					bets.add(new Bet(j, suits[i]));
+				} catch (InvalidBetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			suitIndex = Suit.SPADES.ordinal();

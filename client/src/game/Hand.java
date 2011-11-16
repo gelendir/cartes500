@@ -44,10 +44,10 @@ public class Hand {
 	 * Le constructeur crée la main à partir d'un paquet de carte.
 	 * @param deck Le paquet de carte d'où les cartes de la main vont
 	 *             être prises.
-	 * @throws Exception
+	 * @throws EmptyDeckException
 	 * @see Deck
 	 */
-	public Hand(Deck deck) throws Exception {
+	public Hand(Deck deck) throws EmptyDeckException {
 		for(int i = 0; i < MAX_CARDS; ++i) {
 			if(deck.isEmpty()) {
 				throw new EmptyDeckException();
