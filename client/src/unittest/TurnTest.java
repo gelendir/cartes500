@@ -38,63 +38,65 @@ public class TurnTest extends TestCase {
 				new Player("DummyPlayer4")
 		};
 		
-		this.colorJoker = new Card( Suit.COLOR, CardValue.JOKER );
-		this.blackJoker = new Card( Suit.BLACK, CardValue.JOKER );
+		this.colorJoker = 
+		
+		this.colorJoker = TestCardFactory.createCard( Suit.COLOR, CardValue.JOKER );
+		this.blackJoker = TestCardFactory.createCard( Suit.BLACK, CardValue.JOKER );
 		
 		this.diamondCards = new Card[]{
-				new Card( Suit.DIAMONDS, CardValue.FOUR ),
-				new Card( Suit.DIAMONDS, CardValue.FIVE ),
-				new Card( Suit.DIAMONDS, CardValue.SIX ),
-				new Card( Suit.DIAMONDS, CardValue.SEVEN ),
-				new Card( Suit.DIAMONDS, CardValue.EIGHT ),
-				new Card( Suit.DIAMONDS, CardValue.NINE ),
-				new Card( Suit.DIAMONDS, CardValue.TEN ),
-				new Card( Suit.DIAMONDS, CardValue.JACK ),
-				new Card( Suit.DIAMONDS, CardValue.QUEEN ),
-				new Card( Suit.DIAMONDS, CardValue.KING ),
-				new Card( Suit.DIAMONDS, CardValue.ACE )
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.FOUR ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.FIVE ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.SIX ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.SEVEN ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.EIGHT ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.NINE ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.TEN ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.JACK ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.QUEEN ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.KING ),
+				TestCardFactory.createCard( Suit.DIAMONDS, CardValue.ACE )
 		};
 		
 		this.heartCards = new Card[]{
-				new Card( Suit.HEARTS, CardValue.FOUR ),
-				new Card( Suit.HEARTS, CardValue.FIVE ),
-				new Card( Suit.HEARTS, CardValue.SIX ),
-				new Card( Suit.HEARTS, CardValue.SEVEN ),
-				new Card( Suit.HEARTS, CardValue.EIGHT ),
-				new Card( Suit.HEARTS, CardValue.NINE ),
-				new Card( Suit.HEARTS, CardValue.TEN ),
-				new Card( Suit.HEARTS, CardValue.JACK ),
-				new Card( Suit.HEARTS, CardValue.QUEEN ),
-				new Card( Suit.HEARTS, CardValue.KING ),
-				new Card( Suit.HEARTS, CardValue.ACE )
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.FOUR ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.FIVE ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.SIX ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.SEVEN ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.EIGHT ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.NINE ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.TEN ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.JACK ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.QUEEN ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.KING ),
+				TestCardFactory.createCard( Suit.HEARTS, CardValue.ACE )
 		};
 		
 		this.spadeCards = new Card[]{
-				new Card( Suit.SPADES, CardValue.FOUR ),
-				new Card( Suit.SPADES, CardValue.FIVE ),
-				new Card( Suit.SPADES, CardValue.SIX ),
-				new Card( Suit.SPADES, CardValue.SEVEN ),
-				new Card( Suit.SPADES, CardValue.EIGHT ),
-				new Card( Suit.SPADES, CardValue.NINE ),
-				new Card( Suit.SPADES, CardValue.TEN ),
-				new Card( Suit.SPADES, CardValue.JACK ),
-				new Card( Suit.SPADES, CardValue.QUEEN ),
-				new Card( Suit.SPADES, CardValue.KING ),
-				new Card( Suit.SPADES, CardValue.ACE )
+				TestCardFactory.createCard( Suit.SPADES, CardValue.FOUR ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.FIVE ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.SIX ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.SEVEN ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.EIGHT ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.NINE ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.TEN ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.JACK ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.QUEEN ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.KING ),
+				TestCardFactory.createCard( Suit.SPADES, CardValue.ACE )
 		};
 		
 		this.clubCards = new Card[]{
-				new Card( Suit.CLUBS, CardValue.FOUR ),
-				new Card( Suit.CLUBS, CardValue.FIVE ),
-				new Card( Suit.CLUBS, CardValue.SIX ),
-				new Card( Suit.CLUBS, CardValue.SEVEN ),
-				new Card( Suit.CLUBS, CardValue.EIGHT ),
-				new Card( Suit.CLUBS, CardValue.NINE ),
-				new Card( Suit.CLUBS, CardValue.TEN ),
-				new Card( Suit.CLUBS, CardValue.JACK ),
-				new Card( Suit.CLUBS, CardValue.QUEEN ),
-				new Card( Suit.CLUBS, CardValue.KING ),
-				new Card( Suit.CLUBS, CardValue.ACE )
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.FOUR ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.FIVE ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.SIX ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.SEVEN ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.EIGHT ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.NINE ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.TEN ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.JACK ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.QUEEN ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.KING ),
+				TestCardFactory.createCard( Suit.CLUBS, CardValue.ACE )
 		};
 		
 	}
@@ -139,7 +141,7 @@ public class TurnTest extends TestCase {
 		
 		Card extraCard = null;
 		try {
-			extraCard = new Card( Suit.DIAMONDS, CardValue.EIGHT );
+			extraCard = TestCardFactory.createCard( Suit.DIAMONDS, CardValue.EIGHT );
 		} catch (Exception e1) {
 			fail("add card: error generating extra card");
 		}

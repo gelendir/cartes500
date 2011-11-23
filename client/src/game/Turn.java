@@ -251,8 +251,8 @@ public class Turn {
 		Suit gameSuit = this.gameSuit;
 		Suit turnSuit = this.getTurnSuit();
 				
-		Card colorJoker = new Card( Suit.COLOR, CardValue.JOKER );
-		Card blackJoker = new Card( Suit.BLACK, CardValue.JOKER );
+		Card colorJoker = Card.colorJoker();
+		Card blackJoker = Card.blackJoker();
 		
 		ArrayList<Card> strongCards = null;
 		
@@ -265,16 +265,16 @@ public class Turn {
 		//color as the game suit have priority over other cards
 		if( !gameSuit.equals( Suit.NONE ) ) {
 			
-			strongJack = new Card( gameSuit, CardValue.JACK );
+			strongJack = Card.createJack( gameSuit );
 				
 			if( gameSuit == Suit.CLUBS ) {
-				weakJack =  new Card( Suit.SPADES, CardValue.JACK );
+				weakJack =  Card.createJack( Suit.SPADES );
 			} else if ( gameSuit == Suit.SPADES ) {
-				weakJack =  new Card( Suit.CLUBS, CardValue.JACK );
+				weakJack =  Card.createJack( Suit.CLUBS );
 			} else if ( gameSuit == Suit.DIAMONDS ) {
-				weakJack =  new Card( Suit.HEARTS, CardValue.JACK );
+				weakJack =  Card.createJack( Suit.HEARTS );
 			} else if ( gameSuit == Suit.HEARTS ) {
-				weakJack =  new Card( Suit.DIAMONDS, CardValue.JACK );
+				weakJack =  Card.createJack( Suit.DIAMONDS );
 			}
 		}
 		

@@ -1,6 +1,7 @@
 package game.card;
 
 import exception.InvalidCardException;
+import game.Turn;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
@@ -20,6 +21,59 @@ public class Card {
 	 */
 	private final CardValue value;
 	
+	
+	/**
+	 * Génère un Joker noir. Utilisé dans la classe Turn
+	 * pour déterminer le gagnant d'un tour
+	 * 
+	 * @see Turn#getWinner()
+	 * @return Le Joker
+	 */
+	public final static Card blackJoker() {
+		
+		try {
+			return new Card( Suit.BLACK, CardValue.JOKER );
+		} catch (InvalidCardException e) {
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Génère un Joker de couleur. Utilisé dans la classe Turn
+	 * pour déterminer le gagnant d'un tour
+	 * 
+	 * @see Turn#getWinner()
+	 * @return Le Joker
+	 */
+	public final static Card colorJoker() {
+		
+		try {
+			return new Card( Suit.COLOR, CardValue.JOKER );
+		} catch (InvalidCardException e) {
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Génère un Valet. Utilisé dans la classe Turn
+	 * pour déterminer le gagnant d'un tour
+	 * 
+	 * @param suit La sorte du valet.
+	 * @see Turn#getWinner()
+	 * @return Le Joker
+	 */
+	public final static Card createJack( Suit suit ) {
+		
+		try {
+			return new Card( suit, CardValue.JACK );
+		} catch( InvalidCardException e) {
+			return null;
+		}
+		
+	}
+	
 	/**
 	 * Le constructeur de Card crée une nouvelle carte avec la sorte et
 	 * la valeur spécifié. Une exception est levée lorsque l'on crée une carte
@@ -28,7 +82,7 @@ public class Card {
 	 * @param value La valeur de la carte 
 	 * @throws InvalidCardException
 	 */
-	public Card(Suit suit, CardValue value) throws InvalidCardException {
+	Card(Suit suit, CardValue value) throws InvalidCardException {
 		if(value.equals(CardValue.JOKER)) {
 			if(!suit.equals(Suit.BLACK) && !suit.equals(Suit.COLOR)) {
 				throw new InvalidCardException();
