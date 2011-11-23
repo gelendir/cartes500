@@ -21,6 +21,8 @@ import server.MockServer;
 import server.Server;
 import server.ServerInterface;
 import view.ConsoleView;
+import view.IView;
+import view.graphicview.GraphicView;
 
 /**
  * La classe App se charge d'initialisé le programme avec les
@@ -82,8 +84,7 @@ public class App {
 									.hasArg()
 									.withDescription( "Address of the rmi registry server, a.k.a the game server" )
 									.create("H");
-		
-		
+
 		options.addOption("h", "help", false, "print this help message");
 		options.addOption("c", "console", false, "start console app");
 		options.addOption("g", "graphic", false, "start graphical app");
@@ -171,9 +172,14 @@ public class App {
 			
 			//App.connectToServer( host, port );
 			
-			Scanner in = new Scanner( System.in );
-			
-			ConsoleView view = new ConsoleView( in , System.out );
+			IView view;
+			if ( cmd.hasOption("g") ) {
+				view = new GraphicView();
+			}
+			else {
+				Scanner in = new Scanner( System.in );
+				view = new ConsoleView( in , System.out );
+			}
 			MockServer server = new MockServer();
 
 			Client client = new Client( server, view );
