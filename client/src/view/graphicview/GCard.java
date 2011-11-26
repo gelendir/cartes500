@@ -1,5 +1,7 @@
 package view.graphicview;
 
+import game.card.Card;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -11,22 +13,20 @@ import javax.swing.JPanel;
 
 public class GCard extends JPanel {
 	
-	BufferedImage  image;
-	int valeur;
+	private BufferedImage  image;
+	private Card card;
 	
-	public GCard(int valeur) {
-		this.valeur = valeur;
-		try {
-			String imageName = "images/card.jpg";
-			File input = new File(imageName);
-			image = ImageIO.read(input);
-		} catch (IOException ie) {
-			System.out.println("Error:"+ie.getMessage());
-		}
+	public GCard(Card card) {
+		this.card = card;
+		this.image = ImageCard.getImage(card);
 		this.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
 	}
 	
 	public void paintComponent(Graphics g) {
-		g.drawImage( image, 0, 0, null);
+		g.drawImage(this.image, 0, 0, null);
+	}
+	
+	public Card getCard() {
+		return this.card;
 	}
 }

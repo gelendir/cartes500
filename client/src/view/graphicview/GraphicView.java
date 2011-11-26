@@ -2,6 +2,7 @@ package view.graphicview;
 
 import game.Bet;
 import game.card.Card;
+import game.card.Deck;
 import game.Hand;
 import game.Player;
 import game.enumeration.Suit;
@@ -16,14 +17,21 @@ import view.IView;
 
 public class GraphicView extends JFrame implements IView {
 
-	public GraphicView() {
+	public GraphicView() throws Exception {
 		super();
-		
 		this.setTitle("Jeu du 500");
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.pack();
-		this.setSize(400, 500);
+		
+		GHand ghand = new GHand();
+		Deck deck = new Deck();
+		deck.mixCards();
+		Hand hand = new Hand(deck);
+		ghand.setHand(hand);
+		ghand.setPlayableCards(hand.getPlayableCard(Suit.HEARTS));
+		
+		this.add(ghand);
+		this.pack();
 		this.setVisible(true);
 	}
 
