@@ -19,9 +19,14 @@ import java.util.Iterator;
 public class Hand {
 	
 	/**
-	 * Le nombre maximum de carte dans la main.
+	 * Le nombre maximum de cartes dans la main.
 	 */
 	final static public int MAX_CARDS = 10;
+	
+	/**
+	 * Le nombre minimum de cartes dans la main.
+	 */
+	final static public int MIN_CARDS = 6;
 	
 	/**
 	 * La collection de cartes de la main. L'attribut est « transient » parce que,

@@ -1,5 +1,7 @@
 package server;
 
+import exception.AlreadyConnectedException;
+import exception.ServerException;
 import game.Bet;
 import game.Player;
 import game.card.Card;
@@ -35,7 +37,7 @@ public interface ServerInterface extends Remote {
 	 * ou si un joueur avec le même profil est déja présent.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public boolean connectClient( Client client, Player player ) throws RemoteException;
+	public boolean connectClient( Client client, Player player ) throws AlreadyConnectedException, GameException;
 	
 	/**
 	 * Carte joué par un joueur. Un client appelle cette méthode lorsqu'un joueur
@@ -87,7 +89,7 @@ public interface ServerInterface extends Remote {
 	 * @return Le joueur avec le plus de tours remportés, null si la partie n'est pas terminé
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public Player getWinner() throws RemoteException;
+	public Player[] getWinners() throws RemoteException;
 	
 	/**
 	 * Accesseur du score. Retourne le score du joueur ayant remporté le plus de parties. Cette fonction

@@ -1,7 +1,10 @@
 package game;
 
+import exception.EmptyDeckException;
+import exception.GameException;
 import exception.InvalidBetException;
 import game.enumeration.Suit;
+import game.card.Deck;
 import java.util.ArrayList;
 
 /**
@@ -9,6 +12,9 @@ import java.util.ArrayList;
  * @author Frédérik Paradis
  */
 public class Game {
+	
+	final static public int MAX_TURNS = 10;
+	final static public int MAX_PLAYERS = 4;
 
 	/**
 	 * Le tableau des joueurs de la partie
@@ -20,12 +26,35 @@ public class Game {
 	 * qui a gagné la mise.
 	 */
 	private int indexPlayerBetWinner = -1;
+	
+	/**
+	 * 
+	 */
+	private Deck deck = null;
 
 	/**
 	 * Le constructeur initialise le jeu avec des valeurs par défaut.
+	 * @throws GameException 
 	 */
-	public Game() {
+	public Game( Player[] players, Deck deck ) throws GameException {
+		
+		if( players.length != Game.MAX_PLAYERS ) {
+			throw new GameException("Game must absolutely have 4 players");
+		}
+		
+		this.deck = deck;
+		this.players = players;
+		
+		this.createHands();
 
+	}
+
+	private void createHands() throws EmptyDeckException {
+		
+		for( Player player: this.players ) {
+			player.setHand( new Hand( this.deck ) );
+		}
+		
 	}
 
 	/**
@@ -209,4 +238,58 @@ public class Game {
 
 		return -1;
 	}
+	
+	public Player[] getWinners() {
+		
+		int winner = -1;
+		Player players[] = this.players;
+		
+		for(int i = 0; i < players.length && winner < 0; ++i) {
+			
+			Player p = players[i];
+			
+			if( p.equals( this.getBestPlayerBet() ) ) {
+				winner = i;
+			}
+			
+		}
+
+		int winnerTeammate = 0;
+		int loser = 0;
+		int loserTeammate = 0;
+		
+		if( winner == 0 ) {
+			winnerTeammate = 2;
+			loser = 1;
+			loserTeammate = 3;
+		} else if ( winner == 1 ) {
+			winnerTeammate = 3;
+			loser = 0;
+			loserTeammate = 2;
+		} else if ( winner == 2 ) {
+			winnerTeammate = 0;
+			loser = 1;
+			loserTeammate = 3;
+		} else if ( winner == 3 ) {
+			winnerTeammate = 1;
+			loser = 0;
+			loserTeammate = 2;
+		}
+		
+		int roundsWon = this.players[winner].getTurnWin() + this.players[winnerTeammate].getTurnWin();
+		int roundsBet = this.players[winner].getOriginalBet().getNbRounds();
+		
+		
+		Player[] winners;
+		
+		if( roundsWon >= roundsBet ) {
+			winners = new Player[]{ this.players[winner], this.players[winnerTeammate] };
+		} else {
+			winners = new Player[]{ this.players[loser], this.players[loserTeammate] };
+		}
+		
+		return winners;
+		
+	}
+	
 }

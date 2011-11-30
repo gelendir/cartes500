@@ -3,7 +3,7 @@ package exception;
 public class GameException extends Exception {
 
 	public GameException() {
-		super("Une exception à propos du jeu a été levée.");
+		super("A game exception has been thrown");
 	}
 
 	public GameException(String message) {

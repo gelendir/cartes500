@@ -1,11 +1,25 @@
 package server;
 
+import exception.AlreadyConnectedException;
+import exception.GameException;
+import exception.ServerException;
+import exception.ServerStateException;
 import game.Bet;
+import game.Game;
 import game.Player;
 import game.card.Card;
+import game.card.Deck;
 
 import java.rmi.RemoteException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+
+import view.ConsoleView;
 
 import client.Client;
 
@@ -24,17 +38,98 @@ import client.Client;
  *
  */
 public class Server implements ServerInterface {
+	
+	static private String BUNDLE = "server";
+
+	private LinkedHashMap<Client, Player> clients 	= null;
+	private ServerState state 						= ServerState.CONNECT;
+	private Player currentPlayer 					= null;
+	private Game game								= null;
+	
+	private PropertyResourceBundle bundle;
+	
+	public Server() {
+		
+		this.bundle = (PropertyResourceBundle) ResourceBundle.getBundle( Server.BUNDLE );
+		this.clients = new LinkedHashMap<Client, Player>( Game.MAX_PLAYERS );
+		this.state = ServerState.CONNECT;
+		this.game = null;
+			
+	}
+	
+	public void assertState( ServerState askedState ) {
+		
+		ServerState currentState = this.state;
+		
+		if( !this.state.equals( state ) ) {
+			
+			String msg = MessageFormat.format( 
+					this.bundle.getString("stateException"), 
+					currentState.toString(), 
+					askedState.toString() 
+					);
+			
+			throw new ServerStateException( msg );
+		}
+		
+	}
+	
+	public void assertState( ServerState[] askedStates ) {
+		
+		for( ServerState state: askedStates ) {
+			this.assertState( state );
+		}
+		
+	}
 
 	/**
 	 * Connexion d'un client au serveur. 
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws AlreadyConnectedException 
+	 * @throws GameException 
 	 * @see ServerInterface#connectClient(Client, Player)
 	 */
 	@Override
-	public boolean connectClient(Client client, Player player)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean connectClient(Client client, Player player) throws AlreadyConnectedException, GameException {
+		
+		this.assertState( ServerState.CONNECT );
+		
+		if( 
+			   this.clients.containsKey( client )
+			|| this.clients.containsValue( player )
+		) 
+		{
+			throw new AlreadyConnectedException();
+		}
+		
+		this.clients.put( client,  player );
+		
+		if( this.clients.size() == Game.MAX_PLAYERS ) {
+			this.startGame();
+		}
+		
+		return true;
+		
+	}
+
+	private void startGame() throws GameException {
+		
+		Player[] players = (Player[])this.clients.values().toArray();
+		Deck deck = new Deck();
+		
+		this.game = new Game( players, deck );
+		
+		this.state = ServerState.BET;
+		
+		for( Map.Entry<Client, Player> entry : this.clients.entrySet() ) {
+			
+			Client client = entry.getKey();
+			Player player = entry.getValue();
+			
+			client.notifyBettingTime( player.getHand() );
+			
+		}
+		
 	}
 
 	/**
@@ -51,11 +146,22 @@ public class Server implements ServerInterface {
 	/**
 	 * Déconnexion d'un client.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws ServerException 
+	 * @throws RemoteException 
 	 * @see ServerInterface#disconnectClient(Client)
 	 */
 	@Override
-	public void disconnectClient(Client client) {
-		// TODO Auto-generated method stub
+	public void disconnectClient(Client client) throws RemoteException {
+		
+		this.assertState(
+			new ServerState[]{ ServerState.CONNECT, ServerState.GAME }
+		);
+		
+		Player disconnectedPlayer = this.clients.remove( client );
+		
+		for( Client notify: this.clients.keySet() ) {
+			notify.notifyPlayerDisconnect( disconnectedPlayer );
+		}
 		
 	}
 
@@ -66,19 +172,22 @@ public class Server implements ServerInterface {
 	 */
 	@Override
 	public Player getCurrentPlayer() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.currentPlayer;
 	}
 
 	/**
 	 * Accesseur du gagnant.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws ServerException 
 	 * @see ServerInterface#getCurrentPlayer()
 	 */
 	@Override
-	public Player getWinner() {
-		// TODO Auto-generated method stub
-		return null;
+	public Player[] getWinners() {
+		
+		this.assertState( ServerState.END );
+		
+		return this.game.getWinners();
+
 	}
 
 	/**
@@ -99,7 +208,12 @@ public class Server implements ServerInterface {
 	 */
 	@Override
 	public void setBetForPlayer(Client client, Bet bet) {
-		// TODO Auto-generated method stub
+		
+		this.assertState( ServerState.BET );
+		
+		Player player = this.clients.get( client );
+		
+		this.game.setBet( bet, player );
 		
 	}
 
