@@ -1,5 +1,6 @@
 package server;
 
+import exception.AlreadyConnectedException;
 import exception.EmptyDeckException;
 import exception.GameException;
 import exception.TurnException;
@@ -35,8 +36,10 @@ public class MockServer extends Server {
 	private Turn turn = null;
 
 	public MockServer() {
+		/*
 		this.game = new Game();
 		this.deck = new Deck();
+		*/
 		this.deck.mixCards();
 	}
 
@@ -49,8 +52,13 @@ public class MockServer extends Server {
 
 		this.players = new Player[]{ this.player, new Player("bot2"), new Player("bot3"), new Player("bot4") };
 
-		this.client.connect();
-
+		try {
+			this.client.connect();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//Connections
 		this.game.setPlayers( this.players );
 
@@ -228,8 +236,7 @@ public class MockServer extends Server {
 	}
 
 	@Override
-	public boolean connectClient(Client client, Player player)
-			throws RemoteException {
+	public boolean connectClient(Client client, Player player) {
 
 		System.out.println("SERVER: Client with player " + player.getName() + " has connected.");
 		this.player = player;
@@ -262,12 +269,6 @@ public class MockServer extends Server {
 
 	@Override
 	public Player getCurrentPlayer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Player getWinner() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,6 +2,8 @@ package server;
 
 import exception.AlreadyConnectedException;
 import exception.GameException;
+import exception.InvalidBetException;
+import exception.NotYourTurnToBet;
 import exception.ServerException;
 import exception.ServerStateException;
 import game.Bet;
@@ -200,20 +202,51 @@ public class Server implements ServerInterface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	private void checkClientsTurnToBet( Client client ) throws NotYourTurnToBet {
+		
+		Player player = this.clients.get( client );
+		
+		if( player != this.game.getNextPlayerToBet() ) {
+			throw new NotYourTurnToBet();
+		}
+	}
+	
+	private void setBetAndCheckForValidBet( Bet bet, Player player ) throws InvalidBetException {
+		
+		boolean valid = this.game.setBet( bet, player );
+		if( !valid ) {
+			throw new InvalidBetException();
+		}
+		
+	}
 
 	/**
 	 * Mise d'un joueur.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws NotYourTurnToBet 
+	 * @throws InvalidBetException 
 	 * @see ServerInterface#setBetForPlayer(Client, Bet)
 	 */
 	@Override
-	public void setBetForPlayer(Client client, Bet bet) {
-		
-		this.assertState( ServerState.BET );
+	public void setBetForPlayer(Client client, Bet bet) throws NotYourTurnToBet, InvalidBetException {
 		
 		Player player = this.clients.get( client );
 		
-		this.game.setBet( bet, player );
+		this.assertState( ServerState.BET );
+		this.checkClientsTurnToBet( client );
+		this.setBetAndCheckForValidBet( bet, player );
+		
+		for( Map.Entry<Client, Player> entry : this.clients.entrySet() ) {
+			
+			Client clientToNotify = entry.getKey();
+			Player playerToNotify = entry.getValue();
+			
+			clientToNotify.notifyPlayerBet(player, bet);
+			
+		}
+		
+		//working here
 		
 	}
 
