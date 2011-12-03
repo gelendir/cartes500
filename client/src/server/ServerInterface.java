@@ -118,4 +118,5 @@ public interface ServerInterface extends Remote {
 	 */
 	public void setNewHandAfterBet( Client client, ArrayList<Card> cards ) throws RemoteException;
 	
+	public Player[] getPlayerList();
 }

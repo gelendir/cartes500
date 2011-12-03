@@ -258,7 +258,12 @@ public class Server implements ServerInterface {
 	@Override
 	public void setNewHandAfterBet(Client client, ArrayList<Card> cards) {
 		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public Player[] getPlayerList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
