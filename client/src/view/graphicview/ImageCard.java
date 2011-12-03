@@ -15,26 +15,54 @@ public class ImageCard {
 
 	private static final String imageName = "images/little_cards.png";
 	
-	public static /*final*/ int CARD_HEIGHT;// = 279;
-	public static /*final*/ int CARD_WIDTH;// = 192;
+	public int cardHeight;// = 279;
+	public int cardWidth;// = 192;
+	
+	private int exposedCardPart;
 	
 	private BufferedImage image;
+	private BufferedImage emptyCard;
 
+	public static ImageCard getInstance() {
+		return ImageCard.instance;
+	}
+	
 	private ImageCard() {
 		try {
 			this.image = ImageIO.read(new File(ImageCard.imageName));
-			ImageCard.CARD_HEIGHT = (int) Math.floor(this.image.getHeight() / (double)5);
-			ImageCard.CARD_WIDTH = (int) Math.floor(this.image.getWidth() / (double)13);
+			this.cardHeight = (int) Math.floor(this.image.getHeight() / (double)5);
+			this.cardWidth = (int) Math.floor(this.image.getWidth() / (double)13);
+			this.emptyCard = this.image.getSubimage(2 * this.cardWidth, 
+					4 * this.cardHeight, 
+					this.cardWidth, 
+					this.cardHeight);
+			this.exposedCardPart = (int) (this.cardWidth * 0.15);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	public int getCardHeight() {
+		return this.cardHeight;
+	}
+	
+	public int getCardWidth() {
+		return this.cardWidth;
+	}
+	
+	public int getExposedCardPart() {
+		return exposedCardPart;
+	}
+	
+	public BufferedImage getEmptyCard() {
+		return this.emptyCard;
+	}
 
 	public static BufferedImage getImage(Card card) {
 		int rowNumber;
 		int colNumber;
-
+		
 		if(card.getSuit().equals(Suit.CLUBS)) {
 			rowNumber = 0;
 		}
@@ -66,10 +94,10 @@ public class ImageCard {
 			colNumber = card.getCardValue().getValue();
 		}
 
-		return ImageCard.instance.image.getSubimage(colNumber * ImageCard.CARD_WIDTH, 
-				rowNumber * ImageCard.CARD_HEIGHT, 
-				ImageCard.CARD_WIDTH, 
-				ImageCard.CARD_HEIGHT);
+		return ImageCard.getInstance().image.getSubimage(colNumber * ImageCard.getInstance().getCardWidth(), 
+				rowNumber * ImageCard.getInstance().getCardHeight(), 
+				ImageCard.getInstance().getCardWidth(), 
+				ImageCard.getInstance().getCardHeight());
 
 	}
 }
