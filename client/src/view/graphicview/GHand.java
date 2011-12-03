@@ -1,76 +1,90 @@
 package view.graphicview;
 
-import game.Hand;
 import game.card.Card;
 
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
 
-public class GHand extends JPanel implements MouseListener {
+public class GHand extends JPanel {
 
 	public static final int CARD_MARGIN_TOP = 15;
 	public static final int CHOSEN_CARD_MARGIN_TOP = 0;
-	public static /*final*/ int EXPOSED_CARD_PART = (int) (ImageCard.CARD_WIDTH * 0.15);
 
-	private LinkedList<GCard> gcards = new LinkedList<GCard>();
-	
-	public GHand() throws Exception {
+	private ArrayList<GCard> gcards = new ArrayList<GCard>();
+	private ArrayList<GCardListener> gcardlistener = new ArrayList<GCardListener>();
+	private ArrayList<Card> playableCards = new ArrayList<Card>();
+
+	public GHand() {
 		this.setLayout(null);
 	}
 
-	public boolean setHand(Hand hand) {
-		Card cards[] = hand.getCards();
-				
+	public boolean setHand(ArrayList<Card> cards) {
 		if(cards == null) {
 			return false;
 		}
 		else {
-			int size_cards = cards.length;
+			this.removeAll();
+			int sizeCards = cards.size();
 			Insets insets = this.getInsets();
-			
+			MouseAdapter mouselistener = new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					for(GCardListener gcardlistener: GHand.this.gcardlistener) {
+						gcardlistener.choseenCard(((GCard)e.getSource()).getCard());
+					}
+				}
+			};
+
 			for(Card card : cards) {
 				GCard gcard = new GCard(card);
 				this.gcards.add(gcard);
-				gcard.addMouseListener(this);
+				gcard.addMouseListener(mouselistener);
 				this.add(gcard);
 				Dimension size = gcard.getPreferredSize();
-				gcard.setBounds(GHand.EXPOSED_CARD_PART * (size_cards - 1) + insets.left, 
+				gcard.setBounds(ImageCard.getInstance().getExposedCardPart() * (sizeCards - 1) + insets.left, 
 						GHand.CARD_MARGIN_TOP + insets.top,
 						size.width, size.height);
-				--size_cards;
+				--sizeCards;
 			}
-			
-			this.setPreferredSize(new Dimension(GHand.EXPOSED_CARD_PART * (this.gcards.size() - 1) + ImageCard.CARD_WIDTH, ImageCard.CARD_HEIGHT + GHand.CARD_MARGIN_TOP));
-			
+
+			this.setPreferredSize(new Dimension(ImageCard.getInstance().getExposedCardPart() * (this.gcards.size() - 1) + ImageCard.getInstance().getCardWidth(), ImageCard.getInstance().getCardHeight() + GHand.CARD_MARGIN_TOP));
+
 			return true;
 		}
 	}
 	public boolean removeCard(Card card) {
-		
+
 		return false;
 	}
-	
+
 	public void setPlayableCards(ArrayList<Card> cards) {
+		this.resetPlayableCards();
+		this.playableCards.clear();
+
 		Insets insets = this.getInsets();
 		for(GCard gcard : this.gcards) {
 			Rectangle rect = gcard.getBounds();
 			if(cards.contains(gcard.getCard())) {
 				gcard.setBounds(rect.x, GHand.CHOSEN_CARD_MARGIN_TOP + insets.top, rect.width, rect.height);
+				this.playableCards.add(gcard.getCard());
 			}
 			else {
 				gcard.setBounds(rect.x, GHand.CARD_MARGIN_TOP + insets.top, rect.width, rect.height);
 			}
 		}
 	}
-	
+
+	public ArrayList<Card> getPlayableCards() {
+		return this.playableCards;
+	}
+
 	public void resetPlayableCards() {
 		Insets insets = this.getInsets();
 		for(GCard gcard : this.gcards) {
@@ -79,33 +93,11 @@ public class GHand extends JPanel implements MouseListener {
 		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println(((GCard)e.getSource()).getCard());
+	public void addGCardListener(GCardListener l) {
+		this.gcardlistener.add(l);
 	}
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	public void removeGCardListener(GCardListener l) {
+		this.gcardlistener.remove(l);
 	}
 }
