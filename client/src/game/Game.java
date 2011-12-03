@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Frédérik Paradis
  */
 public class Game {
-	
+
 	final static public int MAX_TURNS = 10;
 	final static public int MAX_PLAYERS = 4;
 
@@ -26,7 +26,7 @@ public class Game {
 	 * qui a gagné la mise.
 	 */
 	private int indexPlayerBetWinner = -1;
-	
+
 	/**
 	 * 
 	 */
@@ -37,24 +37,24 @@ public class Game {
 	 * @throws GameException 
 	 */
 	public Game( Player[] players, Deck deck ) throws GameException {
-		
+
 		if( players.length != Game.MAX_PLAYERS ) {
 			throw new GameException("Game must absolutely have 4 players");
 		}
-		
+
 		this.deck = deck;
 		this.players = players;
-		
+
 		this.createHands();
 
 	}
 
 	private void createHands() throws EmptyDeckException {
-		
+
 		for( Player player: this.players ) {
 			player.setHand( new Hand( this.deck ) );
 		}
-		
+
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class Game {
 					e.printStackTrace();
 				}
 			}
-			
+
 			suitIndex = Suit.SPADES.ordinal();
 		}
 
@@ -180,6 +180,27 @@ public class Game {
 		return false;
 	}
 
+	public Player getNextPlayerToBet() {
+
+		Player nextToBet = null;
+		int pos = 0;
+
+		while( nextToBet != null && pos < this.players.length ) {
+
+			Player player = this.players[pos];
+
+			if( player.getOriginalBet() == null ) {
+				nextToBet = player;
+			}
+
+			pos++;
+
+		}
+
+		return nextToBet;
+
+	}
+
 	/**
 	 * Cette méthode sert à savoir si la mise de départ d'un joueur est valide.
 	 * @param bet La mise du joueur
@@ -188,29 +209,22 @@ public class Game {
 	 * @see Bet
 	 */
 	public boolean isValidBet(Bet bet, Player player) {
+
 		int indexPlayer = findIndexPlayer(player);
+
 		if(bet != null && indexPlayer != -1) {
 
-			if(bet.getNbRounds() >=6 && bet.getNbRounds() <= 10) {
+			for(int i = 0; i < indexPlayer; ++i) {
 
-				if(bet.getSuit() != Suit.COLOR &&
-						bet.getSuit() != Suit.BLACK) {
+				if(this.players[i] != null && this.players[i].getOriginalBet() != null) {
 
-					for(int i = 0; i < indexPlayer; ++i) {
+					if(this.players[i].getOriginalBet().getNbRounds() > bet.getNbRounds()) {
+						return false;
+					}
+					else if(this.players[i].getOriginalBet().getNbRounds() == bet.getNbRounds()) {
 
-						if(this.players[i] != null && this.players[i].getOriginalBet() != null) {
-
-							if(this.players[i].getOriginalBet().getNbRounds() > bet.getNbRounds()) {
-								return false;
-							}
-							else if(this.players[i].getOriginalBet().getNbRounds() == bet.getNbRounds()) {
-
-								if(this.players[i].getOriginalBet().getSuit().getValue() >= bet.getSuit().getValue()) {
-									return false;
-								}
-
-							}
-
+						if(this.players[i].getOriginalBet().getSuit().getValue() >= bet.getSuit().getValue()) {
+							return false;
 						}
 
 					}
@@ -238,26 +252,26 @@ public class Game {
 
 		return -1;
 	}
-	
+
 	public Player[] getWinners() {
-		
+
 		int winner = -1;
 		Player players[] = this.players;
-		
+
 		for(int i = 0; i < players.length && winner < 0; ++i) {
-			
+
 			Player p = players[i];
-			
+
 			if( p.equals( this.getBestPlayerBet() ) ) {
 				winner = i;
 			}
-			
+
 		}
 
 		int winnerTeammate = 0;
 		int loser = 0;
 		int loserTeammate = 0;
-		
+
 		if( winner == 0 ) {
 			winnerTeammate = 2;
 			loser = 1;
@@ -275,21 +289,21 @@ public class Game {
 			loser = 0;
 			loserTeammate = 2;
 		}
-		
+
 		int roundsWon = this.players[winner].getTurnWin() + this.players[winnerTeammate].getTurnWin();
 		int roundsBet = this.players[winner].getOriginalBet().getNbRounds();
-		
-		
+
+
 		Player[] winners;
-		
+
 		if( roundsWon >= roundsBet ) {
 			winners = new Player[]{ this.players[winner], this.players[winnerTeammate] };
 		} else {
 			winners = new Player[]{ this.players[loser], this.players[loserTeammate] };
 		}
-		
+
 		return winners;
-		
+
 	}
-	
+
 }

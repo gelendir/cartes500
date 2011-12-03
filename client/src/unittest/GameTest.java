@@ -1,8 +1,10 @@
 package unittest;
 
+import exception.GameException;
 import game.Bet;
 import game.Game;
 import game.Player;
+import game.card.Deck;
 import game.enumeration.Suit;
 
 import java.util.ArrayList;
@@ -12,13 +14,13 @@ import org.junit.Assert;
 
 public class GameTest extends TestCase {
 
-	public void testGetSetPlayers() {
-		Game game = new Game();
+	public void testGetSetPlayers() throws GameException {
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		Player gamePlayers[] = game.getPlayers();
 		for(int i = 0; i < players.length; ++i) {
@@ -27,12 +29,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testGetGameSuit() throws Exception {
-		Game game = new Game();
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		game.setBet(new Bet(6, Suit.HEARTS), players[0]);
 		game.setBet(new Bet(7, Suit.SPADES), players[1]);
@@ -43,12 +45,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testGetBestPlayerBet() throws Exception {
-		Game game = new Game();
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		game.setBet(new Bet(6, Suit.HEARTS), players[0]);
 		game.setBet(new Bet(7, Suit.SPADES), players[1]);
@@ -60,12 +62,12 @@ public class GameTest extends TestCase {
 
 	public void testGetPlayableBets() throws Exception {
 		ArrayList<Bet> bets;
-		Game game = new Game();
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		bets = game.getPlayableBets(players[0]);
 		Assert.assertEquals(bets.size(), 25);
@@ -91,12 +93,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testSetBet() throws Exception {
-		Game game = new Game();
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		Assert.assertTrue(game.setBet(new Bet(6, Suit.HEARTS), players[0]));
 		Assert.assertFalse(game.setBet(new Bet(6, Suit.SPADES), players[1]));
@@ -106,12 +108,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testIsValidBet() throws Exception {
-		Game game = new Game();
+
 		Player players[] = new Player[4];
 		for(int i = 0; i < players.length; ++i) {
 			players[i] = new Player("Fred" + i);
 		}
-		game.setPlayers(players);
+		Game game = new Game( players, new Deck() );
 		
 		Assert.assertTrue(game.isValidBet(new Bet(6, Suit.HEARTS), players[0]));
 		game.setBet(new Bet(6, Suit.HEARTS), players[0]);
