@@ -1,5 +1,7 @@
 package client;
 
+import exception.AlreadyConnectedException;
+import exception.GameException;
 import game.Bet;
 import game.Hand;
 import game.Player;
@@ -83,8 +85,10 @@ public class Client implements ClientInterface {
 	 * 
 	 * @return Si la connexion a réussi ou échoué.
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws GameException 
+	 * @throws AlreadyConnectedException 
 	 */
-	public boolean connect() throws RemoteException {
+	public boolean connect() throws RemoteException, AlreadyConnectedException, GameException {
 		return this.server.connectClient( this, this.player );
 	}
 
