@@ -154,6 +154,12 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	}
 
+	@Override
+	public void setPlayerList(Player[] players) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public static void main(String[] args) throws Exception {
 		new GraphicView();
 	}

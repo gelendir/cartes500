@@ -124,4 +124,6 @@ public interface IView {
 	 */
 	public void showTurnWinner( Player player );
 	
+	public void setPlayerList(Player[] players);
+	
 }

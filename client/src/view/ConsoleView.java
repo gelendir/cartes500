@@ -598,4 +598,9 @@ public class ConsoleView implements IView {
 		
 	}
 
+	@Override
+	public void setPlayerList(Player[] players) {
+		// TODO Auto-generated method stub
+		
+	}
 }
