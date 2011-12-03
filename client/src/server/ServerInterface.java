@@ -1,6 +1,9 @@
 package server;
 
 import exception.AlreadyConnectedException;
+import exception.GameException;
+import exception.InvalidBetException;
+import exception.NotYourTurnToBet;
 import exception.ServerException;
 import game.Bet;
 import game.Player;
@@ -69,8 +72,10 @@ public interface ServerInterface extends Remote {
 	 * @param client Le client qui veut faire une mise
 	 * @param bet La mise du joueur
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws NotYourTurnToBet 
+	 * @throws InvalidBetException 
 	 */
-	public void setBetForPlayer( Client client, Bet bet ) throws RemoteException;
+	public void setBetForPlayer( Client client, Bet bet ) throws RemoteException, NotYourTurnToBet, InvalidBetException;
 	
 	/**
 	 * Accesseur du joueur courant. Retourne le joueur courant, c'est-à-dire le prochain joueur à jouer une carte
