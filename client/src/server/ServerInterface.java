@@ -42,7 +42,7 @@ public interface ServerInterface extends Remote {
 	 * ou si un joueur avec le même profil est déja présent.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public void connectClient( Client client, Player player ) throws AlreadyConnectedException, GameException, RemoteException;
+	public void connectClient( Client client, Player player ) throws RemoteException;
 	
 	/**
 	 * Carte joué par un joueur. Un client appelle cette méthode lorsqu'un joueur
@@ -57,7 +57,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws GameException 
 	 */
-	public void playCard( Client client, Card card ) throws GameException;
+	public void playCard( Client client, Card card ) throws RemoteException, GameException;
 	
 	/**
 	 * Déconnexion d'un client. Méthode appelé par un client lorsqu'il veut se
@@ -82,7 +82,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void sendBet( Client client, Bet bet ) throws GameException;
+	public void sendBet( Client client, Bet bet ) throws RemoteException, GameException;
 	
 	/**
 	 * Accesseur du joueur courant. Retourne le joueur courant, c'est-à-dire le prochain joueur à jouer une carte
@@ -125,7 +125,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void sendNewHand( Client client, ArrayList<Card> cards ) throws RemoteException, TurnException, InvalidCardException;
+	public void sendNewHand( Client client, ArrayList<Card> cards ) throws RemoteException;
 	
-	public Player[] getPlayerList();
+	public Player[] getPlayerList() throws RemoteException;
 }

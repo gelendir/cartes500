@@ -95,13 +95,7 @@ public class Client implements ClientInterface {
 	public void connect() {
 		try {
 			this.server.connectClient( this, this.player );
-		} catch (AlreadyConnectedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GameException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -149,10 +143,14 @@ public class Client implements ClientInterface {
 		
 		try {
 			this.server.playCard( this, card );
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (GameException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 
 	}
 
@@ -232,6 +230,9 @@ public class Client implements ClientInterface {
 		} catch (GameException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
@@ -283,12 +284,6 @@ public class Client implements ClientInterface {
 		try {
 			this.server.sendNewHand( this, cards );
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TurnException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidCardException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

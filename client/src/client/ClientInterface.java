@@ -57,7 +57,7 @@ public interface ClientInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void notifyYourTurn( Suit suit ) throws RemoteException, TurnException, InvalidCardException;
+	public void notifyYourTurn( Suit suit ) throws RemoteException;
 	
 	/**
 	 * Événement lancé lorsqu'un joueur se déconnecte du serveur. Une partie
