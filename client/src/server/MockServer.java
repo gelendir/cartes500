@@ -19,6 +19,8 @@ import java.util.Arrays;
 
 import client.Client;
 
+/*
+ 
 public class MockServer extends Server {
 
 	final static public int MAX_TURNS = 10;
@@ -36,10 +38,8 @@ public class MockServer extends Server {
 	private Turn turn = null;
 
 	public MockServer() {
-		/*
 		this.game = new Game();
 		this.deck = new Deck();
-		*/
 		this.deck.mixCards();
 	}
 
@@ -90,7 +90,7 @@ public class MockServer extends Server {
 
 		//Client bet
 		Bet bet = this.createHands();
-		this.game.setBet( bet, this.player );
+		this.game.addBet( bet, this.player );
 
 		//Bot bets		
 		for( int i = 1; i < MockServer.MAX_PLAYERS; i++ ) {
@@ -102,7 +102,7 @@ public class MockServer extends Server {
 				botBet = botBets.get(0);
 			}
 
-			this.game.setBet( botBet, this.players[i] );
+			this.game.addBet( botBet, this.players[i] );
 			this.client.notifyPlayerBet( this.players[i], botBet );
 
 		}
@@ -212,7 +212,6 @@ public class MockServer extends Server {
 					this.turn.addCard( currentPlayer , card );
 
 				} else {
-
 					Card botCard = currentPlayer.getHand().getPlayableCard( this.turn.getTurnSuit() ).get(0);				
 					this.turn.addCard( currentPlayer, botCard );
 					currentPlayer.getHand().playCard( botCard );
@@ -264,7 +263,7 @@ public class MockServer extends Server {
 	}
 
 	@Override
-	public void setBetForPlayer(Client client, Bet bet) {
+	public void sendBet(Client client, Bet bet) {
 	}
 
 	@Override
@@ -280,7 +279,7 @@ public class MockServer extends Server {
 	}
 
 	@Override
-	public void setNewHandAfterBet(Client client, ArrayList<Card> cards) {
+	public void sendNewHand(Client client, ArrayList<Card> cards) {
 
 		System.out.println("SERVER: Player " + client.getPlayer().toString() + " has new hand " + cards.toString() );
 		client.getPlayer().getHand().setCards( cards );
@@ -288,3 +287,5 @@ public class MockServer extends Server {
 	}
 
 }
+
+*/
