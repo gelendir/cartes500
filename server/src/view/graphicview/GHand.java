@@ -56,6 +56,9 @@ public class GHand extends JPanel {
 
 			this.setPreferredSize(new Dimension(ImageCard.getInstance().getExposedCardPart() * (this.gcards.size() - 1) + ImageCard.getInstance().getCardWidth(), ImageCard.getInstance().getCardHeight() + GHand.CARD_MARGIN_TOP));
 
+			this.repaint();
+			this.revalidate();
+			
 			return true;
 		}
 	}
