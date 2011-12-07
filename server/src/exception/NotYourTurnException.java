@@ -1,6 +1,5 @@
-package game;
+package exception;
 
-import exception.GameException;
 
 public class NotYourTurnException extends GameException {
 

@@ -4,6 +4,7 @@ import exception.EmptyDeckException;
 import exception.GameException;
 import exception.InvalidBetException;
 import exception.InvalidCardException;
+import exception.NotYourTurnException;
 import exception.NotYourTurnToBet;
 import exception.PlayerNotInGameException;
 import exception.TurnException;
