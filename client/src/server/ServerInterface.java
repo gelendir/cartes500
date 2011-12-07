@@ -3,8 +3,10 @@ package server;
 import exception.AlreadyConnectedException;
 import exception.GameException;
 import exception.InvalidBetException;
+import exception.InvalidCardException;
 import exception.NotYourTurnToBet;
 import exception.ServerException;
+import exception.TurnException;
 import game.Bet;
 import game.Player;
 import game.card.Card;
@@ -40,7 +42,7 @@ public interface ServerInterface extends Remote {
 	 * ou si un joueur avec le même profil est déja présent.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public boolean connectClient( Client client, Player player ) throws AlreadyConnectedException, GameException;
+	public void connectClient( Client client, Player player ) throws AlreadyConnectedException, GameException, RemoteException;
 	
 	/**
 	 * Carte joué par un joueur. Un client appelle cette méthode lorsqu'un joueur
@@ -51,8 +53,11 @@ public interface ServerInterface extends Remote {
 	 * @param client Le client à déposer une carte
 	 * @param card La carte à jouer
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws TurnException 
+	 * @throws InvalidCardException 
+	 * @throws GameException 
 	 */
-	public void playCard( Client client, Card card ) throws RemoteException;
+	public void playCard( Client client, Card card ) throws GameException;
 	
 	/**
 	 * Déconnexion d'un client. Méthode appelé par un client lorsqu'il veut se
@@ -74,8 +79,10 @@ public interface ServerInterface extends Remote {
 	 * @throws RemoteException Erreurs RMI.
 	 * @throws NotYourTurnToBet 
 	 * @throws InvalidBetException 
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 */
-	public void setBetForPlayer( Client client, Bet bet ) throws RemoteException, NotYourTurnToBet, InvalidBetException;
+	public void sendBet( Client client, Bet bet ) throws GameException;
 	
 	/**
 	 * Accesseur du joueur courant. Retourne le joueur courant, c'est-à-dire le prochain joueur à jouer une carte
@@ -115,8 +122,10 @@ public interface ServerInterface extends Remote {
 	 * @param client Le client qui a remporté la mise
 	 * @param cards Toutes les cartes dans la main du joueur.
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 */
-	public void setNewHandAfterBet( Client client, ArrayList<Card> cards ) throws RemoteException;
+	public void sendNewHand( Client client, ArrayList<Card> cards ) throws RemoteException, TurnException, InvalidCardException;
 	
 	public Player[] getPlayerList();
 }
