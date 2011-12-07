@@ -17,7 +17,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-import server.MockServer;
 import server.Server;
 import server.ServerInterface;
 import view.ConsoleView;
@@ -180,12 +179,12 @@ public class App {
 				Scanner in = new Scanner( System.in );
 				view = new ConsoleView( in , System.out );
 			}
-			MockServer server = new MockServer();
+			//MockServer server = new MockServer();
 
-			Client client = new Client( server, view );
+			//Client client = new Client( server, view );
 			
-			server.setClient( client );
-			server.startGame();
+			//server.setClient( client );
+			//server.startGame();
 			
 		}
 
