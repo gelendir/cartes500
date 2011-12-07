@@ -2,6 +2,10 @@ package client;
 
 import exception.AlreadyConnectedException;
 import exception.GameException;
+import exception.InvalidBetException;
+import exception.InvalidCardException;
+import exception.NotYourTurnToBet;
+import exception.TurnException;
 import game.Bet;
 import game.Hand;
 import game.Player;
@@ -11,7 +15,7 @@ import game.enumeration.Suit;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import server.Server;
+import server.ServerInterface;
 import view.IView;
 /**
  * Client du jeu de 500. La classe Client est en charge de se
@@ -33,7 +37,7 @@ public class Client implements ClientInterface {
 	/**
 	 * Le serveur auquel ce client est connecté
 	 */
-	private Server server;
+	private ServerInterface server;
 	
 	/**
 	 * La vue (console ou graphique) à utiliser
@@ -68,7 +72,7 @@ public class Client implements ClientInterface {
 	 * @param view La vue à utiliser pour interagir avec le joueur.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public Client( Server server, IView view ) throws RemoteException {
+	public Client( ServerInterface server, IView view ) throws RemoteException {
 		
 		this.server = server;
 		this.view = view;
@@ -88,8 +92,19 @@ public class Client implements ClientInterface {
 	 * @throws GameException 
 	 * @throws AlreadyConnectedException 
 	 */
-	public boolean connect() throws RemoteException, AlreadyConnectedException, GameException {
-		return this.server.connectClient( this, this.player );
+	public void connect() {
+		try {
+			this.server.connectClient( this, this.player );
+		} catch (AlreadyConnectedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -109,8 +124,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyPlayerTurn(Player, Card)
 	 */
 	@Override
-	public void notifyPlayerTurn( Player player, Card card )
-			throws RemoteException {
+	public void notifyPlayerTurn( Player player, Card card ) {
 		
 		this.view.showPlayerTurn( player, card );
 		
@@ -120,15 +134,25 @@ public class Client implements ClientInterface {
 	 * Notification du tour au joueur courant.
 	 * Veuillez vous référer à la documentation de la classe ClientInterface
 	 * pour plus de détails.
+	 * @throws GameException 
+	 * @throws RemoteException 
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 * 
 	 * @see ClientInterface#notifyYourTurn(Suit)
 	 */
 	@Override
-	public Card notifyYourTurn( Suit suit ) {
+	public void notifyYourTurn( Suit suit ) {
 		
 		Card card = this.view.getCardToPlay( this.player.getHand(), suit );
 		this.player.getHand().playCard( card );
-		return card;
+		
+		try {
+			this.server.playCard( this, card );
+		} catch (GameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -140,7 +164,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyPlayerDisconnect(Player)
 	 */
 	@Override
-	public void notifyPlayerDisconnect(Player player) throws RemoteException {
+	public void notifyPlayerDisconnect(Player player) {
 		// TODO Auto-generated method stub
 
 	}
@@ -153,7 +177,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyWinner(Player, Player)
 	 */
 	@Override
-	public void notifyWinner(Player player, Player player2) throws RemoteException {
+	public void notifyWinner(Player player, Player player2) {
 		this.view.showWinners( player, player2 );
 
 	}
@@ -166,7 +190,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyExit()
 	 */
 	@Override
-	public void notifyExit() throws RemoteException {
+	public void notifyExit() {
 		// TODO Auto-generated method stub
 
 	}
@@ -179,7 +203,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyPlayerConnect(Player)
 	 */
 	@Override
-	public void notifyPlayerConnect(Player player) throws RemoteException {
+	public void notifyPlayerConnect(Player player) {
 		
 		this.view.playerConnected( player );	
 		
@@ -189,15 +213,26 @@ public class Client implements ClientInterface {
 	 * Notification de la période de mise.
 	 * Veuillez vous référer à la documentation de la classe ClientInterface
 	 * pour plus de détails.
+	 * @throws RemoteException 
+	 * @throws InvalidBetException 
+	 * @throws NotYourTurnToBet 
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 * 
 	 * @see ClientInterface#notifyBettingTime(Hand)
 	 */
 	@Override
-	public Bet notifyBettingTime( Hand hand ) {
+	public void notifyBettingTime( Hand hand ) {
 		
 		this.player.setHand( hand );
 		Bet bet = this.view.askBet( hand );
-		return bet;
+		
+		try {
+			this.server.sendBet( this, bet );
+		} catch (GameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -224,8 +259,7 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyStartNewGame(ArrayList)
 	 */
 	@Override
-	public void notifyStartNewGame(ArrayList<Player> players)
-			throws RemoteException {
+	public void notifyStartNewGame(ArrayList<Player> players) {
 		
 		this.players = players;
 		this.view.showGameStart( this.betWinner );
@@ -236,6 +270,9 @@ public class Client implements ClientInterface {
 	 * Notification de nouvelles cartes après avoir gagné une mise.
 	 * Veuillez vous référer à la documentation de la classe ClientInterface
 	 * pour plus de détails.
+	 * @throws RemoteException 
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 * 
 	 * @see ClientInterface#notifyChangeCardsAfterBet(Card[])
 	 */
@@ -243,7 +280,18 @@ public class Client implements ClientInterface {
 	public void notifyChangeCardsAfterBet( Card[] newCards ) {
 		
 		ArrayList<Card> cards = this.view.changeCards( this.player.getHand(), newCards );
-		this.server.setNewHandAfterBet( this, cards );
+		try {
+			this.server.sendNewHand( this, cards );
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TurnException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidCardException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
