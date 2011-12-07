@@ -1,6 +1,8 @@
 package game;
 
+import exception.AlreadyPlayedException;
 import exception.InvalidCardException;
+import exception.MaxCardsPlayedException;
 import exception.TurnException;
 import game.card.Card;
 import game.card.CardComparator;
@@ -79,9 +81,9 @@ public class Turn {
 	public void addCard( Player player, Card card ) throws TurnException {
 		
 		if( this.cards.size() >= Turn.MAX_CARDS ) {
-			throw new TurnException("Cannot add more cards to this turn");
+			throw new MaxCardsPlayedException();
 		} else if ( this.cards.containsKey( player ) ) {
-			throw new TurnException("Player has already played a card");
+			throw new AlreadyPlayedException();
 		}
 		
 		this.cards.put( player, card );
@@ -125,6 +127,11 @@ public class Turn {
 	 */
 	public int nbCards() {
 		return this.cards.size();
+	}
+	
+	public boolean isTurnFinished()
+	{
+		return( this.nbCards() == Turn.MAX_CARDS );
 	}
 	
 	/**
@@ -242,7 +249,7 @@ public class Turn {
 	 * @throws TurnException Erreur si des joueurs n'ont pas encore déposé leur cartes.
 	 * @throws InvalidCardException 
 	 */
-	public Player getWinner() throws TurnException, InvalidCardException {
+	public Player getWinner() throws TurnException {
 		
 		if( this.cards.size() != Turn.MAX_CARDS ) {
 			throw new TurnException("Not all players have played a card in this turn");
