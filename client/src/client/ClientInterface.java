@@ -1,5 +1,9 @@
 package client;
 
+import exception.InvalidBetException;
+import exception.InvalidCardException;
+import exception.NotYourTurnToBet;
+import exception.TurnException;
 import game.Bet;
 import game.Hand;
 import game.Player;
@@ -50,8 +54,10 @@ public interface ClientInterface extends Remote {
 	 * qu'il peut jouer.
 	 * @return La carte que ce client veut jouer.
 	 * @throws RemoteException Erreurs RMI
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 */
-	public Card notifyYourTurn( Suit suit ) throws RemoteException;
+	public void notifyYourTurn( Suit suit ) throws RemoteException, TurnException, InvalidCardException;
 	
 	/**
 	 * Événement lancé lorsqu'un joueur se déconnecte du serveur. Une partie
@@ -84,8 +90,12 @@ public interface ClientInterface extends Remote {
 	 * @param hand Les cartes distribués au joueur.
 	 * @return La mise fait par ce client.
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws InvalidBetException 
+	 * @throws NotYourTurnToBet 
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 */
-	public Bet notifyBettingTime( Hand hand ) throws RemoteException;
+	public void notifyBettingTime( Hand hand ) throws RemoteException;
 	
 	/**
 	 * Événement lancé à la fin d'une partie pour indiquer les joueurs qui ont
@@ -126,6 +136,8 @@ public interface ClientInterface extends Remote {
 	 * 
 	 * @param newCards Nouvelles cartes disponibles.
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws InvalidCardException 
+	 * @throws TurnException 
 	 */
 	public void notifyChangeCardsAfterBet( Card[] newCards ) throws RemoteException;
 	
