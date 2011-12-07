@@ -3,9 +3,15 @@ package game;
 import exception.EmptyDeckException;
 import exception.GameException;
 import exception.InvalidBetException;
+import exception.InvalidCardException;
+import exception.NotYourTurnToBet;
+import exception.PlayerNotInGameException;
+import exception.TurnException;
 import game.enumeration.Suit;
+import game.card.Card;
 import game.card.Deck;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * La classe Game sert à gérer le jeu.
@@ -15,6 +21,7 @@ public class Game {
 
 	final static public int MAX_TURNS = 10;
 	final static public int MAX_PLAYERS = 4;
+	final static public int NB_CARDS_SECRET_HAND = 6;
 
 	/**
 	 * Le tableau des joueurs de la partie
@@ -26,11 +33,22 @@ public class Game {
 	 * qui a gagné la mise.
 	 */
 	private int indexPlayerBetWinner = -1;
+	
+	/**
+	 * L'index dans le tableau du prochain joueur a faire
+	 * une mise
+	 */
+	private int indexPlayerNextBet = 0;
 
 	/**
-	 * 
+	 * la pile de cartes utilisé pour ce jeu
 	 */
 	private Deck deck = null;
+	
+	/**
+	 * Représente le la manche courante du jeu
+	 */
+	private Turn currentTurn = null;
 
 	/**
 	 * Le constructeur initialise le jeu avec des valeurs par défaut.
@@ -66,14 +84,6 @@ public class Game {
 	}
 
 	/**
-	 * Cette méthode sert à changer les joueurs de la parties.
-	 * @param players Les joueurs de la partie
-	 */
-	public void setPlayers(Player players[]) {
-		this.players = players;
-	}
-
-	/**
 	 * Cette méthode retourne l'atoût de la partie.
 	 * @return Retourne l'atoût de la partie.
 	 */
@@ -88,27 +98,6 @@ public class Game {
 	public Player getBestPlayerBet() {
 		return this.players[this.indexPlayerBetWinner];
 	}
-
-	/**
-	 * Cette méthode sert à modifier la main d'un joueur avec
-	 * des nouvelles cartes.
-	 * @param finalHand Les nouvelles cartes du joueur
-	 * @param player Le joueur en question
-	 * @return Retourne vrai si le joueur existe; sinon faux.
-	 */
-	/*public boolean chooseCardFromSecretBet(ArrayList<Card> finalHand, Player player) {
-		int indexPlayer = findIndexPlayer(player);
-		if(indexPlayer != -1) {
-			if(this.players[indexPlayer] != null && 
-					this.players[indexPlayer].getHand() != null &&
-					this.players[indexPlayer].getHand().getCards() != null) {
-				this.players[indexPlayer].getHand().setCards(finalHand);
-				return true;
-			}
-		}
-
-		return false;
-	}*/
 
 	/**
 	 * Cette méthode retourne une collection de Bet que le joueur peut jouer.
@@ -161,44 +150,48 @@ public class Game {
 	 * @param bet La mise du joueur
 	 * @param player Le joueur
 	 * @return  Retourne vrai si la mise est valide; faux sinon.
+	 * @throws InvalidBetException 
+	 * @throws NotYourTurnToBet 
 	 * @see Bet
 	 */
-	public boolean setBet(Bet bet, Player player) {
+	public void addBet(Bet bet, Player player) throws GameException {
+		
 		int indexPlayer = findIndexPlayer(player);
-		if(indexPlayer != -1) {
-			if(isValidBet(bet, player)) {
-				this.players[indexPlayer].setOriginalBet(bet);
-				if(bet != null) {
-					this.indexPlayerBetWinner = indexPlayer;
-				}
-
-				return true;
-			}	
+		
+		if( indexPlayer <= -1 ) {
+			throw new PlayerNotInGameException();
+		}
+		
+		if( !player.equals( this.getNextPlayerToBet() ) ) {
+			throw new NotYourTurnToBet();
+		}
+			
+		if(isValidBet(bet, player)) {
+			
+			this.players[indexPlayer].setOriginalBet(bet);
+			this.indexPlayerNextBet++;
+			
+			if(bet != null) {
+				this.indexPlayerBetWinner = indexPlayer;
+				return;
+			} 
+			
+		} else {
+			throw new InvalidBetException();
 		}
 
-
-		return false;
 	}
 
 	public Player getNextPlayerToBet() {
+		
+		return this.players[ this.indexPlayerNextBet ];
 
-		Player nextToBet = null;
-		int pos = 0;
-
-		while( nextToBet != null && pos < this.players.length ) {
-
-			Player player = this.players[pos];
-
-			if( player.getOriginalBet() == null ) {
-				nextToBet = player;
-			}
-
-			pos++;
-
-		}
-
-		return nextToBet;
-
+	}
+	
+	public boolean areBetsFinished() {
+		
+		return( this.indexPlayerNextBet > this.players.length );
+		
 	}
 
 	/**
@@ -304,6 +297,82 @@ public class Game {
 
 		return winners;
 
+	}
+	
+	public Card[] createSecretHand() {
+		
+		Card newCards[] = new Card[ Game.NB_CARDS_SECRET_HAND ];
+		
+		for( int i = 0; i < Game.NB_CARDS_SECRET_HAND; i++ ) {
+			newCards[i] = this.deck.takeCard();
+		}
+		
+		return newCards;	
+		
+	}
+	
+	public void newTurn() throws TurnException {
+		
+		if( 
+				this.currentTurn == null
+				|| this.currentTurn.isTurnFinished()
+		) {
+			this.currentTurn = new Turn( this.getGameSuit() );
+		} else {
+			throw new TurnException("Turn is not finished");
+		}
+	}
+	
+	public Suit getTurnSuit() {
+		return this.currentTurn.getTurnSuit();
+	}
+
+	public void playCard(Player player, Card card) throws GameException {
+		
+		if( !player.equals( this.nextPlayer() ) ) {
+			throw new NotYourTurnException();
+		}
+		
+		ArrayList<Card> hand = new ArrayList<Card>(
+			Arrays.asList( player.getHand().getCards() )
+		);
+		
+		if( !hand.contains( card ) ) {
+			throw new InvalidCardException();
+		}
+		
+		this.currentTurn.addCard( player, card );
+		
+	}
+
+	public boolean isTurnFinished() {
+		return this.currentTurn.isTurnFinished();
+	}
+
+	public Player getTurnWinner() throws TurnException {
+		return this.currentTurn.getWinner();
+	}
+	
+	public Player nextPlayer() {
+		
+		if( this.currentTurn == null ) {
+			return this.players[0];
+		}
+		
+		Player latestPlayer = this.currentTurn.getLatestPlayer();
+		
+		if( latestPlayer == null ) {
+			return this.players[0];
+		}
+		
+		int indexPlayer = this.findIndexPlayer( latestPlayer );
+		
+		if( indexPlayer + 1 == Game.MAX_PLAYERS ) {
+			return this.players[0];
+		}
+		
+		return this.players[ indexPlayer + 1 ];
+		
 	}
 
 }
