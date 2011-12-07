@@ -1,6 +1,6 @@
 package exception;
 
-public class ServerException extends Exception {
+public class ServerException extends RuntimeException {
 	
 	public ServerException() {
 		super("A server exception has been thrown");
