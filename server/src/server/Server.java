@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 import view.ConsoleView;
 
 import client.Client;
+import client.ClientInterface;
 
 /**
  * Serveur du jeu de 500. Classe en charge de gérer les connexions, 
@@ -49,7 +50,7 @@ public class Server implements ServerInterface {
 	
 	static private String BUNDLE = "server";
 
-	private LinkedHashMap<Client, Player> clients 	= null;
+	private LinkedHashMap<ClientInterface, Player> clients 	= null;
 	private ServerState state 						= ServerState.CONNECT;
 	private Game game								= null;
 	
@@ -58,7 +59,7 @@ public class Server implements ServerInterface {
 	public Server() {
 		
 		this.bundle = (PropertyResourceBundle) ResourceBundle.getBundle( Server.BUNDLE );
-		this.clients = new LinkedHashMap<Client, Player>( Game.MAX_PLAYERS );
+		this.clients = new LinkedHashMap<ClientInterface, Player>( Game.MAX_PLAYERS );
 		this.state = ServerState.CONNECT;
 		this.game = null;
 			
@@ -109,10 +110,11 @@ public class Server implements ServerInterface {
 	/**
 	 * Connexion d'un client au serveur. 
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws RemoteException 
 	 * @see ServerInterface#connectClient(Client, Player)
 	 */
 	@Override
-	public void connectClient(Client client, Player player) {
+	public void connectClient(ClientInterface client, Player player) throws RemoteException {
 		
 		this.assertState( ServerState.CONNECT );
 		
@@ -137,8 +139,9 @@ public class Server implements ServerInterface {
 	/**
 	 * Fonction utilitaire permettant de notifier tous les joueurs qu'ils doivent maintenant
 	 * émettre une mise au serveur
+	 * @throws RemoteException 
 	 */
-	private void startBets() {
+	private void startBets() throws RemoteException {
 		
 		this.state = ServerState.BET;
 		
@@ -147,9 +150,9 @@ public class Server implements ServerInterface {
 		
 		this.createGame( players, deck );
 			
-		for( Map.Entry<Client, Player> entry : this.clients.entrySet() ) {
+		for( Map.Entry<ClientInterface, Player> entry : this.clients.entrySet() ) {
 			
-			Client client = entry.getKey();
+			ClientInterface client = entry.getKey();
 			Player player = entry.getValue();
 			
 			client.notifyBettingTime( player.getHand() );
@@ -180,9 +183,10 @@ public class Server implements ServerInterface {
 	 * 
 	 * @see ServerInterface#playCard(Client, Card)
 	 * @throws GameException Exception lancé si le joueur a déposé une carte invalide.
+	 * @throws RemoteException 
 	 */
 	@Override
-	public void playCard(Client client, Card card) throws GameException {
+	public void playCard(ClientInterface client, Card card) throws GameException, RemoteException {
 		
 		this.assertState( ServerState.GAME );
 		
@@ -190,7 +194,7 @@ public class Server implements ServerInterface {
 		
 		this.game.playCard( player, card );
 		
-		for( Client clientToNotify: this.clients.keySet() ) {
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			
 			clientToNotify.notifyPlayerTurn( player, card );
 			
@@ -206,13 +210,14 @@ public class Server implements ServerInterface {
 	/**
 	 * Fonction utilitaire permettant de donner un point au gagnant du tour et de
 	 * démarrer un nouveau tour.
+	 * @throws RemoteException 
 	 */
-	public void startNewTurn() {
+	public void startNewTurn() throws RemoteException {
 		
 		Player turnWinner = this.fetchTurnWinner();
 		turnWinner.addTurnWin();
 		
-		for( Client clientToNotify: this.clients.keySet() ) {
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyTurnWinner( turnWinner );
 		}
 		
@@ -262,10 +267,11 @@ public class Server implements ServerInterface {
 	/**
 	 * Déconnexion d'un client.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws RemoteException 
 	 * @see ServerInterface#disconnectClient(Client)
 	 */
 	@Override
-	public void disconnectClient(Client client) {
+	public void disconnectClient(ClientInterface client) throws RemoteException {
 		
 		this.assertState(
 			new ServerState[]{ ServerState.CONNECT, ServerState.GAME }
@@ -273,7 +279,7 @@ public class Server implements ServerInterface {
 		
 		Player disconnectedPlayer = this.clients.remove( client );
 		
-		for( Client notify: this.clients.keySet() ) {
+		for( ClientInterface notify: this.clients.keySet() ) {
 			notify.notifyPlayerDisconnect( disconnectedPlayer );
 		}
 		
@@ -318,20 +324,21 @@ public class Server implements ServerInterface {
 	/**
 	 * Mise d'un joueur.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws RemoteException 
 	 * 
 	 * @throws NotYourTurnToBet 
 	 * @throws InvalidCardException 
 	 * @see ServerInterface#sendBet(Client, Bet)
 	 */
 	@Override
-	public void sendBet(Client client, Bet bet) throws GameException {
+	public void sendBet(ClientInterface client, Bet bet) throws GameException, RemoteException {
 		
 		this.assertState( ServerState.BET );
 		
 		Player player = this.clients.get( client );
 		this.game.addBet( bet, player );
 		
-		for( Client clientToNotify: this.clients.keySet() ) {
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyPlayerBet(player, bet);			
 		}
 		
@@ -347,10 +354,10 @@ public class Server implements ServerInterface {
 	 * @param player Le joueur à rechercher.
 	 * @return Le client d'associé au joueur.
 	 */
-	private Client clientForPlayer(Player player)
+	private ClientInterface clientForPlayer(Player player)
 	{
 		
-		for( Map.Entry<Client, Player> entry : this.clients.entrySet() ) {
+		for( Map.Entry<ClientInterface, Player> entry : this.clients.entrySet() ) {
 			if( entry.getValue().equals( player ) ) {
 				return entry.getKey();
 			}
@@ -362,14 +369,15 @@ public class Server implements ServerInterface {
 	
 	/**
 	 * Fonction utilitaire permettant de notifier tout les clients du gagnant du tour.
+	 * @throws RemoteException 
 	 */
-	private void notifyBetWinner() {
+	private void notifyBetWinner() throws RemoteException {
 		
 		Player betWinner = this.game.getBestPlayerBet();
 		Bet winningBet = betWinner.getOriginalBet();
 		Suit gameSuit = winningBet.getSuit();
 		
-		for( Client clientToNotify: this.clients.keySet() ) {			
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {			
 			clientToNotify.notifyBetWinner( betWinner, gameSuit );
 		}
 		
@@ -377,13 +385,14 @@ public class Server implements ServerInterface {
 	
 	/**
 	 * Fonction utilitaire permettant de distribuer de nouvelles cartes au gagnant de la mise.
+	 * @throws RemoteException 
 	 */
-	private void distributeSecretHand() {
+	private void distributeSecretHand() throws RemoteException {
 		
 		Player betWinner = this.game.getBestPlayerBet();
 		Card[] secretHand = this.game.createSecretHand();
 		
-		Client client = this.clientForPlayer( betWinner );
+		ClientInterface client = this.clientForPlayer( betWinner );
 		client.notifyChangeCardsAfterBet( secretHand );
 		
 	}
@@ -391,11 +400,12 @@ public class Server implements ServerInterface {
 	/**
 	 * Mutateur de la nouvelle main.
 	 * Voir la classe ServerInterface pour plus de détails.
+	 * @throws RemoteException 
 	 * 
 	 * @see ServerInterface#sendNewHand(Client, ArrayList)
 	 */
 	@Override
-	public void sendNewHand(Client client, ArrayList<Card> cards) {
+	public void sendNewHand(ClientInterface client, ArrayList<Card> cards) throws RemoteException {
 		
 		this.assertState( ServerState.DISTRIBUTE_SECRET_HAND );
 		
@@ -410,9 +420,10 @@ public class Server implements ServerInterface {
 	 * Fonction utilitaire permettant de notifier les joueurs
 	 * que la partie peut maintenant débuter et démarrer une nouvelle partie après la période
 	 * de mises.
+	 * @throws RemoteException 
 	 * 
 	 */
-	private void startGame() {
+	private void startGame() throws RemoteException {
 		
 		this.state = ServerState.GAME;
 		
@@ -422,11 +433,11 @@ public class Server implements ServerInterface {
 			)
 		);
 		
-		for( Client client: this.clients.keySet() ) {
+		for( ClientInterface client: this.clients.keySet() ) {
 			client.notifyStartNewGame( players );
 		}
 		
-		Client first = ((Client[])this.clients.keySet().toArray())[0];
+		ClientInterface first = ((Client[])this.clients.keySet().toArray())[0];
 		
 		this.createNewTurn();
 

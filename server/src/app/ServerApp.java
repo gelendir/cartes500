@@ -29,7 +29,7 @@ import view.graphicview.GraphicView;
  * arguments passés en paramètre.
  * @author Gregory Eric Sanderson
  */
-public class App {
+public class ServerApp {
 	
 	/**
 	 * L'adresse de l'hôte par défaut du régistraire RMI.
@@ -100,7 +100,7 @@ public class App {
 		if( cmd != null && cmd.hasOption("help") ) {
 		
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( App.PROGRAM_NAME , options );
+			formatter.printHelp( ServerApp.PROGRAM_NAME , options );
 			return null;
 
 		}
@@ -117,13 +117,13 @@ public class App {
 		try {
 		
 			System.out.println("Exporting server stub...");
-			ServerInterface stub = (ServerInterface)UnicastRemoteObject.exportObject( server );
+			ServerInterface stub = (ServerInterface)UnicastRemoteObject.exportObject( server, 0 );
 			
 			System.out.println("Getting Registry...");
 			registry = LocateRegistry.getRegistry( host, port );
 			
 			System.out.println("Binding server...");
-			registry.rebind( App.SERVER_NAME, stub );
+			registry.rebind( ServerApp.SERVER_NAME, stub );
 			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
@@ -144,10 +144,10 @@ public class App {
 	public static void main(String[] args) throws Exception {
 		
 		CommandLine cmd = null;
-		String host = App.DEFAULT_HOST;
-		int port = App.DEFAULT_PORT;
+		String host = ServerApp.DEFAULT_HOST;
+		int port = ServerApp.DEFAULT_PORT;
 		
-		cmd = App.parseArgs( args );
+		cmd = ServerApp.parseArgs( args );
 		
 		if( cmd != null ) {
 			
@@ -161,16 +161,10 @@ public class App {
 			
 			Server server = new Server();
 			
-			boolean connected = App.connectRMI( server, host, port );
+			boolean connected = ServerApp.connectRMI( server, host, port );
 			
 			if( !connected ) {
 				System.out.println("Error connecting to RMI. Please see stack trace");
-			} else {
-				
-				//TODO: remove this
-				while( true ) {
-					Thread.sleep( 2000 );
-				}
 			}
 			
 		}

@@ -1,5 +1,7 @@
 package game;
 
+import java.io.Serializable;
+
 /**
  * Joueur dans le jeu de 500.
  * Représente le profil d'un joueur humain qui participe à une partie de cartes 500.
@@ -12,8 +14,13 @@ package game;
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
  *
  */
-public class Player {
+public class Player implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7950307699192824310L;
+
 	/**
 	 * La main du joueur. Contient les cartes qu'un joueur peut jouer.
 	 */

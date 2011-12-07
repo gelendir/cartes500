@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import client.Client;
+import client.ClientInterface;
 
 /**
  * Interface Serveur du jeu. Cette interface est utilisé par
@@ -42,7 +43,7 @@ public interface ServerInterface extends Remote {
 	 * ou si un joueur avec le même profil est déja présent.
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public void connectClient( Client client, Player player ) throws RemoteException;
+	public void connectClient( ClientInterface client, Player player ) throws RemoteException;
 	
 	/**
 	 * Carte joué par un joueur. Un client appelle cette méthode lorsqu'un joueur
@@ -57,7 +58,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws GameException 
 	 */
-	public void playCard( Client client, Card card ) throws RemoteException, GameException;
+	public void playCard( ClientInterface client, Card card ) throws RemoteException, GameException;
 	
 	/**
 	 * Déconnexion d'un client. Méthode appelé par un client lorsqu'il veut se
@@ -68,7 +69,7 @@ public interface ServerInterface extends Remote {
 	 * @param client Le client qui veut se déconnecter
 	 * @throws RemoteException Erreurs RMI.
 	 */
-	public void disconnectClient( Client client ) throws RemoteException;
+	public void disconnectClient( ClientInterface client ) throws RemoteException;
 	
 	/**
 	 * Mise d'un joueur. Méthode appelé lorsqu'un client est prêt à faire une mise. Une mise est fait lorsque le serveur
@@ -82,7 +83,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void sendBet( Client client, Bet bet ) throws RemoteException, GameException;
+	public void sendBet( ClientInterface client, Bet bet ) throws RemoteException, GameException;
 	
 	/**
 	 * Accesseur du joueur courant. Retourne le joueur courant, c'est-à-dire le prochain joueur à jouer une carte
@@ -125,7 +126,7 @@ public interface ServerInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void sendNewHand( Client client, ArrayList<Card> cards ) throws RemoteException;
+	public void sendNewHand( ClientInterface client, ArrayList<Card> cards ) throws RemoteException;
 	
 	public Player[] getPlayerList() throws RemoteException;
 }
