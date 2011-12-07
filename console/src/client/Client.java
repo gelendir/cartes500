@@ -89,16 +89,9 @@ public class Client implements ClientInterface {
 	 * 
 	 * @return Si la connexion a réussi ou échoué.
 	 * @throws RemoteException Erreurs RMI.
-	 * @throws GameException 
-	 * @throws AlreadyConnectedException 
 	 */
-	public void connect() {
-		try {
-			this.server.connectClient( this, this.player );
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void connect() throws RemoteException {
+		this.server.connectClient( this, this.player );
 	}
 
 	/**

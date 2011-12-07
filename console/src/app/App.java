@@ -1,9 +1,10 @@
-package client;
+package app;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 import org.apache.commons.cli.CommandLine;
@@ -14,6 +15,9 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+
+import client.Client;
+import client.ClientInterface;
 
 import server.ServerInterface;
 import view.ConsoleView;
@@ -39,7 +43,9 @@ public class App {
 	/**
 	 * Le nom du programme
 	 */
-	final public static String 	PROGRAM_NAME = "Cartes500";
+	final public static String 	PROGRAM_NAME = "Cartes 500 Client console";
+	
+	final public static String SERVER_NAME = "Cartes500Server";
 	
 	/**
 	 * L'interface Stub du serveur
@@ -77,8 +83,6 @@ public class App {
 									.create("H");
 
 		options.addOption("h", "help", false, "print this help message");
-		options.addOption("c", "console", false, "start console app");
-		options.addOption("g", "graphic", false, "start graphical app");
 		options.addOption( host );
 		options.addOption( port );
 										
@@ -117,7 +121,7 @@ public class App {
 			
 			System.out.println("Connecting to RMI Registry...");
 			App.registry = LocateRegistry.getRegistry( host, port );
-			App.server = (ServerInterface)registry.lookup( App.PROGRAM_NAME );
+			App.server = (ServerInterface)registry.lookup( App.SERVER_NAME );
 			
 		} catch (RemoteException e) {
 			System.out.println("Error during connection to server. Stacktrace:");
@@ -132,6 +136,23 @@ public class App {
 		System.out.println("Connected.");
 		
 		return true;
+		
+	}
+	
+	private static boolean exportClient( Client client ) {
+						
+		boolean exported = true;
+		
+		System.out.println("Exporting client stub...");
+		try {
+			ClientInterface stub = (ClientInterface)UnicastRemoteObject.exportObject( client, 0 );
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			exported = false;
+		}
+		
+		return exported;
 		
 	}
 
@@ -159,17 +180,31 @@ public class App {
 				port = Integer.parseInt( cmd.getOptionValue("port") );
 			}
 			
-			//App.connectToServer( host, port );
+			boolean connected = App.connectToServer( host, port );
 			
-
-			Scanner in = new Scanner( System.in );
-			ConsoleView view = new ConsoleView( in , System.out );
-			//MockServer server = new MockServer();
-
-			//Client client = new Client( server, view );
-			
-			//server.setClient( client );
-			//server.startGame();
+			if( !connected ) {
+				System.out.println("Error connecting to RMI. Please see stack trace");
+			} else {
+				
+				Scanner in = new Scanner( System.in );
+				ConsoleView view = new ConsoleView( in , System.out );
+				Client client = new Client( App.server, view );
+				
+				boolean exported = App.exportClient( client );
+				
+				if( !exported ) {
+					System.out.println("Error exporting client to RMI. Please see stack trace");
+				} else {
+					
+					client.connect();
+					
+					//TODO: remove this
+					while( true ) {
+						Thread.sleep( 2000 );
+					}
+				}
+				
+			}			
 			
 		}
 
