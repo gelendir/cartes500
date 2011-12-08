@@ -41,8 +41,8 @@ public class GGamingZone extends JPanel {
 		this.gcards[position - 1] = gcard;
 		this.add(gcard, c);
 		
-		//this.repaint();
-		//this.revalidate();
+		this.repaint();
+		this.revalidate();
 	}
 
 	public void flushGamingZone() {

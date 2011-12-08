@@ -86,6 +86,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.choosenCard = card;
 		this.cardChosed.countDown();
 		this.gamingZone.setCard(1, card);
+		
+		this.repaint();
+		this.validate();
+		this.pack();
 		System.out.println("clique");
 	}
 	
@@ -105,6 +109,11 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 		ghand.setHand(cards);
 		ghand.setPlayableCards(hand.getPlayableCard(suit));
+		
+		this.repaint();
+		this.validate();
+		this.pack();
+		
 		try {
 			this.cardChosed.await();
 		} catch (InterruptedException e) {

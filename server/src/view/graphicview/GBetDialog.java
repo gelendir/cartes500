@@ -15,8 +15,8 @@ import javax.swing.JFrame;
 
 public class GBetDialog extends JDialog implements MouseListener {
 
-	private JComboBox<Suit> suitList;
-	private JComboBox<Integer> valueList;
+	private JComboBox suitList;
+	private JComboBox valueList;
 	private JButton betButton;
 	private Bet bet;
 	
@@ -26,11 +26,11 @@ public class GBetDialog extends JDialog implements MouseListener {
 		this.setLayout(new FlowLayout());
 		
 		Suit[] suits = { Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, Suit.NONE };
-		this.suitList = new JComboBox<Suit>(suits);
+		this.suitList = new JComboBox(suits);
 		this.add(this.suitList);
 		
 		Integer[] value = { 6, 7, 8, 9, 10 };
-		this.valueList = new JComboBox<Integer>(value);
+		this.valueList = new JComboBox(value);
 		this.add(this.valueList);
 		
 		this.betButton = new JButton("Bet!");
