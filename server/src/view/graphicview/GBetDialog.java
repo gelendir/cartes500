@@ -1,6 +1,7 @@
 package view.graphicview;
 
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,16 +14,15 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-public class GBetDialog extends JDialog implements MouseListener {
+public class GBetDialog extends JDialog {
 
 	private JComboBox suitList;
 	private JComboBox valueList;
-	private JButton betButton;
 	private Bet bet;
 	
 	public GBetDialog(JFrame owner) {
 		super(owner);
-		
+				
 		this.setLayout(new FlowLayout());
 		
 		Suit[] suits = { Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, Suit.NONE };
@@ -33,21 +33,36 @@ public class GBetDialog extends JDialog implements MouseListener {
 		this.valueList = new JComboBox(value);
 		this.add(this.valueList);
 		
-		this.betButton = new JButton("Bet!");
-		this.betButton.addMouseListener(this);
-		this.add(this.betButton);
+		JButton betButton = new JButton("Bet!");
+		betButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				GBetDialog.this.finishBet();
+			}
+		});
+		this.add(betButton);
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				GBetDialog.this.bet = null;
+				GBetDialog.this.dispose();
+			}
+		});
+		this.add(cancelButton);
 		
 		this.setModal(true);
 		this.pack();
 		this.setResizable(false);
+		this.setLocationRelativeTo(owner);
 	}
 	
 	public Bet getBet() {
 		return this.bet;
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void finishBet() {
 		try {
 			this.bet = new Bet((Integer)this.valueList.getSelectedItem(), (Suit)this.suitList.getSelectedItem());
 			this.dispose();
@@ -55,29 +70,5 @@ public class GBetDialog extends JDialog implements MouseListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }

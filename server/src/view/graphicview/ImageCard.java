@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class ImageCard {
 	private static ImageCard instance = new ImageCard();
 
-	private static final String imageName = "images/little_cards.png";
+	private static final String imageName = "images/little_cards2.png";
 	
 	public int cardHeight;// = 279;
 	public int cardWidth;// = 192;

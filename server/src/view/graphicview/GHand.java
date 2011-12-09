@@ -20,29 +20,32 @@ public class GHand extends JPanel {
 	private ArrayList<GCard> gcards = new ArrayList<GCard>();
 	private ArrayList<GCardListener> gcardlistener = new ArrayList<GCardListener>();
 	private ArrayList<Card> playableCards = new ArrayList<Card>();
+	private ArrayList<Card> hand = new ArrayList<Card>();
 
 	public GHand() {
 		this.setLayout(null);
 	}
 
-	public boolean setHand(ArrayList<Card> cards) {
+	public void setHand(ArrayList<Card> cards) {
 		if(cards == null) {
-			return false;
+			throw new NullPointerException();
 		}
 		else {
 			this.removeAll();
+			this.gcards.clear();
+			this.hand.clear();
+			
 			int sizeCards = cards.size();
 			Insets insets = this.getInsets();
 			MouseAdapter mouselistener = new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					for(GCardListener gcardlistener: GHand.this.gcardlistener) {
-						gcardlistener.choseenCard(((GCard)e.getSource()).getCard());
-					}
+					GHand.this.notifyGCardlistener(((GCard)e.getSource()).getCard());
 				}
 			};
 
 			for(Card card : cards) {
+				this.hand.add(card);
 				GCard gcard = new GCard(card);
 				this.gcards.add(gcard);
 				gcard.addMouseListener(mouselistener);
@@ -53,20 +56,32 @@ public class GHand extends JPanel {
 						size.width, size.height);
 				--sizeCards;
 			}
-
+			
 			this.setPreferredSize(
 					new Dimension(ImageCard.getInstance().getExposedCardPart() * (this.gcards.size() - 1) + ImageCard.getInstance().getCardWidth(), 
 							ImageCard.getInstance().getCardHeight() + GHand.CARD_MARGIN_TOP));
 
-			this.repaint();
-			this.revalidate();
-						
-			return true;
+			this.refresh();
 		}
 	}
-	public boolean removeCard(Card card) {
+	public void removeCard(Card card) {
 
-		return false;
+		this.hand.remove(card);
+		
+		GCard toBeRemove = null;
+		for(GCard gcard: this.gcards) {
+			if(gcard.getCard().equals(card)) {
+				toBeRemove = gcard;
+				break;
+			}
+		}
+		
+		if(toBeRemove != null) {
+			this.gcards.remove(toBeRemove);
+			this.remove(toBeRemove);
+		}
+		
+		this.refresh();
 	}
 
 	public void setPlayableCards(ArrayList<Card> cards) {
@@ -91,11 +106,15 @@ public class GHand extends JPanel {
 	}
 
 	public void resetPlayableCards() {
-		Insets insets = this.getInsets();
+		/*Insets insets = this.getInsets();
 		for(GCard gcard : this.gcards) {
 			Rectangle rect = gcard.getBounds();
 			gcard.setBounds(rect.x, GHand.CARD_MARGIN_TOP + insets.top, rect.width, rect.height);
-		}
+		}*/
+		this.playableCards.clear();
+		this.setHand((ArrayList<Card>)this.hand.clone());
+		
+		this.refresh();
 	}
 
 	public void addGCardListener(GCardListener l) {
@@ -104,5 +123,16 @@ public class GHand extends JPanel {
 
 	public void removeGCardListener(GCardListener l) {
 		this.gcardlistener.remove(l);
+	}
+	
+	private void notifyGCardlistener(Card card) {
+		for(GCardListener gcardlistener: this.gcardlistener) {
+			gcardlistener.choseenCard(card);
+		}
+	}
+	
+	private void refresh() {
+		this.repaint();
+		this.revalidate();
 	}
 }
