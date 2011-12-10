@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import exception.InvalidBetException;
@@ -16,8 +17,13 @@ import game.enumeration.Suit;
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
  *
  */
-public class Bet {
+public class Bet implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7103686540092057123L;
+
 	/**
 	 * Le nombre minimum de tours qu'un joueur doit miser
 	 */
@@ -108,6 +114,11 @@ public class Bet {
 			}
 		}
 		return false;
+	}
+	
+	public boolean didNotBet()
+	{
+		return( this.nbRounds == 0 && this.suit.equals( Suit.NONE ) );
 	}
 
 }
