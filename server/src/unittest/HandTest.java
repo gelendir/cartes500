@@ -30,17 +30,6 @@ public class HandTest extends TestCase {
 		}
 	}
 
-	public void testGetSetGameSuit() throws Exception {
-		Deck d = new Deck();
-		Hand h = new Hand(d);
-		h.setGameSuit(Suit.CLUBS);
-		Assert.assertEquals(h.getGameSuit(), Suit.CLUBS);
-		Assert.assertNotSame(h.getGameSuit(), Suit.SPADES);
-		Assert.assertNotSame(h.getGameSuit(), Suit.HEARTS);
-		Assert.assertNotSame(h.getGameSuit(), Suit.DIAMONDS);
-		Assert.assertNotSame(h.getGameSuit(), Suit.NONE);
-	}
-
 	public void testGetSetCards() throws Exception {
 		Deck d = new Deck();
 		Hand h = new Hand(d);
@@ -101,7 +90,6 @@ public class HandTest extends TestCase {
 	public void testGetPlayableCard() throws Exception {
 		Deck d = new Deck();
 		Hand h = new Hand(d);
-		h.setGameSuit(Suit.CLUBS);
 		ArrayList<Card> cards = new ArrayList<Card>(10);
 		cards.add(TestCardFactory.createCard(Suit.SPADES, CardValue.EIGHT));
 		cards.add(TestCardFactory.createCard(Suit.DIAMONDS, CardValue.ACE));
