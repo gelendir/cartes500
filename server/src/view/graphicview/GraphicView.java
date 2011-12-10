@@ -10,15 +10,23 @@ import game.enumeration.Suit;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import view.IView;
+import view.TestGUI;
 
 public class GraphicView extends JFrame implements IView, GCardListener {
 
 	private GGamingZone gamingZone = new GGamingZone();
+	private Player actualPlayer;
+	
+	private GHand ghand = new GHand();
+	
+	private CountDownLatch cardChosed = new CountDownLatch(1);
+	private Card choosenCard;
 	
 	public GraphicView() throws Exception {
 		super();
@@ -44,7 +52,6 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.add(new GOtherHand(GOtherHand.Orientation.HORIZONTAL, 10), c);
 
 		Hand hand = new Hand(deck);
-		GHand ghand = new GHand();
 		ArrayList<Card> cards = new ArrayList<Card>(hand.getCards().length);
 		for(Card card: hand.getCards()) {
 			cards.add(card);
@@ -68,30 +75,53 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.add(this.gamingZone, c);
 
 		this.pack();
-		this.setVisible(true);
+		//this.setVisible(true);
 		
 		//GBetDialog s = new GBetDialog(this);
-		//s.setVisible(true);
-		//GCardChooserDialog s = new GCardChooserDialog(cards, this);
 		//s.setVisible(true);
 	}
 	
 	@Override
 	public void choseenCard(Card card) {
+		this.choosenCard = card;
+		this.cardChosed.countDown();
 		this.gamingZone.setCard(1, card);
+		
+		this.repaint();
+		this.validate();
+		this.pack();
+		System.out.println("clique");
 	}
 	
 	@Override
 	public Player createPlayer() {
 		String name = JOptionPane.showInputDialog(this, "Veuillez entrer votre nom d'utilisateur.");
-		Player player = new Player(name);
-		return player;
+		this.actualPlayer = new Player(name);
+		return this.actualPlayer;
 	}
 
 	@Override
 	public Card getCardToPlay(Hand hand, Suit suit) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS);
+		Card[] c = hand.getCards();
+		for(Card card: c) {
+			cards.add(card);
+		}
+		ghand.setHand(cards);
+		ghand.setPlayableCards(hand.getPlayableCard(suit));
+		
+		this.repaint();
+		this.validate();
+		this.pack();
+		
+		try {
+			this.cardChosed.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("debloque");
+		return this.choosenCard;
 	}
 
 	@Override
@@ -126,8 +156,21 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public ArrayList<Card> changeCards(Hand oldHand, Card[] availableCards) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS + Hand.MIN_CARDS);
+		Card[] oldCards = oldHand.getCards();
+		
+		for(Card card: oldCards) {
+			cards.add(card);
+		}
+		
+		for(Card card: availableCards) {
+			cards.add(card);
+		}
+		
+		GCardChooserDialog s = new GCardChooserDialog(cards, this);
+		s.setVisible(true);
+		
+		return s.getChoosenCard();
 	}
 
 	@Override
@@ -161,7 +204,11 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		new GraphicView();
+		GraphicView g = new GraphicView();
+		TestGUI test= new TestGUI();
+		test.setGraphicView(g);
+		new Thread(test).start();
+		g.setVisible(true);
 	}
 
 	@Override

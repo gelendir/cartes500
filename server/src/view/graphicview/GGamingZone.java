@@ -23,9 +23,6 @@ public class GGamingZone extends JPanel {
 			c.fill = GridBagConstraints.VERTICAL;
 			c.gridx = point.x;
 			c.gridy = point.y;
-			//this.gcards[i] = new GCard(unittest.TestCardFactory.createCard(Suit.CLUBS, CardValue.NINE));
-			//this.gcards[i].resize(35);
-			//this.add(this.gcards[i], c);
 			++i;
 		}
 	}
@@ -43,6 +40,8 @@ public class GGamingZone extends JPanel {
 		}
 		this.gcards[position - 1] = gcard;
 		this.add(gcard, c);
+		
+		this.repaint();
 		this.revalidate();
 	}
 
