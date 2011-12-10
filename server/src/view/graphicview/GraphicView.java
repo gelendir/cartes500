@@ -23,7 +23,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	private GGamingZone gamingZone = new GGamingZone();
 	private Player actualPlayer;
-	
+
 	private Player[] playerList = new Player[4];
 	private GPlayer[] gplayers = new GPlayer[4];
 
@@ -35,7 +35,6 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public GraphicView() throws Exception {
 		super();
 		this.setTitle("Jeu du 500");
-		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.setLayout(new GridBagLayout());
@@ -82,9 +81,6 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		c.gridy = 1;
 		this.add(this.gamingZone, c);
 
-		this.pack();
-		//this.setVisible(true);
-
 		this.createPlayer();
 		Player[] players = new Player[4];
 		players[0] = new Player("Bob");
@@ -92,9 +88,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		players[2] = new Player("Greg");
 		players[3] = new Player("Louis");
 		this.setPlayerList(players);
-		
-		//GBetDialog s = new GBetDialog(this);
-		//s.setVisible(true);
+
+		this.pack();
+		this.setLocationRelativeTo(null);
+		//this.setVisible(true);
 	}
 
 	@Override
@@ -139,7 +136,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return this.choosenCard;
 	}
 
@@ -147,7 +144,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public void showPlayerTurn(Player player, Card card) {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
 		this.gamingZone.setCard(indexPlayer, card);
-		
+
 		this.playerList[indexPlayer] = player;
 		this.gplayers[indexPlayer].setPlayer(player);
 
@@ -155,19 +152,21 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public void playerConnected(Player player) {
-		
+
 	}
 
 	@Override
 	public Bet askBet(Hand hand) {
-		// TODO Auto-generated method stub
-		return null;
+		GBetDialog s = new GBetDialog(this);
+		s.setVisible(true);
+
+		return s.getBet();
 	}
 
 	@Override
 	public void playerHasBet(Player player, Bet bet) {
-		// TODO Auto-generated method stub
-
+		player.setOriginalBet(bet);
+		this.changePlayerStatus(player);
 	}
 
 	@Override
@@ -197,6 +196,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public void showBetWinner(Player player, Suit gameSuit) {
+
 		this.changePlayerStatus(player);
 
 	}
@@ -204,9 +204,21 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	@Override
 	public void showGameStart(Player first) {
 		this.changePlayerStatus(first);
-		
+
 		for(int i = 0; i < this.playerList.length; ++i) {
-			
+			if(i == 0) {
+				if(this.playerList[i].equals(first)) {
+					this.gplayers[i].itsYourTurn();
+				} else {
+					this.gplayers[i].itsNotYourTurn();
+				}
+			} else {
+				if(this.playerList[i].equals(first)) {
+					this.gplayers[i].itsHisTurn();
+				} else {
+					this.gplayers[i].itsNotHisTurn();
+				}
+			}
 		}
 	}
 
@@ -214,7 +226,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public void showWinners(Player player, Player player2) {
 		this.changePlayerStatus(player);
 		this.changePlayerStatus(player2);
-		
+
 		for(int i = 0; i < this.playerList.length; ++i) {
 			if(this.playerList[i].equals(player) || this.playerList[i].equals(player2)) {
 				this.gplayers[i].setWinner();
@@ -235,9 +247,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		int j = findPlayerIndex(this.actualPlayer, players);
 		for(int i = 0; i < this.playerList.length; ++i) {
 			this.playerList[i] = players[j]; 
-			
+
 			this.gplayers[i].setPlayer(this.playerList[i]);
-			
+
 			++j;
 			if(j > 3) {
 				j = 0;
@@ -245,7 +257,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 		this.pack();
 	}
-	
+
 	private static int findPlayerIndex(Player player, Player[] players) {
 		for(int i = 0; i <  players.length; ++i) {
 			if(players[i].equals(player)) {
@@ -254,7 +266,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 		return -1;
 	}
-	
+
 	private void changePlayerStatus(Player player) {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
 		this.playerList[indexPlayer] = player;

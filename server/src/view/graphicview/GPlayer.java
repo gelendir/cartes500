@@ -70,6 +70,10 @@ public class GPlayer extends JPanel {
 		this.turn.setText("");
 	}
 	
+	public void itsNotHisTurn() {
+		this.turn.setText("");
+	}
+	
 	public void setWinner() {
 		this.winner.setText("You are a winner!");
 	}
