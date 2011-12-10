@@ -145,7 +145,16 @@ public class Server implements ServerInterface {
 		
 		this.state = ServerState.BET;
 		
-		Player[] players = (Player[])this.clients.values().toArray();
+		Player[] players = new Player[ this.clients.size() ];
+		int counter = 0;
+		
+		for( Player player: this.clients.values() ) {
+			players[counter] = player;
+			counter++;
+		}
+		
+		//Player[] players = (Player[])this.clients.values().toArray();
+		
 		Deck deck = new Deck();
 		
 		this.createGame( players, deck );
@@ -204,9 +213,32 @@ public class Server implements ServerInterface {
 			this.startNewTurn();
 		}
 		
+		if( this.game.isGameFinished() ) {
+			
+			this.endGame();
+			
+		} else {
+			
+			ClientInterface next = this.clientForPlayer( game.nextPlayer() );
+			next.notifyYourTurn( this.game.getTurnSuit() );
+		
+		}	
 		
 	}
 	
+	private void endGame() throws RemoteException {
+		
+		this.state = ServerState.END;
+		
+		Player[] winners = this.game.getWinners();
+		
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
+			
+			clientToNotify.notifyWinner( winners[0], winners[1] );
+		}
+		
+	}
+
 	/**
 	 * Fonction utilitaire permettant de donner un point au gagnant du tour et de
 	 * démarrer un nouveau tour.
@@ -401,16 +433,18 @@ public class Server implements ServerInterface {
 	 * Mutateur de la nouvelle main.
 	 * Voir la classe ServerInterface pour plus de détails.
 	 * @throws RemoteException 
+	 * @throws GameException 
 	 * 
 	 * @see ServerInterface#sendNewHand(Client, ArrayList)
 	 */
 	@Override
-	public void sendNewHand(ClientInterface client, ArrayList<Card> cards) throws RemoteException {
+	public void sendNewHand(ClientInterface client, ArrayList<Card> cards) throws RemoteException, GameException {
 		
 		this.assertState( ServerState.DISTRIBUTE_SECRET_HAND );
 		
 		Player player = this.clients.get( client );
-		player.getHand().setCards( cards );
+		
+		this.game.newHandAfterSecretBet( player, cards );
 		
 		this.startGame();
 		
@@ -427,17 +461,17 @@ public class Server implements ServerInterface {
 		
 		this.state = ServerState.GAME;
 		
-		ArrayList<Player> players = new ArrayList<Player>(
-			Arrays.asList( 
-				(Player[]) this.clients.values().toArray() 
-			)
-		);
+		ArrayList<Player> players = new ArrayList<Player>( this.clients.size() );
+		
+		for( Player p: this.clients.values() ) {
+			players.add(p);
+		}
 		
 		for( ClientInterface client: this.clients.keySet() ) {
 			client.notifyStartNewGame( players );
 		}
 		
-		ClientInterface first = ((Client[])this.clients.keySet().toArray())[0];
+		ClientInterface first = this.clients.keySet().iterator().next();
 		
 		this.createNewTurn();
 
