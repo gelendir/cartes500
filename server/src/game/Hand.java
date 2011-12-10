@@ -5,6 +5,7 @@ import game.card.Card;
 import game.card.Deck;
 import game.enumeration.Suit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,8 +17,13 @@ import java.util.Iterator;
  * @see Deck
  * @see Suit
  */
-public class Hand {
+public class Hand implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8447840828554178769L;
+
 	/**
 	 * Le nombre maximum de cartes dans la main.
 	 */
@@ -33,7 +39,7 @@ public class Hand {
 	 * lors de la sérialisation, on ne veut pas que les cartes soient sérialisées
 	 * avec la main.
 	 */
-	private transient ArrayList<Card> hand = new ArrayList<Card>(MAX_CARDS);
+	private ArrayList<Card> hand = new ArrayList<Card>(MAX_CARDS);
 	
 	/**
 	 * Le nombre de carte de la main. Cet attribut existe parce que, lors de la 
@@ -41,11 +47,6 @@ public class Hand {
 	 * attribut pour avoir le nombre de carte. 
 	 */
 	private int numberOfCard = 0;
-	
-	/**
-	 * L'atoût de la partie de la main.
-	 */
-	private Suit suit = null;
 	
 	/**
 	 * Le constructeur crée la main à partir d'un paquet de carte.
@@ -64,29 +65,6 @@ public class Hand {
 				++this.numberOfCard;
 			}
 		}
-	}
-	
-	/**
-	 * Cette méthode retourne l'atoût de la partie de la main.
-	 * @return Retourne l'atoût de la partie de la main si elle a été
-	 *         initialisée; sinon null.
-	 */
-	public Suit getGameSuit() {
-		return this.suit;
-	}
-	
-	/**
-	 * Cette méthode sert modifier l'atoût de la partie de la main.
-	 * L'atoût ne peut pas être « noir » ou « couleur ».
-	 * @param suit L'atoût de la partie
-	 * @return Retourne vrai si l'atoût est valide; faux sinon.
-	 */
-	public boolean setGameSuit(Suit suit) {
-		if(this.suit ==  Suit.BLACK || this.suit == Suit.COLOR)
-			return false;
-		
-		this.suit = suit;
-		return true;
 	}
 	
 	/**
@@ -180,8 +158,7 @@ public class Hand {
 		if(obj instanceof Hand) {
 			Hand hand = (Hand)obj;
 			if(hand.hand.size() == this.hand.size() &&
-					hand.numberOfCard == this.numberOfCard &&
-					hand.suit == this.suit) {
+					hand.numberOfCard == this.numberOfCard) {
 				for(int i = 0; i < this.hand.size(); ++i) {
 					if(!hand.hand.get(i).equals(this.hand.get(i))) {
 						return false;
