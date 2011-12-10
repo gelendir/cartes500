@@ -199,7 +199,7 @@ public class ClientApp {
 					client.connect();
 					
 					//TODO: remove this
-					while( true ) {
+					while( !client.isGameFinished() ) {
 						Thread.sleep( 2000 );
 					}
 				}
