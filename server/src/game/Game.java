@@ -2,10 +2,12 @@ package game;
 
 import exception.EmptyDeckException;
 import exception.GameException;
+import exception.GameHasStartedException;
 import exception.InvalidBetException;
 import exception.InvalidCardException;
 import exception.NotYourTurnException;
 import exception.NotYourTurnToBet;
+import exception.PlayerDidNotWinBetException;
 import exception.PlayerNotInGameException;
 import exception.TurnException;
 import game.enumeration.Suit;
@@ -50,6 +52,11 @@ public class Game {
 	 * Représente le la manche courante du jeu
 	 */
 	private Turn currentTurn = null;
+	
+	/**
+	 * Le nombre de tours joués dans le jeu à date
+	 */
+	private int nbTurns = 0;
 
 	/**
 	 * Le constructeur initialise le jeu avec des valeurs par défaut.
@@ -62,6 +69,7 @@ public class Game {
 		}
 
 		this.deck = deck;
+		this.deck.mixCards();
 		this.players = players;
 
 		this.createHands();
@@ -191,7 +199,7 @@ public class Game {
 	
 	public boolean areBetsFinished() {
 		
-		return( this.indexPlayerNextBet > this.players.length );
+		return( this.indexPlayerNextBet >= this.players.length );
 		
 	}
 
@@ -314,13 +322,20 @@ public class Game {
 	
 	public void newTurn() throws TurnException {
 		
-		if( 
-				this.currentTurn == null
-				|| this.currentTurn.isTurnFinished()
-		) {
+		if( this.currentTurn == null ) {
+			
 			this.currentTurn = new Turn( this.getGameSuit() );
+			
+		} else if ( this.currentTurn.isTurnFinished() ) {
+			
+			this.nbTurns++;
+			this.currentTurn.incrementWinner();
+			this.currentTurn = new Turn( this.getGameSuit() );
+			
 		} else {
+			
 			throw new TurnException("Turn is not finished");
+			
 		}
 	}
 	
@@ -373,6 +388,27 @@ public class Game {
 		}
 		
 		return this.players[ indexPlayer + 1 ];
+		
+	}
+
+	public void newHandAfterSecretBet(Player player, ArrayList<Card> cards) throws GameException {
+		
+		if( this.currentTurn != null ) {
+			throw new GameHasStartedException();
+		}
+		
+		if( !player.equals( this.getBestPlayerBet() ) )
+		{
+			throw new PlayerDidNotWinBetException();
+		}
+		
+		this.getBestPlayerBet().getHand().setCards( cards );
+		
+	}
+
+	public boolean isGameFinished() {
+		
+		return( this.nbTurns == Game.MAX_TURNS );
 		
 	}
 
