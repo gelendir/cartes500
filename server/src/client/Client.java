@@ -66,6 +66,11 @@ public class Client implements ClientInterface {
 	private Suit gameSuit;
 	
 	/**
+	 * Indique si la partie en cours est terminé
+	 */
+	private boolean gameFinished = false;
+	
+	/**
 	 * Constructeur. Crée une nouvelle instance du client.
 	 * 
 	 * @param server Le serveur du jeu.
@@ -177,6 +182,7 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyWinner(Player player, Player player2) {
 		this.view.showWinners( player, player2 );
+		this.gameFinished = true;
 
 	}
 
@@ -220,19 +226,27 @@ public class Client implements ClientInterface {
 	 * @see ClientInterface#notifyBettingTime(Hand)
 	 */
 	@Override
-	public void notifyBettingTime( Hand hand ) {
+	public void notifyBettingTime( Hand hand ) throws RemoteException {
 		
 		this.player.setHand( hand );
-		Bet bet = this.view.askBet( hand );
 		
-		try {
-			this.server.sendBet( this, bet );
-		} catch (GameException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		boolean validBet = false;
+		
+		Bet bet = null;
+		
+		while( !validBet ) {
+			
+			bet = this.view.askBet( hand );
+			
+			try {
+				this.server.sendBet( this, bet );
+				validBet = true;
+			} catch( InvalidBetException e ) {
+				this.view.showBetInvalid();
+			} catch (GameException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 	}
@@ -282,8 +296,12 @@ public class Client implements ClientInterface {
 		
 		ArrayList<Card> cards = this.view.changeCards( this.player.getHand(), newCards );
 		try {
+			this.player.getHand().setCards( cards );
 			this.server.sendNewHand( this, cards );
 		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GameException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -314,6 +332,10 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyTurnWinner(Player player) {
 		this.view.showTurnWinner( player );
+	}
+
+	public boolean isGameFinished() {
+		return this.gameFinished;
 	}
 
 }

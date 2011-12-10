@@ -126,4 +126,7 @@ public interface IView {
 	
 	public void setPlayerList(Player[] players);
 	
+	public void showBetInvalid();
+	
+	
 }

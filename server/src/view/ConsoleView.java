@@ -8,6 +8,8 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import exception.InvalidBetException;
+
 import game.Bet;
 import game.Hand;
 import game.Player;
@@ -289,10 +291,8 @@ public class ConsoleView implements IView {
 				try {
 					bet = new Bet( nbRounds, suit );
 					validBet = true;
-				} catch (Exception e) {
-					
-					this.out.println( this.bundle.getString("invalidBet") );
-					
+				} catch (InvalidBetException e) {
+					this.showBetInvalid();
 				}
 				
 			} else {
@@ -305,6 +305,11 @@ public class ConsoleView implements IView {
 		
 		return bet;
 		
+	}
+	
+	public void showBetInvalid()
+	{
+		this.out.println( this.bundle.getString("invalidBet") );
 	}
 
 	/**

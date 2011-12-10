@@ -24,7 +24,7 @@ public class Player implements Serializable {
 	/**
 	 * La main du joueur. Contient les cartes qu'un joueur peut jouer.
 	 */
-	private Hand hand = null;
+	private transient Hand hand = null;
 	
 	/**
 	 * La mise fait pair le joueur au début de la partie.

@@ -123,10 +123,11 @@ public interface ServerInterface extends Remote {
 	 * @param client Le client qui a remporté la mise
 	 * @param cards Toutes les cartes dans la main du joueur.
 	 * @throws RemoteException Erreurs RMI.
+	 * @throws GameException 
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void sendNewHand( ClientInterface client, ArrayList<Card> cards ) throws RemoteException;
+	public void sendNewHand( ClientInterface client, ArrayList<Card> cards ) throws RemoteException, GameException;
 	
 	public Player[] getPlayerList() throws RemoteException;
 }

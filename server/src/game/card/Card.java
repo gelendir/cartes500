@@ -1,5 +1,7 @@
 package game.card;
 
+import java.io.Serializable;
+
 import exception.InvalidCardException;
 import game.Turn;
 import game.enumeration.CardValue;
@@ -9,8 +11,13 @@ import game.enumeration.Suit;
  * La classe Card représente une carte de jeu.
  * @author Frédérik Paradis
  * */
-public class Card {
+public class Card implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7334073620289847045L;
+
 	/**
 	 * La sorte de la carte
 	 */
