@@ -217,7 +217,7 @@ public class Turn {
 	 * @throws InvalidCardException 
 	 * @see getWinner
 	 */
-	public void incrementWinner() throws TurnException, InvalidCardException {
+	public void incrementWinner() throws TurnException {
 		
 		Player winner = this.getWinner();
 		winner.addTurnWin();
