@@ -22,6 +22,7 @@ import client.ClientInterface;
 import server.ServerInterface;
 import view.ConsoleView;
 import view.IView;
+import view.graphicview.GraphicView;
 
 /**
  * La classe App se charge d'initialisé le programme avec les
@@ -85,6 +86,7 @@ public class ClientApp {
 		options.addOption("h", "help", false, "print this help message");
 		options.addOption( host );
 		options.addOption( port );
+		options.addOption("g", "gui", false, "Use this option to have a GUI frontend.");
 										
 		CommandLineParser parser = new PosixParser();
 		
@@ -187,7 +189,11 @@ public class ClientApp {
 			} else {
 				
 				Scanner in = new Scanner( System.in );
-				ConsoleView view = new ConsoleView( in , System.out );
+				IView view = new ConsoleView( in , System.out );
+				
+				if ( cmd.hasOption("gui") ) {
+					view = new GraphicView();
+				}
 				Client client = new Client( ClientApp.server, view );
 				
 				boolean exported = ClientApp.exportClient( client );
@@ -197,6 +203,10 @@ public class ClientApp {
 				} else {
 					
 					client.connect();
+
+					if ( cmd.hasOption("gui") ) {
+						((GraphicView)view).setVisible(true);
+					}
 					
 					//TODO: remove this
 					while( !client.isGameFinished() ) {

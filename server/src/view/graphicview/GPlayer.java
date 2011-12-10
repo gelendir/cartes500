@@ -36,6 +36,7 @@ public class GPlayer extends JPanel {
 		
 		this.ghand = ghand;
 		this.add(this.ghand);
+		this.refresh();
 	}
 
 	public Player getPlayer() {
@@ -48,7 +49,7 @@ public class GPlayer extends JPanel {
 		this.name.setText("Player name: " + player.getName());
 		
 		if(player.getOriginalBet() != null) {
-			this.bet.setText("Bet: " + player.getOriginalBet().toString());
+			this.bet.setText("Bet: " + player.getOriginalBet().getNbRounds() + " of " + player.getOriginalBet().getSuit());
 		}
 		else {
 			this.bet.setText("Has not bet.");

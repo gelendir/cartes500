@@ -27,6 +27,8 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	private Player[] playerList = new Player[4];
 	private GPlayer[] gplayers = new GPlayer[4];
 
+	private int connectPlayer = 0;
+	
 	private GHand ghand = new GHand();
 
 	private CountDownLatch cardChosed = new CountDownLatch(1);
@@ -42,8 +44,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 		Deck deck = new Deck();
 		deck.mixCards();
-
-
+		
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 1;
@@ -56,13 +57,13 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.gplayers[2] =  new GPlayer(new GOtherHand(Orientation.HORIZONTAL, 10));
 		this.add(this.gplayers[2], c);
 
-		Hand hand = new Hand(deck);
+		/*Hand hand = new Hand(deck);
 		ArrayList<Card> cards = new ArrayList<Card>(hand.getCards().length);
 		for(Card card: hand.getCards()) {
 			cards.add(card);
 		}
 		this.ghand.setHand(cards);
-		this.ghand.setPlayableCards(hand.getPlayableCard(Suit.HEARTS));
+		this.ghand.setPlayableCards(hand.getPlayableCard(Suit.HEARTS));*/
 		this.ghand.addGCardListener(this);
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
@@ -80,15 +81,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		c.gridx = 1;
 		c.gridy = 1;
 		this.add(this.gamingZone, c);
-
-		this.createPlayer();
-		Player[] players = new Player[4];
-		players[0] = new Player("Bob");
-		players[1] = new Player("Fred");
-		players[2] = new Player("Greg");
-		players[3] = new Player("Louis");
-		this.setPlayerList(players);
-
+		
 		this.pack();
 		this.setLocationRelativeTo(null);
 		//this.setVisible(true);
@@ -113,6 +106,11 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public Player createPlayer() {
 		String name = JOptionPane.showInputDialog(this, "Veuillez entrer votre nom d'utilisateur.");
 		this.actualPlayer = new Player(name);
+		
+		/*this.playerList[0] = this.actualPlayer;
+		++this.connectPlayer;*/
+		this.playerConnected(this.actualPlayer);
+		
 		return this.actualPlayer;
 	}
 
@@ -143,7 +141,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	@Override
 	public void showPlayerTurn(Player player, Card card) {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
-		this.gamingZone.setCard(indexPlayer, card);
+		this.gamingZone.setCard(indexPlayer + 1, card);
 
 		this.playerList[indexPlayer] = player;
 		this.gplayers[indexPlayer].setPlayer(player);
@@ -152,11 +150,22 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public void playerConnected(Player player) {
-
+		this.playerList[this.connectPlayer] = player;
+		++this.connectPlayer;
+		this.changePlayerStatus(player);
 	}
 
 	@Override
 	public Bet askBet(Hand hand) {
+		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS);
+		Card[] c = hand.getCards();
+		for(Card card: c) {
+			cards.add(card);
+		}
+		
+		this.ghand.setHand(cards);
+		this.pack();
+		
 		GBetDialog s = new GBetDialog(this);
 		s.setVisible(true);
 
@@ -257,10 +266,16 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 		this.pack();
 	}
+	
+	@Override
+	public void showBetInvalid() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	private static int findPlayerIndex(Player player, Player[] players) {
 		for(int i = 0; i <  players.length; ++i) {
-			if(players[i].equals(player)) {
+			if(players[i] != null && players[i].equals(player)) {
 				return i;
 			}
 		}
@@ -271,6 +286,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
 		this.playerList[indexPlayer] = player;
 		this.gplayers[indexPlayer].setPlayer(player);
+		
+		this.revalidate();
+		this.repaint();
+		this.pack();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -279,11 +298,5 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		test.setGraphicView(g);
 		new Thread(test).start();
 		g.setVisible(true);
-	}
-
-	@Override
-	public void showBetInvalid() {
-		// TODO Auto-generated method stub
-		
 	}
 }
