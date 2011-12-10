@@ -163,4 +163,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public static void main(String[] args) throws Exception {
 		new GraphicView();
 	}
+
+	@Override
+	public void showBetInvalid() {
+		// TODO Auto-generated method stub
+		
+	}
 }
