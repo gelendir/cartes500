@@ -109,7 +109,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		
 		/*this.playerList[0] = this.actualPlayer;
 		++this.connectPlayer;*/
-		this.playerConnected(this.actualPlayer);
+		//this.playerConnected(this.actualPlayer);
 		
 		return this.actualPlayer;
 	}
@@ -174,6 +174,8 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public void playerHasBet(Player player, Bet bet) {
+		this.playerConnected(player);
+		
 		player.setOriginalBet(bet);
 		this.changePlayerStatus(player);
 	}
