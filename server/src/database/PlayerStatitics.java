@@ -22,11 +22,11 @@ public class PlayerStatitics {
 	}
 
 	public int getIdPlayer() {
-		return idPlayer;
+		return this.idPlayer;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void addAPlayedGame() {
