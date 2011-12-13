@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.text.NumberFormatter;
 
-import database.PlayerStatitics;
+import database.PlayerStatistics;
 
 /**
  * Cette classe sert de boîte de dialogue pour afficher
@@ -28,7 +28,7 @@ public class GStatisticDialog extends JDialog {
 	 * @param stats Les statistiques du joueur
 	 * @param owner Le fenêtre parent de la boîte de dialogue.
 	 */
-	public GStatisticDialog(PlayerStatitics stats, JFrame owner) {
+	public GStatisticDialog(PlayerStatistics stats, JFrame owner) {
 		super(owner);
 		
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));

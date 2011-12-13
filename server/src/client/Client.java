@@ -1,5 +1,6 @@
 package client;
 
+import database.PlayerStatistics;
 import exception.AlreadyConnectedException;
 import exception.GameException;
 import exception.InvalidBetException;
@@ -349,6 +350,13 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyBettingTime() throws RemoteException {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendStatistics(PlayerStatistics playerStats) {
+		
+		this.view.showStatistics( playerStats );
 		
 	}
 

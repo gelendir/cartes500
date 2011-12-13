@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import database.PlayerStatitics;
+import database.PlayerStatistics;
 
 import view.IView;
 
@@ -367,6 +367,14 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	@Override
 	public void showBetInvalid() {
 		JOptionPane.showMessageDialog(this, "The bet is invalid. If you do not want to bet, clik on Cancel", "Invalid bet", JOptionPane.WARNING_MESSAGE);
+	}
+
+	/**
+	 * @see IView#showStatistics(PlayerStatistics)
+	 */
+	@Override
+	public void showStatistics(PlayerStatistics playerStats) {
+		new GStatisticDialog(playerStats, this).setVisible(true);
 	}
 
 	/**

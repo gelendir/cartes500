@@ -2,6 +2,8 @@ package view;
 
 import java.util.ArrayList;
 
+import database.PlayerStatistics;
+
 import game.Bet;
 import game.Hand;
 import game.Player;
@@ -134,5 +136,7 @@ public interface IView {
 	public void showBetInvalid();
 	
 	public void nextPlayer( Player player );
+
+	public void showStatistics(PlayerStatistics playerStats);
 	
 }
