@@ -161,6 +161,13 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyTurnWinner( Player player ) throws RemoteException;
 	
-	public void notifyPlayerList( Player[] player ) throws RemoteException;
+	/**
+	 * Événement lancé à la fin des connexions. Envoie la liste de tous les joueurs connectés 
+	 * au serveur.
+	 * 
+	 * @param players La liste de joueurs
+	 * @throws RemoteException Erreurs RMI.
+	 */
+	public void notifyPlayerList( Player[] players ) throws RemoteException;
 	
 }
