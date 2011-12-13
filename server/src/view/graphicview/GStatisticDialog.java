@@ -38,15 +38,15 @@ public class GStatisticDialog extends JDialog {
 		
 		NumberFormatter f = new NumberFormatter(new DecimalFormat("###.#%"));
 		try {
-			this.add(new JLabel("Ratio: " + f.valueToString(((double)stats.getNbWonGame() / (double)stats.getNbPlayedGame()))));
+			this.add(new JLabel("Ratio: " + f.valueToString(stats.getRatio())));
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 		this.add(new JLabel("Total points: " + stats.getTotalPoints()));
-		this.add(new JLabel("Average points per game: " + stats.getTotalPoints() / stats.getNbPlayedGame()));
-		
+		this.add(new JLabel("Average points per game: " + (int)stats.getAveragePointsPerGame()));
+			
 		JButton close = new JButton("Close window");
 		close.addMouseListener(new MouseAdapter() {
 			@Override
