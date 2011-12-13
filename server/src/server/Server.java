@@ -312,24 +312,16 @@ public class Server implements ServerInterface, Runnable {
 		
 		this.game.playCard( player, card );
 		
-		System.out.println( player.toString() + " has played card " + card.toString() );
-		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
-			
-			System.out.println("notify play card");
 			clientToNotify.notifyPlayerTurn( player, card );
-			
 		}
 		
 		if( this.game.isTurnFinished() ) {
-			System.out.println(this.game.getTurnWinner() + " has won the turn.");
-			System.out.println("start new turn");
 			this.startNewTurn();
 		}
 		
 		if( this.game.isGameFinished() ) {
 			
-			System.out.println("game finished");
 			this.changeState( ServerState.END );
 			
 		} else {
@@ -341,28 +333,31 @@ public class Server implements ServerInterface, Runnable {
 		
 	}
 	
+	/**
+	 * Fonction utilitaire pour déclencher les procédures de fin de partie.
+	 * Détermine qui a gagné la partie et informe les joueurs.
+	 * 
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	private void endGame() throws RemoteException {
 		
-		this.state = ServerState.END;
+		this.assertState( ServerState.END );
 		
 		Player[] winners = this.game.getWinners();
 		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
-			
 			clientToNotify.notifyWinner( winners[0], winners[1] );
 		}
 		
 	}
 
 	/**
-	 * Fonction utilitaire permettant de donner un point au gagnant du tour et de
-	 * démarrer un nouveau tour.
+	 * Fonction utilitaire permettant de démarrer un nouveau tour.
 	 * @throws RemoteException 
 	 */
 	public void startNewTurn() throws RemoteException {
 		
 		Player turnWinner = this.fetchTurnWinner();
-		turnWinner.addTurnWin();
 		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyTurnWinner( turnWinner );
