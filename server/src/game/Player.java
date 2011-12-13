@@ -1,6 +1,11 @@
 package game;
 
+import exception.DoesNotHaveCardException;
+import game.card.Card;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Joueur dans le jeu de 500.
@@ -138,6 +143,19 @@ public class Player implements Serializable {
 		
 		return this.name.equals( player.name );
 		
+	}
+	
+	public boolean hasCard( Card card ) {
+		return this.hand.hasCard(card);
+	}
+	
+	public void playCard( Card card ) throws DoesNotHaveCardException {
+		
+		if( !this.hasCard(card) ) {
+			throw new DoesNotHaveCardException();
+		}
+		
+		this.hand.playCard(card);
 	}
 	
 }

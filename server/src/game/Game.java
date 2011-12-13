@@ -359,15 +359,12 @@ public class Game {
 			throw new NotYourTurnException();
 		}
 		
-		ArrayList<Card> hand = new ArrayList<Card>(
-			Arrays.asList( player.getHand().getCards() )
-		);
-		
-		if( !hand.contains( card ) ) {
+		if( !player.hasCard( card ) ) {
 			throw new InvalidCardException();
 		}
 		
 		Turn currentTurn = this.turns.peek();
+		player.playCard( card );
 		currentTurn.addCard( player, card );
 		
 	}

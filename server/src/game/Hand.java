@@ -169,4 +169,10 @@ public class Hand implements Serializable {
 		}
 		return false;
 	}
+	
+	public boolean hasCard( Card card ) {
+		
+		return this.hand.contains( card );
+		
+	}
 }
