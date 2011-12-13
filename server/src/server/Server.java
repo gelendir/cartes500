@@ -129,6 +129,13 @@ public class Server implements ServerInterface {
 		
 		this.clients.put( client,  player );
 		
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
+			if( clientToNotify != client ) {
+				clientToNotify.notifyPlayerConnect( player );
+			}
+			
+		}
+		
 		//Si tous les joueurs se sont connectés, démarrer la phase des mises.
 		if( this.clients.size() == Game.MAX_PLAYERS ) {
 			this.startBets();
