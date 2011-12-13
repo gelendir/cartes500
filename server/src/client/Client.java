@@ -228,6 +228,9 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyBettingTime( Hand hand ) throws RemoteException {
 		
+		Player[] players = this.server.getPlayerList();
+		this.view.setPlayerList( players );
+		
 		this.player.setHand( hand );
 		
 		boolean validBet = false;
