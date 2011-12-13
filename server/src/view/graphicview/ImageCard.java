@@ -4,6 +4,8 @@ import game.card.Card;
 import game.enumeration.CardValue;
 import game.enumeration.Suit;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +17,8 @@ public class ImageCard {
 
 	private static final String imageName = "images/little_cards.png";
 	
-	public int cardHeight;// = 279;
-	public int cardWidth;// = 192;
+	public int cardHeight;
+	public int cardWidth;
 	
 	private int exposedCardPart;
 	
@@ -30,6 +32,7 @@ public class ImageCard {
 	private ImageCard() {
 		try {
 			this.image = ImageIO.read(new File(ImageCard.imageName));
+			this.resize(75);
 			this.cardHeight = (int) Math.floor(this.image.getHeight() / (double)5);
 			this.cardWidth = (int) Math.floor(this.image.getWidth() / (double)13);
 			this.emptyCard = this.image.getSubimage(2 * this.cardWidth, 
@@ -99,5 +102,19 @@ public class ImageCard {
 				ImageCard.getInstance().getCardWidth(), 
 				ImageCard.getInstance().getCardHeight());
 
+	}
+	
+	private void resize(int pourcent) {
+		int width = (int)(this.image.getWidth() * (pourcent / 100.0));
+		int height =(int)(this.image.getHeight() * (pourcent / 100.0));
+		BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D graphics2D = scaledImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+			RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		graphics2D.drawImage(this.image, 0, 0, width, height, null);
+
+		graphics2D.dispose();
+		this.image = scaledImage;
 	}
 }
