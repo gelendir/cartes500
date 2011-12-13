@@ -87,9 +87,9 @@ public class GPlayer extends JPanel {
 			this.bet.setText("Bet: " + player.getOriginalBet().getNbRounds() + " of " + player.getOriginalBet().getSuit());
 		}
 		else {
-			this.bet.setText("Has not bet.");
+			this.bet.setText("Did not bet.");
 		}
-		this.nbWonTurn.setText("Won turn: " + Integer.toString(player.getTurnWin()));
+		this.nbWonTurn.setText("Turns won: " + Integer.toString(player.getTurnWin()));
 		
 		this.refresh();
 	}
@@ -128,14 +128,14 @@ public class GPlayer extends JPanel {
 	 * Cette méthode indique au joueur qu'il est le gagnant.
 	 */
 	public void setWinner() {
-		this.winner.setText("You are a winner!");
+		this.winner.setText("Winner!");
 	}
 	
 	/**
 	 * Cette méthode indique au joueur qu'il n'est pas le gagnant.
 	 */
 	public void setLooser() {
-		this.winner.setText("You are a looser!");
+		this.winner.setText("Looser!");
 	}
 	
 	/**
