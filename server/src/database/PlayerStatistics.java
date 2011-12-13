@@ -65,6 +65,25 @@ public class PlayerStatistics implements Serializable {
 		return this.totalPoints;
 	}
 	
+	public double getAveragePointsPerGame()
+	{
+		if( this.nbPlayedGame > 0 ) {
+			return ((double)this.totalPoints / (double)this.nbPlayedGame);
+		} else {
+			return 0.0;
+		}
+	}
+	
+	public double getRatio() {
+		
+		if( this.nbWonGame > 0 ) {
+			return (double)this.nbPlayedGame / (double)this.nbWonGame;
+		} else {
+			return 1.0;
+		}
+		
+	}
+	
 	public void save() throws SQLException {
 		this.statistics.savePlayer(this);
 	}
