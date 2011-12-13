@@ -137,4 +137,7 @@ public interface ServerInterface extends Remote {
 	 * @throws RemoteException Erreurs RMI.
 	 */
 	public Player[] getPlayerList() throws RemoteException;
+	
+	
+	public Player nextPlayer() throws RemoteException;
 }

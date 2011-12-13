@@ -608,4 +608,10 @@ public class ConsoleView implements IView {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void nextPlayer(Player player) {
+		// TODO Auto-generated method stub
+		
+	}
 }

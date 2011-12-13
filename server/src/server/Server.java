@@ -580,8 +580,9 @@ public class Server implements ServerInterface, Runnable {
 			client.notifyStartNewGame( players );
 		}
 		
-		ClientInterface first = this.clients.keySet().iterator().next();
-		
+		Player betWinner = this.game.getBestPlayerBet();
+		ClientInterface first = this.clientForPlayer( betWinner );
+
 		this.createNewTurn();
 
 		first.notifyYourTurn( this.game.getTurnSuit() );
@@ -606,6 +607,12 @@ public class Server implements ServerInterface, Runnable {
 		}
 		
 		return players;
+	}
+	
+	public Player nextPlayer() {
+		
+		return this.game.nextPlayer();
+		
 	}
 
 

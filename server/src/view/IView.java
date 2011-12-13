@@ -133,5 +133,6 @@ public interface IView {
 	
 	public void showBetInvalid();
 	
+	public void nextPlayer( Player player );
 	
 }

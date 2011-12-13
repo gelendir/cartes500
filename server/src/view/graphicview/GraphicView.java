@@ -299,4 +299,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		new Thread(test).start();
 		g.setVisible(true);
 	}
+
+	@Override
+	public void nextPlayer(Player player) {
+		// TODO Auto-generated method stub
+		
+	}
 }
