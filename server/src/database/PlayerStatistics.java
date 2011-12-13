@@ -6,6 +6,11 @@ import java.sql.SQLException;
 import game.Bet;
 
 public class PlayerStatistics implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private transient Statistics statistics;
 	private int idPlayer;
 	private String name;

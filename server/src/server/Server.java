@@ -363,7 +363,7 @@ public class Server implements ServerInterface, Runnable {
 		}
 	}
 	
-	private void sendStatistics() {
+	private void sendStatistics() throws RemoteException {
 		
 		Statistics statistics;
 		try {

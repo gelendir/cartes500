@@ -370,6 +370,14 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	}
 
 	/**
+	 * @see IView#showStatistics(PlayerStatistics)
+	 */
+	@Override
+	public void showStatistics(PlayerStatistics playerStats) {
+		new GStatisticDialog(playerStats, this).setVisible(true);
+	}
+
+	/**
 	 * Cette méthode permet de trouver l'index d'un joueur
 	 * dans un tableau de joueur.
 	 * @param player Le joueur
@@ -397,11 +405,5 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.revalidate();
 		this.repaint();
 		this.pack();
-	}
-
-	@Override
-	public void showStatistics(PlayerStatistics playerStats) {
-		// TODO Auto-generated method stub
-		
 	}
 }
