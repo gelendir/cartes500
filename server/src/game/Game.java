@@ -428,7 +428,7 @@ public class Game {
 
 	public boolean isGameFinished() {
 		
-		return( this.turns.size() == Game.MAX_TURNS );
+		return( this.turns.size() > Game.MAX_TURNS );
 		
 	}
 
