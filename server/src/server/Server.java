@@ -414,11 +414,7 @@ public class Server implements ServerInterface, Runnable {
 	 */
 	@Override
 	public void disconnectClient(ClientInterface client) throws RemoteException {
-		
-		this.assertState(
-			new ServerState[]{ ServerState.CONNECT, ServerState.GAME }
-		);
-		
+				
 		Player disconnectedPlayer = this.clients.remove( client );
 		
 		for( ClientInterface notify: this.clients.keySet() ) {
