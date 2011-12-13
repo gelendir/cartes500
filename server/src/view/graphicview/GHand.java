@@ -78,6 +78,7 @@ public class GHand extends JPanel {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					GHand.this.notifyGCardlistener(((GCard)e.getSource()).getCard());
+					System.out.println("Carte cliquée: " + ((GCard)e.getSource()).getCard().toString());
 				}
 			};
 
@@ -204,6 +205,7 @@ public class GHand extends JPanel {
 	private void notifyGCardlistener(Card card) {
 		for(GCardListener gcardlistener: this.gcardlistener) {
 			gcardlistener.choseenCard(card);
+			System.out.println("notify listener");
 		}
 	}
 	
