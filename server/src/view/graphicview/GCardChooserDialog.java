@@ -66,6 +66,7 @@ public class GCardChooserDialog extends JDialog implements GCardListener {
 		this.setModal(true);
 		this.pack();
 		this.setResizable(false);
+		this.setLocationRelativeTo(owner);
 	}
 
 	/**
