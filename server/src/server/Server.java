@@ -312,12 +312,12 @@ public class Server implements ServerInterface, Runnable {
 		
 		this.game.playCard( player, card );
 		
-		if( this.game.isTurnFinished() ) {
-			this.startNewTurn();
-		}
-		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyPlayerTurn( player, card );
+		}
+				
+		if( this.game.isTurnFinished() ) {
+			this.startNewTurn();
 		}
 		
 		if( this.game.isGameFinished() ) {
@@ -361,11 +361,11 @@ public class Server implements ServerInterface, Runnable {
 		
 		Player turnWinner = this.fetchTurnWinner();
 		
+		this.createNewTurn();
+		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyTurnWinner( turnWinner );
 		}
-		
-		this.createNewTurn();
 			
 	}
 	
