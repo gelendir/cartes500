@@ -627,7 +627,9 @@ public class ConsoleView implements IView {
 				playerStats.getName(),
 				playerStats.getNbPlayedGame(),
 				playerStats.getNbWonGame(),
-				playerStats.getTotalPoints()
+				playerStats.getTotalPoints(),
+				Double.toString( playerStats.getAveragePointsPerGame() ),
+				Double.toString( playerStats.getRatio() )
 				);
 		this.out.println( msg );
 		
