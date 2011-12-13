@@ -173,6 +173,6 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyPlayerList( Player[] players ) throws RemoteException;
 
-	public void sendStatistics(PlayerStatistics playerStats);
+	public void sendStatistics(PlayerStatistics playerStats) throws RemoteException;
 	
 }
