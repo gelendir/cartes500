@@ -312,6 +312,8 @@ public class Server implements ServerInterface, Runnable {
 		
 		this.game.playCard( player, card );
 		
+		System.out.println( player.toString() + " has played card " + card.toString() );
+		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			
 			System.out.println("notify play card");
@@ -320,6 +322,7 @@ public class Server implements ServerInterface, Runnable {
 		}
 		
 		if( this.game.isTurnFinished() ) {
+			System.out.println(this.game.getTurnWinner() + " has won the turn.");
 			System.out.println("start new turn");
 			this.startNewTurn();
 		}
