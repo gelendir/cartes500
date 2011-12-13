@@ -124,6 +124,11 @@ public interface IView {
 	 */
 	public void showTurnWinner( Player player );
 	
+	/**
+	 * Met à jour la liste de joueurs 
+	 * 
+	 * @param players
+	 */
 	public void setPlayerList(Player[] players);
 	
 	public void showBetInvalid();

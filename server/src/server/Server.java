@@ -486,10 +486,24 @@ public class Server implements ServerInterface {
 		
 	}
 
+	/**
+	 * Accesseur de la liste des joueurs. Veuillez vous référér à la documentation
+	 * de l'interface pour plus de détails.
+	 * 
+	 * @see ServerInterface#getPlayerList()
+	 */
 	@Override
 	public Player[] getPlayerList() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Player[] players = new Player[ this.clients.size() ];
+		int counter = 0;
+		
+		for( Player player: this.clients.values() ) {
+			players[counter] = player;
+			counter++;
+		}
+		
+		return players;
 	}
 
 }

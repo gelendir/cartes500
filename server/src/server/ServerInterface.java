@@ -129,5 +129,12 @@ public interface ServerInterface extends Remote {
 	 */
 	public void sendNewHand( ClientInterface client, ArrayList<Card> cards ) throws RemoteException, GameException;
 	
+	/**
+	 * Accesseur de la liste des joueurs. Retourne une liste des tous les joueurs qui sont
+	 * connectés au serveur en ce moment. 
+	 * 
+	 * @return La liste des joueurs
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public Player[] getPlayerList() throws RemoteException;
 }
