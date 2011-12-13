@@ -1,5 +1,6 @@
 package client;
 
+import database.PlayerStatistics;
 import exception.InvalidBetException;
 import exception.InvalidCardException;
 import exception.NotYourTurnToBet;
@@ -171,5 +172,7 @@ public interface ClientInterface extends Remote {
 	 * @throws RemoteException Erreurs RMI.
 	 */
 	public void notifyPlayerList( Player[] players ) throws RemoteException;
+
+	public void sendStatistics(PlayerStatistics playerStats);
 	
 }

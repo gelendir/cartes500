@@ -1,5 +1,8 @@
 package server;
 
+import database.PlayerStatistics;
+import database.Statistics;
+
 import exception.AlreadyConnectedException;
 import exception.GameException;
 import exception.InvalidBetException;
@@ -9,6 +12,7 @@ import exception.ServerException;
 import exception.ServerStateException;
 import exception.TurnException;
 import exception.UnexpectedBehaviorException;
+
 import game.Bet;
 import game.Game;
 import game.Player;
@@ -18,6 +22,7 @@ import game.card.Deck;
 import game.enumeration.Suit;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -344,11 +349,45 @@ public class Server implements ServerInterface, Runnable {
 	private void endGame() throws RemoteException {
 		
 		this.assertState( ServerState.END );
+		this.sendWinners();
+		this.sendStatistics();
+		this.changeState( ServerState.DISCONNECT ); 
 		
+	}
+	
+	private void sendWinners() throws RemoteException {
 		Player[] winners = this.game.getWinners();
 		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			clientToNotify.notifyWinner( winners[0], winners[1] );
+		}
+	}
+	
+	private void sendStatistics() {
+		
+		Statistics statistics;
+		try {
+			statistics = new Statistics();
+		} catch (ClassNotFoundException e) {
+			throw new UnexpectedBehaviorException( e );
+		} catch (SQLException e) {
+			throw new UnexpectedBehaviorException( e );
+		}
+		
+		for( Map.Entry<ClientInterface, Player> entry: this.clients.entrySet() ) {
+			
+			ClientInterface client = entry.getKey();
+			Player player = entry.getValue();
+			
+			PlayerStatistics playerStats = null;
+			try {
+				playerStats = statistics.getPlayer( player );
+			} catch (SQLException e) {
+				throw new UnexpectedBehaviorException( e );
+			}
+			
+			client.sendStatistics( playerStats );
+			
 		}
 		
 	}

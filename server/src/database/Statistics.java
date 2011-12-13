@@ -59,12 +59,12 @@ public class Statistics {
 		stat.close();
 	}
 
-	public PlayerStatitics getPlayer(Player player) throws SQLException {
+	public PlayerStatistics getPlayer(Player player) throws SQLException {
 		return this.getPlayer(player.getName());
 	}
 
-	public PlayerStatitics getPlayer(String name) throws SQLException {
-		PlayerStatitics retour;
+	public PlayerStatistics getPlayer(String name) throws SQLException {
+		PlayerStatistics retour;
 
 		PreparedStatement prep = this.conn.prepareStatement(Statistics.GET_PLAYER_SQL_QUERY);
 		prep.setString(1, name);
@@ -77,7 +77,7 @@ public class Statistics {
 			int nbWonGame = result.getInt("NB_WON_GAME");
 			int totalPoints = result.getInt("TOTAL_POINTS");
 
-			retour = new PlayerStatitics(this,
+			retour = new PlayerStatistics(this,
 					idPlayer, 
 					name, 
 					nbPlayedGame, 
@@ -99,7 +99,7 @@ public class Statistics {
 				lastInsertID = lastID.getInt(1);
 			}
 
-			retour = new PlayerStatitics(this, lastInsertID, name, 0,	0, 0);
+			retour = new PlayerStatistics(this, lastInsertID, name, 0,	0, 0);
 
 			lastID.close();
 			insert.close();
@@ -109,7 +109,7 @@ public class Statistics {
 		return retour;
 	}
 
-	public void savePlayer(PlayerStatitics p) throws SQLException {
+	public void savePlayer(PlayerStatistics p) throws SQLException {
 		PreparedStatement update = this.conn.prepareStatement(Statistics.UPDATE_PLAYER_SQL_QUERY);
 		update.setString(	1, p.getName());
 		update.setInt(		2, p.getNbPlayedGame());

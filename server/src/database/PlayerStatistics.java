@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import game.Bet;
 
-public class PlayerStatitics implements Serializable {
+public class PlayerStatistics implements Serializable {
 	private transient Statistics statistics;
 	private int idPlayer;
 	private String name;
@@ -13,7 +13,7 @@ public class PlayerStatitics implements Serializable {
 	private int nbWonGame;
 	private int totalPoints;
 
-	PlayerStatitics(Statistics statistics,
+	PlayerStatistics(Statistics statistics,
 			int idPlayer, 
 			String name, 
 			int nbPlayedGame, 

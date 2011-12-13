@@ -15,6 +15,8 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import database.PlayerStatistics;
+
 import view.IView;
 import view.TestGUI;
 
@@ -311,5 +313,11 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		test.setGraphicView(g);
 		new Thread(test).start();
 		g.setVisible(true);
+	}
+
+	@Override
+	public void showStatistics(PlayerStatistics playerStats) {
+		// TODO Auto-generated method stub
+		
 	}
 }
