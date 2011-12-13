@@ -7,5 +7,6 @@ public enum ServerState {
 	DISTRIBUTE_SECRET_HAND,
 	GAME,
 	END,
+	DISCONNECT,
 
 }

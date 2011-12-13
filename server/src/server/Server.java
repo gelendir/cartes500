@@ -46,7 +46,7 @@ import client.ClientInterface;
  * @author Gregory Eric Sanderson <gzou2000@gmail.com>
  *
  */
-public class Server implements ServerInterface {
+public class Server implements ServerInterface, Runnable {
 	
 	/**
 	 * Nom du du fichier .properties à récupérer
@@ -64,6 +64,8 @@ public class Server implements ServerInterface {
 	 * État du joueur. Utilisé pour implémenter une state machine minimaliste
 	 */
 	private ServerState state 						= ServerState.CONNECT;
+	
+	private ServerState nextState 					= null;
 	
 	/**
 	 * Instance de la partie en cours. Utilisé comme partie "Modèle" d'une
@@ -84,9 +86,79 @@ public class Server implements ServerInterface {
 		this.bundle = (PropertyResourceBundle) ResourceBundle.getBundle( Server.BUNDLE );
 		this.clients = new LinkedHashMap<ClientInterface, Player>( Game.MAX_PLAYERS );
 		this.state = ServerState.CONNECT;
+		this.nextState = ServerState.CONNECT;
 		this.game = null;
 			
 	}
+	
+	
+	@Override
+	public void run() {
+		
+		while( this.state != ServerState.DISCONNECT ) {
+			
+			synchronized( this ) {
+				
+				if( this.state == this.nextState  ) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						this.nextState = ServerState.DISCONNECT;
+					}
+				}
+				
+				this.state = this.nextState;
+				
+			}
+			
+			if( this.state == ServerState.BET ) {
+				
+				try {
+					this.startBets();
+				} catch (RemoteException e) {
+					this.state = ServerState.DISCONNECT;
+				}
+				
+			} else if( this.state == ServerState.DISTRIBUTE_SECRET_HAND ) {
+				
+				try {
+					this.distributeSecretHand();
+				} catch (RemoteException e) {
+					this.state = ServerState.DISCONNECT;
+				}
+				
+			} else if ( this.state == ServerState.GAME ) {
+				
+				try {
+					this.startGame();
+				} catch (RemoteException e) {
+					this.state = ServerState.DISCONNECT;
+				}
+				
+			} else if ( this.state == ServerState.END ) {
+				
+				try {
+					this.endGame();
+				} catch (RemoteException e) {
+					this.state = ServerState.DISCONNECT;
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	private void changeState( ServerState state ) {
+		
+		synchronized( this ) {
+			this.nextState = state;
+			this.notify();
+		}
+		
+	}
+	
+	
 	
 	/**
 	 * Cette fonction sert à implémenter une "state machine" minimaliste 
@@ -162,7 +234,7 @@ public class Server implements ServerInterface {
 		//Si tous les joueurs se sont connectés, démarrer la phase des mises.
 		if( this.clients.size() == Game.MAX_PLAYERS ) {
 			this.sendPlayerList();
-			this.startBets();
+			this.changeState( ServerState.BET );
 		}
 		
 	}
@@ -182,7 +254,7 @@ public class Server implements ServerInterface {
 	 */
 	private void startBets() throws RemoteException {
 		
-		this.state = ServerState.BET;
+		this.assertState( ServerState.BET );
 		
 		Player[] players = new Player[ this.clients.size() ];
 		int counter = 0;
@@ -201,7 +273,7 @@ public class Server implements ServerInterface {
 			ClientInterface client = entry.getKey();
 			Player player = entry.getValue();
 			
-			client.notifyBettingTime( player.getHand() );
+			client.notifyYourTurnToBet( player.getHand() );
 			
 		}
 		
@@ -252,7 +324,7 @@ public class Server implements ServerInterface {
 		
 		if( this.game.isGameFinished() ) {
 			
-			this.endGame();
+			this.changeState( ServerState.END );
 			
 		} else {
 			
@@ -413,7 +485,7 @@ public class Server implements ServerInterface {
 		
 		if( this.game.areBetsFinished() ) {
 			this.notifyBetWinner();
-			this.distributeSecretHand();
+			this.changeState( ServerState.DISTRIBUTE_SECRET_HAND );
 		}
 		
 	}
@@ -483,7 +555,7 @@ public class Server implements ServerInterface {
 		
 		this.game.newHandAfterSecretBet( player, cards );
 		
-		this.startGame();
+		this.changeState( ServerState.GAME );
 		
 	}
 	
@@ -535,5 +607,7 @@ public class Server implements ServerInterface {
 		
 		return players;
 	}
+
+
 
 }

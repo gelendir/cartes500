@@ -165,6 +165,8 @@ public class ServerApp {
 			
 			if( !connected ) {
 				System.out.println("Error connecting to RMI. Please see stack trace");
+			} else {
+				new Thread(server).start();
 			}
 			
 		}

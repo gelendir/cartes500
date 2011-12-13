@@ -81,6 +81,8 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyPlayerConnect( Player player ) throws RemoteException;
 	
+	public void notifyBettingTime() throws RemoteException;
+	
 	/**
 	 * Événement lancé lorsqu'il est rendu temps aux joueurs de faire une mise.
 	 * La période de mise peut seulement s'enclencher après la connexion de tout
@@ -95,7 +97,7 @@ public interface ClientInterface extends Remote {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 */
-	public void notifyBettingTime( Hand hand ) throws RemoteException;
+	public void notifyYourTurnToBet( Hand hand ) throws RemoteException;
 	
 	/**
 	 * Événement lancé à la fin d'une partie pour indiquer les joueurs qui ont

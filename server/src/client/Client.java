@@ -223,10 +223,10 @@ public class Client implements ClientInterface {
 	 * @throws InvalidCardException 
 	 * @throws TurnException 
 	 * 
-	 * @see ClientInterface#notifyBettingTime(Hand)
+	 * @see ClientInterface#notifyYourTurnToBet(Hand)
 	 */
 	@Override
-	public void notifyBettingTime( Hand hand ) throws RemoteException {
+	public void notifyYourTurnToBet( Hand hand ) throws RemoteException {
 		
 		this.player.setHand( hand );
 		Player[] players = this.server.getPlayerList();
@@ -342,6 +342,12 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyPlayerList(Player[] players) throws RemoteException {
 		this.view.setPlayerList(players);
+	}
+
+	@Override
+	public void notifyBettingTime() throws RemoteException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
