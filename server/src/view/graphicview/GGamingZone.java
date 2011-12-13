@@ -10,12 +10,27 @@ import java.awt.Point;
 
 import javax.swing.JPanel;
 
+/**
+ * Cette classe 
+ * @author Frédérik Paradis
+ */
 public class GGamingZone extends JPanel {
 
+	/**
+	 * Les 4 cartes graphiques
+	 */
 	private GCard[] gcards = new GCard[4];
+	
+	/**
+	 * La position des cartes à placer dans le GridBagLayout
+	 * en ordre pour les positions des joueurs.
+	 */
 	private Point[] points = { new Point(1, 2), new Point(0, 1), new Point(1, 0), new Point(2, 1) };
 
-	public GGamingZone() throws Exception {
+	/**
+	 * Ce constructeur sert à initialiser la zone de jeu.
+	 */
+	public GGamingZone() {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		int i = 0;
@@ -27,6 +42,13 @@ public class GGamingZone extends JPanel {
 		}
 	}
 
+	/**
+	 * Cette méthode sert à placer une carte sur le jeu
+	 * selon la position du joueur sur le jeu qui a joué 
+	 * la carte.
+	 * @param position La position du joueur
+	 * @param card La carte jouée
+	 */
 	public void setCard(int position, Card card) {
 		GridBagConstraints c = new GridBagConstraints();	
 		c.fill = GridBagConstraints.VERTICAL;
@@ -45,6 +67,9 @@ public class GGamingZone extends JPanel {
 		this.revalidate();
 	}
 
+	/**
+	 * Cette méthode sert à vider la zone de jeu des cartes présentes.
+	 */
 	public void flushGamingZone() {
 		this.removeAll();
 	}

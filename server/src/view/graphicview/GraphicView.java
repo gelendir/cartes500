@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 
 import view.IView;
 import view.TestGUI;
-import view.graphicview.GOtherHand.Orientation;
 
 public class GraphicView extends JFrame implements IView, GCardListener {
 
@@ -48,13 +47,13 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		this.gplayers[1] =  new GPlayer(new GOtherHand(Orientation.HORIZONTAL, 10));
+		this.gplayers[1] =  new GPlayer(new GOtherHand(10));
 		this.add(this.gplayers[1], c);
 
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
 		c.gridy = 0;
-		this.gplayers[2] =  new GPlayer(new GOtherHand(Orientation.HORIZONTAL, 10));
+		this.gplayers[2] =  new GPlayer(new GOtherHand(10));
 		this.add(this.gplayers[2], c);
 
 		/*Hand hand = new Hand(deck);
@@ -74,7 +73,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		c.fill = GridBagConstraints.CENTER;
 		c.gridx = 2;
 		c.gridy = 1;
-		this.gplayers[3] =  new GPlayer(new GOtherHand(Orientation.HORIZONTAL, 10));
+		this.gplayers[3] =  new GPlayer(new GOtherHand(10));
 		this.add(this.gplayers[3], c);
 
 		c.fill = GridBagConstraints.VERTICAL;
@@ -212,23 +211,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	@Override
 	public void showGameStart(Player first) {
-		this.changePlayerStatus(first);
-
-		for(int i = 0; i < this.playerList.length; ++i) {
-			if(i == 0) {
-				if(this.playerList[i].equals(first)) {
-					this.gplayers[i].itsYourTurn();
-				} else {
-					this.gplayers[i].itsNotYourTurn();
-				}
-			} else {
-				if(this.playerList[i].equals(first)) {
-					this.gplayers[i].itsHisTurn();
-				} else {
-					this.gplayers[i].itsNotHisTurn();
-				}
-			}
-		}
+		this.nextPlayer(first);
 	}
 
 	@Override
@@ -249,6 +232,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	@Override
 	public void showTurnWinner(Player player) {
 		this.changePlayerStatus(player);
+		this.gamingZone.flushGamingZone();
 	}
 
 	@Override
@@ -265,6 +249,27 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 			}
 		}
 		this.pack();
+	}
+	
+	@Override
+	public void nextPlayer(Player player) {
+		this.changePlayerStatus(player);
+
+		for(int i = 0; i < this.playerList.length; ++i) {
+			if(i == 0) {
+				if(this.playerList[i].equals(player)) {
+					this.gplayers[i].itsYourTurn();
+				} else {
+					this.gplayers[i].itsNotYourTurn();
+				}
+			} else {
+				if(this.playerList[i].equals(player)) {
+					this.gplayers[i].itsHisTurn();
+				} else {
+					this.gplayers[i].itsNotHisTurn();
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -298,11 +303,5 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		test.setGraphicView(g);
 		new Thread(test).start();
 		g.setVisible(true);
-	}
-
-	@Override
-	public void nextPlayer(Player player) {
-		// TODO Auto-generated method stub
-		
 	}
 }

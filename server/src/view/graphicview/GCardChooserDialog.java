@@ -12,12 +12,37 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+/**
+ * Cette classe sert à l'interface graphique permettant
+ * à l'utilisateur qui a gagné la mise de départ de choisir
+ * les cartes qu'il souhaite.
+ * @author Frédérik Paradis
+ */
 public class GCardChooserDialog extends JDialog implements GCardListener {
 
+	/**
+	 * Représente la main de toutes les cartes pouvant
+	 * être choisies par l'utilisateur
+	 */
 	private GHand ghand = new GHand();
+	
+	/**
+	 * Tableau contenant la liste des cartes choisies par l'utilisateur.
+	 */
 	private ArrayList<Card> choosenCard = new ArrayList<Card>();
+	
+	/**
+	 * Le bouton permettant d'effectuer le choix des cartes.
+	 */
 	private JButton button = new JButton("Choose card!");
 
+	/**
+	 * Initialise la boîte de dialogue avec les cartes et le
+	 * bouton de choix des cartes.
+	 * @param cards La liste des cartes pouvant être chosie par
+	 * l'utilisateur.
+	 * @param owner Le fenêtre parente de ce dialogue
+	 */
 	public GCardChooserDialog(ArrayList<Card> cards, JFrame owner) {
 		super(owner);
 
@@ -43,6 +68,13 @@ public class GCardChooserDialog extends JDialog implements GCardListener {
 		this.setResizable(false);
 	}
 
+	/**
+	 * Cette méthode est appelé lorsque l'utilisateur clique
+	 * sur une carte. Lorsqu'une carte est cliquée, on lève
+	 * ou on baisse la carte selon si elle était levée ou pas.
+	 * Lorsqu'il y a 10 cartes qui sont levées, on active le bouton
+	 * permettant de valider le choix sinon il est désactivé.
+	 */
 	@Override
 	public void choseenCard(Card card) {
 		if(!this.choosenCard.contains(card)) {
@@ -64,6 +96,12 @@ public class GCardChooserDialog extends JDialog implements GCardListener {
 		this.ghand.setPlayableCards(this.choosenCard);
 	}
 	
+	/**
+	 * Cette méthode retourne un tableau des cartes choisies par
+	 * le joueur.
+	 * @return Retourne un tableau des cartes choisies par
+	 * le joueur.
+	 */
 	public ArrayList<Card> getChoosenCard() {
 		return this.choosenCard;
 	}
