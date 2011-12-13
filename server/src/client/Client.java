@@ -119,13 +119,15 @@ public class Client implements ClientInterface {
 	 * Notification du tour d'un joueur.
 	 * Veuillez vous référer à la documentation de la classe ClientInterface
 	 * pour plus de détails.
+	 * @throws RemoteException 
 	 * 
 	 * @see ClientInterface#notifyPlayerTurn(Player, Card)
 	 */
 	@Override
-	public void notifyPlayerTurn( Player player, Card card ) {
+	public void notifyPlayerTurn( Player player, Card card ) throws RemoteException {
 		
 		this.view.showPlayerTurn( player, card );
+		this.view.nextPlayer( this.server.nextPlayer() );
 		
 	}
 

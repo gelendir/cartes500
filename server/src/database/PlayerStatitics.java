@@ -1,11 +1,12 @@
 package database;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 
 import game.Bet;
 
-public class PlayerStatitics {
-	private Statistics statistics;
+public class PlayerStatitics implements Serializable {
+	private transient Statistics statistics;
 	private int idPlayer;
 	private String name;
 	private int nbPlayedGame;
