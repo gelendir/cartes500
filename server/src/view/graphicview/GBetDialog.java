@@ -14,6 +14,11 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+/**
+ * Cette classe sert à afficher une boite de dialogue
+ * servant à l'utilisateur pour choisir son 
+ * @author Frédérik Paradis
+ */
 public class GBetDialog extends JDialog {
 
 	private JComboBox suitList;
