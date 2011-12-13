@@ -1,19 +1,24 @@
 package database;
 
+import java.sql.SQLException;
+
 import game.Bet;
 
 public class PlayerStatitics {
+	private Statistics statistics;
 	private int idPlayer;
 	private String name;
 	private int nbPlayedGame;
 	private int nbWonGame;
 	private int totalPoints;
 
-	PlayerStatitics(int idPlayer, 
+	PlayerStatitics(Statistics statistics,
+			int idPlayer, 
 			String name, 
 			int nbPlayedGame, 
 			int nbWonGame, 
 			int totalPoints) {
+		this.statistics = statistics;
 		this.idPlayer = idPlayer;
 		this.name = name;
 		this.nbPlayedGame = nbPlayedGame;
@@ -52,5 +57,9 @@ public class PlayerStatitics {
 
 	public int getTotalPoints() {
 		return this.totalPoints;
+	}
+	
+	public void save() throws SQLException {
+		this.statistics.savePlayer(this);
 	}
 }
