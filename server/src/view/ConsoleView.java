@@ -8,6 +8,8 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import database.PlayerStatistics;
+
 import exception.InvalidBetException;
 
 import game.Bet;
@@ -605,13 +607,29 @@ public class ConsoleView implements IView {
 
 	@Override
 	public void setPlayerList(Player[] players) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void nextPlayer(Player player) {
-		// TODO Auto-generated method stub
+	
+		String template = this.bundle.getString("nextPlayer");
+		String msg = MessageFormat.format( template, player.getName() );
+		this.out.println( msg );
+
+	}
+
+	@Override
+	public void showStatistics(PlayerStatistics playerStats) {
+		
+		String template = this.bundle.getString("playerStats");
+		String msg = MessageFormat.format(
+				template,
+				playerStats.getName(),
+				playerStats.getNbPlayedGame(),
+				playerStats.getNbWonGame(),
+				playerStats.getTotalPoints()
+				);
+		this.out.println( msg );
 		
 	}
 }
