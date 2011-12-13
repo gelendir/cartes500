@@ -228,11 +228,9 @@ public class Client implements ClientInterface {
 	@Override
 	public void notifyBettingTime( Hand hand ) throws RemoteException {
 		
+		this.player.setHand( hand );
 		Player[] players = this.server.getPlayerList();
 		this.view.setPlayerList( players );
-		
-		this.player.setHand( hand );
-		
 		boolean validBet = false;
 		
 		Bet bet = null;
@@ -339,6 +337,11 @@ public class Client implements ClientInterface {
 
 	public boolean isGameFinished() {
 		return this.gameFinished;
+	}
+
+	@Override
+	public void notifyPlayerList(Player[] players) throws RemoteException {
+		this.view.setPlayerList(players);
 	}
 
 }

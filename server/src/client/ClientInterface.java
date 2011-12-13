@@ -161,4 +161,6 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyTurnWinner( Player player ) throws RemoteException;
 	
+	public void notifyPlayerList( Player[] player ) throws RemoteException;
+	
 }

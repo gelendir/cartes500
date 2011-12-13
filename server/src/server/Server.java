@@ -35,7 +35,7 @@ import client.ClientInterface;
 /**
  * Serveur du jeu de 500. Classe en charge de gérer les connexions, 
  * les événements venant des clients (joueurs) et de mettre 
- * à jour l'état du jeu selon les réponses reçues.Le serveur communique 
+ * à jour l'état du jeu selon les réponses reçues. Le serveur communique 
  * avec les clients en utilisant le patron de conception "Observeur Observé". 
  * Le serveur commence à l'état "en attente", c'est-à-dire qu'il attend que
  * 4 clients se connectent. Ensuite, il démarre le jeu, distribue
@@ -48,14 +48,37 @@ import client.ClientInterface;
  */
 public class Server implements ServerInterface {
 	
+	/**
+	 * Nom du du fichier .properties à récupérer
+	 */
 	static private String BUNDLE = "server";
 
+	/**
+	 * Table d'association entre le client le joueur de connecté.
+	 * On utilise un LinkedHashMap pour conserver l'ordre de connexion
+	 * des joueurs.
+	 */
 	private LinkedHashMap<ClientInterface, Player> clients 	= null;
+	
+	/**
+	 * État du joueur. Utilisé pour implémenter une state machine minimaliste
+	 */
 	private ServerState state 						= ServerState.CONNECT;
+	
+	/**
+	 * Instance de la partie en cours. Utilisé comme partie "Modèle" d'une
+	 * architecture MVC.
+	 */
 	private Game game								= null;
 	
+	/**
+	 * Ressource pour récupérer les libellés de texte. 
+	 */
 	private PropertyResourceBundle bundle;
 	
+	/**
+	 * Constructeur de la classe. Crée une nouvelle instance du serveur.
+	 */
 	public Server() {
 		
 		this.bundle = (PropertyResourceBundle) ResourceBundle.getBundle( Server.BUNDLE );
@@ -66,7 +89,7 @@ public class Server implements ServerInterface {
 	}
 	
 	/**
-	 * Cette fonction est à implémenter une "state machine" minimaliste 
+	 * Cette fonction sert à implémenter une "state machine" minimaliste 
 	 * sur le serveur. Le serveur contient plusieurs états qui représentent l'avancement
 	 * des phases du jeu (Par exemple: phase de connexion, phase de distribution des cartes,
 	 * phase de la mise, etc). Durant chaque état, le client a le droit d'accomplir un nombre
@@ -138,7 +161,16 @@ public class Server implements ServerInterface {
 		
 		//Si tous les joueurs se sont connectés, démarrer la phase des mises.
 		if( this.clients.size() == Game.MAX_PLAYERS ) {
+			this.sendPlayerList();
 			this.startBets();
+		}
+		
+	}
+	
+	private void sendPlayerList() throws RemoteException {
+		
+		for( ClientInterface clientToNotify: this.clients.keySet() ) {
+			clientToNotify.notifyPlayerList( this.getPlayerList() );
 		}
 		
 	}
@@ -159,8 +191,6 @@ public class Server implements ServerInterface {
 			players[counter] = player;
 			counter++;
 		}
-		
-		//Player[] players = (Player[])this.clients.values().toArray();
 		
 		Deck deck = new Deck();
 		
