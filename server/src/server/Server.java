@@ -314,16 +314,19 @@ public class Server implements ServerInterface, Runnable {
 		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
 			
+			System.out.println("notify play card");
 			clientToNotify.notifyPlayerTurn( player, card );
 			
 		}
 		
 		if( this.game.isTurnFinished() ) {
+			System.out.println("start new turn");
 			this.startNewTurn();
 		}
 		
 		if( this.game.isGameFinished() ) {
 			
+			System.out.println("game finished");
 			this.changeState( ServerState.END );
 			
 		} else {
