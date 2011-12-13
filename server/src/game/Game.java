@@ -15,6 +15,7 @@ import game.card.Card;
 import game.card.Deck;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * La classe Game sert à gérer le jeu.
@@ -30,6 +31,8 @@ public class Game {
 	 * Le tableau des joueurs de la partie
 	 */
 	private Player players[] = null;
+	
+	private LinkedList<Turn> turns = null;
 
 	/**
 	 * L'index dans le tableau des joueurs du joueur 
@@ -47,16 +50,6 @@ public class Game {
 	 * la pile de cartes utilisé pour ce jeu
 	 */
 	private Deck deck = null;
-	
-	/**
-	 * Représente le la manche courante du jeu
-	 */
-	private Turn currentTurn = null;
-	
-	/**
-	 * Le nombre de tours joués dans le jeu à date
-	 */
-	private int nbTurns = 0;
 
 	/**
 	 * Le constructeur initialise le jeu avec des valeurs par défaut.
@@ -71,6 +64,7 @@ public class Game {
 		this.deck = deck;
 		this.deck.mixCards();
 		this.players = players;
+		this.turns = new LinkedList<Turn>();
 
 		this.createHands();
 
@@ -322,25 +316,41 @@ public class Game {
 	
 	public void newTurn() throws TurnException {
 		
-		if( this.currentTurn == null ) {
+		if( this.turns.size() == 0 ) {
 			
-			this.currentTurn = new Turn( this.getGameSuit() );
-			
-		} else if ( this.currentTurn.isTurnFinished() ) {
-			
-			this.nbTurns++;
-			this.currentTurn.incrementWinner();
-			this.currentTurn = new Turn( this.getGameSuit() );
+			Turn turn = new Turn( this.getGameSuit() );
+			this.turns.push( turn );
 			
 		} else {
-			
-			throw new TurnException("Turn is not finished");
+		
+			Turn currentTurn = this.turns.peek();
+				
+			if ( currentTurn.isTurnFinished() ) {
+				
+				currentTurn.incrementWinner();
+				Turn turn = new Turn( this.getGameSuit() );
+				this.turns.push( turn );
+				
+			} else {
+				
+				throw new TurnException("Turn is not finished");
+				
+			}
 			
 		}
 	}
 	
+	private Turn currentTurn() {
+		
+		if( this.turns.size() == 0 ) {
+			return null;
+		}
+		
+		return this.turns.peek();
+	}
+	
 	public Suit getTurnSuit() {
-		return this.currentTurn.getTurnSuit();
+		return this.currentTurn().getTurnSuit();
 	}
 
 	public void playCard(Player player, Card card) throws GameException {
@@ -357,28 +367,41 @@ public class Game {
 			throw new InvalidCardException();
 		}
 		
-		this.currentTurn.addCard( player, card );
+		Turn currentTurn = this.turns.peek();
+		currentTurn.addCard( player, card );
 		
 	}
 
 	public boolean isTurnFinished() {
-		return this.currentTurn.isTurnFinished();
+		return this.currentTurn().isTurnFinished();
 	}
 
 	public Player getTurnWinner() throws TurnException {
-		return this.currentTurn.getWinner();
+		return this.currentTurn().getWinner();
 	}
 	
 	public Player nextPlayer() {
 		
-		if( this.currentTurn == null ) {
-			return this.players[0];
+		if( this.turns.size() == 0 ) {
+			return this.getBestPlayerBet();
 		}
 		
-		Player latestPlayer = this.currentTurn.getLatestPlayer();
+		//Turn turn = this.currentTurn();
+		Player latestPlayer = this.currentTurn().getLatestPlayer();
 		
 		if( latestPlayer == null ) {
-			return this.players[0];
+			
+			if( this.turns.size() <= 1 ) {
+				return this.getBestPlayerBet();
+			}
+			
+			Turn lastTurn = this.turns.get(1);
+			try {
+				return lastTurn.getWinner();
+			} catch (TurnException e) {
+				return null;
+			}
+			
 		}
 		
 		int indexPlayer = this.findIndexPlayer( latestPlayer );
@@ -393,7 +416,7 @@ public class Game {
 
 	public void newHandAfterSecretBet(Player player, ArrayList<Card> cards) throws GameException {
 		
-		if( this.currentTurn != null ) {
+		if( this.turns.size() > 0 ) {
 			throw new GameHasStartedException();
 		}
 		
@@ -408,7 +431,7 @@ public class Game {
 
 	public boolean isGameFinished() {
 		
-		return( this.nbTurns == Game.MAX_TURNS );
+		return( this.turns.size() == Game.MAX_TURNS );
 		
 	}
 
