@@ -77,7 +77,7 @@ public class Statistics {
 			int nbWonGame = result.getInt("NB_WON_GAME");
 			int totalPoints = result.getInt("TOTAL_POINTS");
 
-			retour = new PlayerStatitics(
+			retour = new PlayerStatitics(this,
 					idPlayer, 
 					name, 
 					nbPlayedGame, 
@@ -99,7 +99,7 @@ public class Statistics {
 				lastInsertID = lastID.getInt(1);
 			}
 
-			retour = new PlayerStatitics(lastInsertID, name, 0,	0, 0);
+			retour = new PlayerStatitics(this, lastInsertID, name, 0,	0, 0);
 
 			lastID.close();
 			insert.close();
