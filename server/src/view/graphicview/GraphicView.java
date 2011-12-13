@@ -16,25 +16,69 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import view.IView;
-import view.TestGUI;
 
+/**
+ * Cette classe est l'interface graphique principale du
+ * programme. Elle implémente l'interface IView.
+ * @author Frédérik Paradis
+ */
 public class GraphicView extends JFrame implements IView, GCardListener {
 
+	/**
+	 * La zone de jeu où les cartes sont déposés.
+	 */
 	private GGamingZone gamingZone = new GGamingZone();
+	
+	/**
+	 * Le joueur actuel du jeu.
+	 */
 	private Player actualPlayer;
 
+	
+	/**
+	 * La liste des joueurs du jeu.
+	 */
 	private Player[] playerList = new Player[4];
+	
+	/**
+	 * La liste des réprésentation graphique des joueurs
+	 */
 	private GPlayer[] gplayers = new GPlayer[4];
+	
+	/**
+	 * Les mains des autres joueurs.
+	 */
 	private GOtherHand[] gotherhand = new GOtherHand[3];
 
+	
+	/**
+	 * L'index du prochain joueur a se connecter
+	 */
 	private int connectPlayer = 0;
 
+	
+	/**
+	 * La main du joueur actuel.
+	 */
 	private GHand ghand = new GHand();
 
+	
+	/**
+	 * CountDownLatch servant à bloquer la fonction getCardToPlay tant
+	 * que l'utilisateur n'a pas choisi de carte.
+	 */
 	private CountDownLatch cardChosed = new CountDownLatch(1);
+	
+	/**
+	 * La carte choisie par le joueur pour le tour actuel.
+	 */
 	private Card choosenCard;
 
-	public GraphicView() throws Exception {
+	/**
+	 * Ce constructeur initialise tous les composants d'interface
+	 * du jeu.
+	 */
+	public GraphicView() {
 		super();
 		this.setTitle("Jeu du 500");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,13 +103,6 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.gplayers[2] =  new GPlayer(this.gotherhand[1]);
 		this.add(this.gplayers[2], c);
 
-		/*Hand hand = new Hand(deck);
-		ArrayList<Card> cards = new ArrayList<Card>(hand.getCards().length);
-		for(Card card: hand.getCards()) {
-			cards.add(card);
-		}
-		this.ghand.setHand(cards);
-		this.ghand.setPlayableCards(hand.getPlayableCard(Suit.HEARTS));*/
 		this.ghand.addGCardListener(this);
 		c.fill = GridBagConstraints.VERTICAL;
 		c.gridx = 1;
@@ -87,17 +124,18 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 		this.pack();
 		this.setLocationRelativeTo(null);
-		//this.setVisible(true);
 	}
 
+	/**
+	 * @see GCardListener#choseenCard(Card)
+	 */
 	@Override
 	public void choseenCard(Card card) {
 		if(this.ghand.getPlayableCards().contains(card)) {
 			this.choosenCard = card;
 			this.cardChosed.countDown();
 			this.cardChosed = new CountDownLatch(1);
-
-			this.gamingZone.setCard(1, card);
+			
 			this.ghand.removeCard(card);
 			this.ghand.resetPlayableCards();
 
@@ -107,18 +145,22 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 	}
 
+	/**
+	 * @see IView#createPlayer()
+	 */
 	@Override
 	public Player createPlayer() {
 		String name = JOptionPane.showInputDialog(this, "Veuillez entrer votre nom d'utilisateur.");
 		this.actualPlayer = new Player(name);
-
-		/*this.playerList[0] = this.actualPlayer;
-		++this.connectPlayer;*/
+		
 		this.playerConnected(this.actualPlayer);
 
 		return this.actualPlayer;
 	}
 
+	/**
+	 * @see IView#getCardToPlay(Hand, Suit)
+	 */
 	@Override
 	public Card getCardToPlay(Hand hand, Suit suit) {
 		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS);
@@ -143,6 +185,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		return this.choosenCard;
 	}
 
+	/**
+	 * @see IView#showPlayerTurn(Player, Card)
+	 */
 	@Override
 	public void showPlayerTurn(Player player, Card card) {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
@@ -156,6 +201,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 	}
 
+	/**
+	 * @see IView#playerConnected(Player)
+	 */
 	@Override
 	public void playerConnected(Player player) {
 		this.playerList[this.connectPlayer] = player;
@@ -163,6 +211,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.changePlayerStatus(player);
 	}
 
+	/**
+	 * @see IView#askBet(Hand)
+	 */
 	@Override
 	public Bet askBet(Hand hand) {
 		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS);
@@ -180,18 +231,27 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		return s.getBet();
 	}
 
+	/**
+	 * @see IView#playerHasBet(Player, Bet)
+	 */
 	@Override
 	public void playerHasBet(Player player, Bet bet) {		
 		player.setOriginalBet(bet);
 		this.changePlayerStatus(player);
 	}
 
+	/**
+	 * @see IView#welcome()
+	 */
 	@Override
 	public void welcome() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @see IView#changeCards(Hand, Card[])
+	 */
 	@Override
 	public ArrayList<Card> changeCards(Hand oldHand, Card[] availableCards) {
 		ArrayList<Card> cards = new ArrayList<Card>(Hand.MAX_CARDS + Hand.MIN_CARDS);
@@ -211,6 +271,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		return s.getChoosenCard();
 	}
 
+	/**
+	 * @see IView#showBetWinner(Player, Suit)
+	 */
 	@Override
 	public void showBetWinner(Player player, Suit gameSuit) {
 
@@ -218,11 +281,17 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 
 	}
 
+	/**
+	 * @see IView#showGameStart(Player)
+	 */
 	@Override
 	public void showGameStart(Player first) {
 		this.nextPlayer(first);
 	}
 
+	/**
+	 * @see IView#showWinners(Player, Player)
+	 */
 	@Override
 	public void showWinners(Player player, Player player2) {
 		this.changePlayerStatus(player);
@@ -238,12 +307,18 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 	}
 
+	/**
+	 * @see IView#showTurnWinner(Player)
+	 */
 	@Override
 	public void showTurnWinner(Player player) {
 		this.changePlayerStatus(player);
 		this.gamingZone.flushGamingZone();
 	}
 
+	/**
+	 * @see IView#setPlayerList(Player[])
+	 */
 	@Override
 	public void setPlayerList(Player[] players) {
 		int j = findPlayerIndex(this.actualPlayer, players);
@@ -260,6 +335,9 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.pack();
 	}
 
+	/**
+	 * @see IView#nextPlayer(Player)
+	 */
 	@Override
 	public void nextPlayer(Player player) {
 		this.changePlayerStatus(player);
@@ -281,11 +359,21 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		}
 	}
 
+	/**
+	 * @see IView#showBetInvalid()
+	 */
 	@Override
 	public void showBetInvalid() {
 		JOptionPane.showMessageDialog(this, "The bet is invalid. If you do not want to bet, clik on Cancel", "Invalid bet", JOptionPane.WARNING_MESSAGE);
 	}
 
+	/**
+	 * Cette méthode permet de trouver l'index d'un joueur
+	 * dans un tableau de joueur.
+	 * @param player Le joueur
+	 * @param players Le tableau de joueur
+	 * @return Retourne l'index du joueur
+	 */
 	private static int findPlayerIndex(Player player, Player[] players) {
 		for(int i = 0; i <  players.length; ++i) {
 			if(players[i] != null && players[i].equals(player)) {
@@ -295,6 +383,10 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		return -1;
 	}
 
+	/**
+	 * Cette méthode permet de mettre à jour le statut d'un joueur. 
+	 * @param player Le joueur à mettre à jour.
+	 */
 	private void changePlayerStatus(Player player) {
 		int indexPlayer = findPlayerIndex(player, this.playerList);
 		this.playerList[indexPlayer] = player;
@@ -303,13 +395,5 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 		this.revalidate();
 		this.repaint();
 		this.pack();
-	}
-
-	public static void main(String[] args) throws Exception {
-		GraphicView g = new GraphicView();
-		TestGUI test= new TestGUI();
-		test.setGraphicView(g);
-		new Thread(test).start();
-		g.setVisible(true);
 	}
 }

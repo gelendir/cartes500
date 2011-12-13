@@ -44,7 +44,7 @@ public class GOtherHand extends JPanel {
 
 
 	/**
-	 * 
+	 * Cette méthode met à jour l'affichage de la main.
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -53,15 +53,26 @@ public class GOtherHand extends JPanel {
 		}
 	}
 
+	/**
+	 * Cette méthode retourne le nombre de carte.
+	 * @return Retourne le nombre de carte.
+	 */
 	public int getNbCard() {
 		return this.nbCard;
 	}
 
+	/**
+	 * Cette méthode supprime une carte de la main.
+	 */
 	public void removeCard() {
 		--this.nbCard;
 		this.repaint();
 	}
 	
+	/**
+	 * Cette méthode modifie le nombre de carte.
+	 * @param nbCard Le nombre de carte.
+	 */
 	public void setNbCard(int nbCard) {
 		this.nbCard = nbCard;
 		this.repaint();
