@@ -30,34 +30,34 @@ import view.graphicview.GraphicView;
  * @author Gregory Eric Sanderson
  */
 public class ServerApp {
-	
+
 	/**
 	 * L'adresse de l'hôte par défaut du régistraire RMI.
 	 */
 	final public static String 	DEFAULT_HOST = "localhost";
-	
+
 	/**
 	 * Le port de l'hôte par défaut du régistraire RMI.
 	 */
 	final public static int 	DEFAULT_PORT = 2222;
-	
+
 	/**
 	 * Le nom du programme
 	 */
 	final public static String 	SERVER_NAME = "Cartes500Server";
-	
+
 	final public static String PROGRAM_NAME = "Cartes 500 Serveur";
-	
+
 	/**
 	 * L'interface Stub du serveur
 	 */
 	private static ServerInterface server = null;
-	
+
 	/**
 	 * L'instance du régistraire RMI
 	 */
 	private static Registry registry = null;
-	
+
 	/**
 	 * Cette méthode se charge de lire les arguments.
 	 * @param args Les arguments du programme
@@ -65,40 +65,40 @@ public class ServerApp {
 	 *         de commande
 	 */
 	private static CommandLine parseArgs(String[] args) {
-		
+
 		Options options = new Options();		
-		
+
 		@SuppressWarnings("static-access")
 		Option port = OptionBuilder.withLongOpt("port")
-									.withArgName("PORT")
-									.hasArg()
-									.withDescription("Port of the rmi registry server")
-									.create("p");
-		
+		.withArgName("PORT")
+		.hasArg()
+		.withDescription("Port of the rmi registry server")
+		.create("p");
+
 		@SuppressWarnings("static-access")
 		Option host = OptionBuilder.withLongOpt("host")
-									.withArgName("HOST")
-									.hasArg()
-									.withDescription( "Address of the rmi registry server, a.k.a the game server" )
-									.create("H");
+		.withArgName("HOST")
+		.hasArg()
+		.withDescription( "Address of the rmi registry server, a.k.a the game server" )
+		.create("H");
 
 		options.addOption("h", "help", false, "print this help message");
 		options.addOption( host );
 		options.addOption( port );
-										
+
 		CommandLineParser parser = new PosixParser();
-		
+
 		CommandLine cmd = null;
-		
+
 		try{
 			cmd = parser.parse( options, args );
 		} catch (ParseException e) {
 			System.out.println("ERROR: cannot parse arguments.");
 			System.out.println( e.getMessage() );
 		}
-		
+
 		if( cmd != null && cmd.hasOption("help") ) {
-		
+
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp( ServerApp.PROGRAM_NAME , options );
 			return null;
@@ -107,32 +107,69 @@ public class ServerApp {
 
 		return cmd;
 	}
-	
+
 	private static boolean connectRMI( Server server, String host, int port ) {
-		
+
 		boolean connected = true;
-		
-		Registry registry;
-		
+
+		Registry registry = null;
+
+
+
+		System.out.println("Exporting server stub...");
+		ServerInterface stub = null;
 		try {
-		
-			System.out.println("Exporting server stub...");
-			ServerInterface stub = (ServerInterface)UnicastRemoteObject.exportObject( server, 0 );
-			
-			System.out.println("Getting Registry...");
-			registry = LocateRegistry.getRegistry( host, port );
-			
-			System.out.println("Binding server...");
-			registry.rebind( ServerApp.SERVER_NAME, stub );
-			
-		} catch (RemoteException e) {
+			stub = (ServerInterface)UnicastRemoteObject.exportObject( server, 0 );
+		} catch (RemoteException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			connected = false;
+			e1.printStackTrace();
 		}
-		
+
+
+		registry = ServerApp.getRegistry(host, port);
+
+		if(registry != null && stub != null) {
+			try {	
+				System.out.println("Binding server...");
+				registry.rebind( ServerApp.SERVER_NAME, stub );
+
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				connected = false;
+			}
+		}
+		else {
+			return false;
+		}
+
 		return connected;
-		
+	}
+
+	private static Registry getRegistry(String host, int port) {
+		Registry registry = null;
+		System.out.println("Creating or getting Registry...");
+		if(host == DEFAULT_HOST) {
+			try {
+				registry = LocateRegistry.createRegistry(port);
+			} catch (RemoteException e1) {
+				try {
+					registry = LocateRegistry.getRegistry( host, port );
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else {
+			try {
+				registry = LocateRegistry.getRegistry( host, port );
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return registry;
 	}
 
 	/**
@@ -142,35 +179,35 @@ public class ServerApp {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		
+
 		CommandLine cmd = null;
 		String host = ServerApp.DEFAULT_HOST;
 		int port = ServerApp.DEFAULT_PORT;
-		
+
 		cmd = ServerApp.parseArgs( args );
-		
+
 		if( cmd != null ) {
-			
+
 			if ( cmd.hasOption("host") ) {
 				host = cmd.getOptionValue("host");
 			}
-			
+
 			if ( cmd.hasOption("port") ) {
 				port = Integer.parseInt( cmd.getOptionValue("port") );
 			}
-			
+
 			Server server = new Server();
-			
+
 			boolean connected = ServerApp.connectRMI( server, host, port );
-			
+
 			if( !connected ) {
 				System.out.println("Error connecting to RMI. Please see stack trace");
 			} else {
 				new Thread(server).start();
 			}
-			
+
 		}
 
 	}
-	
+
 }
