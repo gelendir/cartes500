@@ -39,8 +39,6 @@ public interface ServerInterface extends Remote {
 	 * 
 	 * @param client Le client qui se connecte
 	 * @param player Le profil du joueur qui se connecte
-	 * @return Retourne vrai si la connexion a réussi, faux si le client est déja connecté
-	 * ou si un joueur avec le même profil est déja présent.
 	 * @throws RemoteException Erreurs RMI.
 	 */
 	public void connectClient( ClientInterface client, Player player ) throws RemoteException;

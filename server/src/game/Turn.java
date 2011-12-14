@@ -226,7 +226,7 @@ public class Turn {
 	 * 
 	 * @throws TurnException Retourne les mêmes exceptions que getWinner()
 	 * @throws InvalidCardException 
-	 * @see getWinner
+	 * @see Turn#getWinner()
 	 */
 	public void incrementWinner() throws TurnException {
 		

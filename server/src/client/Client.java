@@ -62,7 +62,7 @@ public class Client implements ClientInterface {
 	
 	/**
 	 * L'atout du jeu
-	 * @See game.enumeration.Suit
+	 * @see game.enumeration.Suit
 	 */
 	private Suit gameSuit;
 	
@@ -92,8 +92,6 @@ public class Client implements ClientInterface {
 	/**
 	 * Fonction appelé lorsque le client est prêt à se connecter au serveur.
 	 * Le client s'enregistrera au près du serveur à travers RMI.
-	 * 
-	 * @return Si la connexion a réussi ou échoué.
 	 * @throws RemoteException Erreurs RMI.
 	 * @throws GameException 
 	 * @throws AlreadyConnectedException 

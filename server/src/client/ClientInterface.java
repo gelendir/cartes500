@@ -53,7 +53,6 @@ public interface ClientInterface extends Remote {
 	 * 
 	 * @param suit La suite du tour. Utilisé pour indiquer au client quels cartes
 	 * qu'il peut jouer.
-	 * @return La carte que ce client veut jouer.
 	 * @throws RemoteException Erreurs RMI
 	 */
 	public void notifyYourTurn( Suit suit ) throws RemoteException;
@@ -92,7 +91,6 @@ public interface ClientInterface extends Remote {
 	 * aussi lors de cet événement que le serveur distribue les cartes à chaque joueur.
 	 *  
 	 * @param hand Les cartes distribués au joueur.
-	 * @return La mise fait par ce client.
 	 * @throws RemoteException Erreurs RMI.
 	 */
 	public void notifyYourTurnToBet( Hand hand ) throws RemoteException;

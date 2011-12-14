@@ -155,7 +155,6 @@ public class Game {
 	 * Cette méthode sert à effectuer la mise de départ d'un joueur.
 	 * @param bet La mise du joueur
 	 * @param player Le joueur
-	 * @return  Retourne vrai si la mise est valide; faux sinon.
 	 * @throws InvalidBetException 
 	 * @throws NotYourTurnToBet 
 	 * @see Bet

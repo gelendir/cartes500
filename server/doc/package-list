@@ -1,6 +1,11 @@
+app
 client
+database
+exception
 game
+game.card
 game.enumeration
 server
 unittest
 view
+view.graphicview

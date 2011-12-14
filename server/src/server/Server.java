@@ -447,7 +447,7 @@ public class Server implements ServerInterface, Runnable {
 	 * est déja géré par la fonction playCard.
 	 * 
 	 * @return Le joueur qui a remporté le tour
-	 * @see playCard
+	 * @see Server#playCard(ClientInterface, Card)
 	 */
 	private Player fetchTurnWinner() {
 		
@@ -468,7 +468,7 @@ public class Server implements ServerInterface, Runnable {
 	 * Les exceptions sont muselés car l'ordre dans lequel les joueurs dépose une carte
 	 * est déja géré par la fonction playCard.
 	 * 
-	 * @see playCard
+	 * @see Server#playCard(ClientInterface, Card)
 	 */
 	private void createNewTurn() {
 		

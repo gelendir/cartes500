@@ -320,7 +320,7 @@ public class ConsoleView implements IView {
 	/**
 	 * Demande à l'utilisateur le nombre de tours qu'il veut miser.
 	 * 
-	 * @see askBet
+	 * @see IView#askBet(Hand)
 	 * @return le nombre de tours.
 	 */
 	private int askBetNbRounds() {
@@ -347,7 +347,7 @@ public class ConsoleView implements IView {
 	/**
 	 * Demande à l'utilisateur la sorte qu'il veut miser
 	 * 
-	 * @see askBet
+	 * @see IView#askBet(Hand)
 	 * @return La suite.
 	 */
 	private Suit askBetSuit() {
