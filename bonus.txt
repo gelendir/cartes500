@@ -1,0 +1,4 @@
+Bonus implémentés
+=================
+
+* Démarrage automatique du RMI registry
