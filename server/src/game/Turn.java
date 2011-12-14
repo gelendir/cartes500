@@ -129,6 +129,12 @@ public class Turn {
 		return this.cards.size();
 	}
 	
+	/**
+	 * Indique si le tour courant est terminé. Un tour est terminé
+	 * lorsque les 4 joueurs ont tous déposé une carte dans le tour.
+	 * 
+	 * @return Retourne vrai si le tour est terminé.
+	 */
 	public boolean isTurnFinished()
 	{
 		return( this.nbCards() == Turn.MAX_CARDS );

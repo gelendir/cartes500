@@ -71,13 +71,6 @@ public class Deck {
 	 * aléatoire.
 	 */
 	public void mixCards() {
-		/*Random rand = new Random();
-		for(int i = 0; i < cards.size(); ++i) {
-			int pos = rand.nextInt(cards.size());
-			Card temp = cards.elementAt(i);
-			cards.set(i, cards.elementAt(pos));
-			cards.set(pos, temp);
-		}*/
 		Collections.shuffle(this.cards);
 	}
 

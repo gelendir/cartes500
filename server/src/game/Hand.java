@@ -20,7 +20,7 @@ import java.util.Iterator;
 public class Hand implements Serializable {
 	
 	/**
-	 * 
+	 * Numéro de version pour la sérialisation
 	 */
 	private static final long serialVersionUID = 8447840828554178769L;
 
@@ -142,6 +142,10 @@ public class Hand implements Serializable {
 		return this.numberOfCard;
 	}
 	
+	/**
+	 * Retourne une représentation sous forme de chaîne de charactères
+	 * de la main d'un joueur.
+	 */
 	public String toString() {
 		
 		String hand = "";
@@ -154,6 +158,10 @@ public class Hand implements Serializable {
 		
 	}
 	
+	/**
+	 * Comparateur de mains. Utilisé pour savoir si 2 mains
+	 * contiennent les mêmes cartes.
+	 */
 	public boolean equals(Object obj) {
 		if(obj instanceof Hand) {
 			Hand hand = (Hand)obj;
@@ -170,6 +178,12 @@ public class Hand implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Indique si la carte demandé est contenu dans les cartes de la main.
+	 * 
+	 * @param card La carte à chercher.
+	 * @return Retoune vrai si la carte est contenu dans la main.
+	 */
 	public boolean hasCard( Card card ) {
 		
 		return this.hand.contains( card );

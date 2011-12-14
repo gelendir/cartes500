@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class Player implements Serializable {
 	
 	/**
-	 * 
+	 * Numéro de version pour la sérialisation
 	 */
 	private static final long serialVersionUID = 7950307699192824310L;
 
@@ -145,10 +145,23 @@ public class Player implements Serializable {
 		
 	}
 	
+	/**
+	 * Indique si le joueur possède la carte demandé dans sa main.
+	 * @param card La carte à rechercher
+	 * @return Retourne vrai si le joueur possède la carte.
+	 */
 	public boolean hasCard( Card card ) {
 		return this.hand.hasCard(card);
 	}
 	
+	/**
+	 * Retire une carte de la main de la joueur. Cette fonction
+	 * est utilisé lorsqu'un joueur veut déposer une carte dans le jeu.
+	 * 
+	 * @param card La carte à retirer.
+	 * @throws DoesNotHaveCardException Exception lancé si le joueur ne possède
+	 * pas la carte demandé.
+	 */
 	public void playCard( Card card ) throws DoesNotHaveCardException {
 		
 		if( !this.hasCard(card) ) {

@@ -20,7 +20,7 @@ import game.enumeration.Suit;
 public class Bet implements Serializable {
 	
 	/**
-	 * 
+	 * Numéro de version pour la sérialisation
 	 */
 	private static final long serialVersionUID = 7103686540092057123L;
 
@@ -116,6 +116,11 @@ public class Bet implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Indique si le joueur a décidé de rien miser.
+	 * 
+	 * @return Retourne vrai si le joueur a rien misé.
+	 */
 	public boolean didNotBet()
 	{
 		return( this.nbRounds == 0 && this.suit.equals( Suit.NONE ) );

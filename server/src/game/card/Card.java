@@ -14,7 +14,7 @@ import game.enumeration.Suit;
 public class Card implements Serializable {
 	
 	/**
-	 * 
+	 * Numéro de version pour la sérialisation
 	 */
 	private static final long serialVersionUID = 7334073620289847045L;
 
@@ -119,6 +119,12 @@ public class Card implements Serializable {
 		return this.value;
 	}
 	
+	/**
+	 * Comparateur de carte. Permet de savoir si 2 cartes
+	 * ont la même valeur.
+	 * 
+	 * @return Retourne vrai si les 2 cartes sont pareils.
+	 */
 	public boolean equals(Object obj) {
 		if(obj instanceof Card) {
 			Card card = (Card)obj;
@@ -129,6 +135,9 @@ public class Card implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Retourne une représentation de la carte sous forme de chaîne de charactères.
+	 */
 	public String toString() {
 		String s = this.value.name().toLowerCase();
 		s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
