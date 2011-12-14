@@ -280,6 +280,7 @@ public class GraphicView extends JFrame implements IView, GCardListener {
 	public void showBetWinner(Player player, Suit gameSuit) {
 
 		this.changePlayerStatus(player);
+		System.out.println("");
 
 	}
 
