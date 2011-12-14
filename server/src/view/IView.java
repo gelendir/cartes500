@@ -133,10 +133,22 @@ public interface IView {
 	 */
 	public void setPlayerList(Player[] players);
 	
+	/**
+	 * Indique à l'interface que la mise jouée par le joueur est invalide.
+	 * Cette méthode permet d'avertir le client que le bet n'est pas valide.
+	 */
 	public void showBetInvalid();
 	
+	/**
+	 * Cette méthode indique qui est le prochain joueur à jouer.
+	 * @param player Le prochain joueur à jouer.
+	 */
 	public void nextPlayer( Player player );
 
+	/**
+	 * Cette méthode envoie les statistiques sur le joueur actuel.
+	 * @param playerStats Les statistiques du joueur.
+	 */
 	public void showStatistics(PlayerStatistics playerStats);
 	
 }
