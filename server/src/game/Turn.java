@@ -109,13 +109,18 @@ public class Turn {
 		Iterator<Card> iterator = this.cards.values().iterator();
 		Card card = iterator.next();
 		
-		if( this.cards.size() <= 1 && card.getCardValue() == CardValue.JOKER ) {
+		
+		if( card.getCardValue() == CardValue.JOKER ) {
+			return this.gameSuit;
+		}
+		
+		/*if( this.cards.size() <= 1 && card.getCardValue() == CardValue.JOKER ) {
 			return null;
 		}
 		
 		while( card.getCardValue() == CardValue.JOKER ) {
 			card = iterator.next();
-		}
+		}*/
 		
 		return card.getSuit();
 		
