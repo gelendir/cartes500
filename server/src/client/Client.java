@@ -338,21 +338,48 @@ public class Client implements ClientInterface {
 		this.view.showTurnWinner( player );
 	}
 
+	/**
+	 * Indique si la partie est terminé ou pas. Utilisé dans le Main du client
+	 * pour savoir quand est-ce que l'application peut fermer.
+	 * 
+	 * @return Retourne vrai si la partie est terminé
+	 */
 	public boolean isGameFinished() {
 		return this.gameFinished;
 	}
 
+	/**
+	 * Notification de la liste des joueurs.
+	 * Veuillez vous référer à la documentation de la classe ClientInterface
+	 * pour plus de détails.
+	 * 
+	 * @see ClientInterface#notifyPlayerList(Player[])
+	 */
 	@Override
 	public void notifyPlayerList(Player[] players) throws RemoteException {
 		this.view.setPlayerList(players);
 	}
 
+	/**
+	 * Notification du début des mises.
+	 * Veuillez vous référer à la documentation de la classe ClientInterface
+	 * pour plus de détails.
+	 * 
+	 * @see ClientInterface#notifyBettingTime()
+	 */
 	@Override
 	public void notifyBettingTime() throws RemoteException {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Notification des statistiques du joueur.
+	 * Veuillez vous référer à la documentation de la classe ClientInterface
+	 * pour plus de détails.
+	 * 
+	 * @see ClientInterface#sendStatistics(PlayerStatistics)
+	 */
 	@Override
 	public void sendStatistics(PlayerStatistics playerStats) {
 		

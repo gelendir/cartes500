@@ -1,5 +1,10 @@
 package exception;
 
+/**
+ * Exception lancé lorsqu'un joueur qui n'est pas connecté au serveur
+ * tente d'accomplir une action.
+ *
+ */
 public class PlayerNotInGameException extends GameException {
 
 	public PlayerNotInGameException() {

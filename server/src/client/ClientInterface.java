@@ -55,8 +55,6 @@ public interface ClientInterface extends Remote {
 	 * qu'il peut jouer.
 	 * @return La carte que ce client veut jouer.
 	 * @throws RemoteException Erreurs RMI
-	 * @throws InvalidCardException 
-	 * @throws TurnException 
 	 */
 	public void notifyYourTurn( Suit suit ) throws RemoteException;
 	
@@ -64,9 +62,6 @@ public interface ClientInterface extends Remote {
 	 * Événement lancé lorsqu'un joueur se déconnecte du serveur. Une partie
 	 * ne peut continuer s'il manque un joueur, donc si un joueur se déconnecte 
 	 * avant la fin de la partie, le jeu ne peut plus continuer.
-	 * 
-	 * TODO: Pour les besoins du prototype cette fonction n'est pas encore
-	 * implémenté.
 	 * 
 	 * @param player Le joueur qui c'est déconnecté.
 	 * @throws RemoteException Erreurs RMI.
@@ -82,6 +77,12 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyPlayerConnect( Player player ) throws RemoteException;
 	
+	/**
+	 * Événement lance lorsque tous les joueurs se sont connectés et que
+	 * la période de mises peut débuter.
+	 * 
+	 * @throws RemoteException
+	 */
 	public void notifyBettingTime() throws RemoteException;
 	
 	/**
@@ -93,10 +94,6 @@ public interface ClientInterface extends Remote {
 	 * @param hand Les cartes distribués au joueur.
 	 * @return La mise fait par ce client.
 	 * @throws RemoteException Erreurs RMI.
-	 * @throws InvalidBetException 
-	 * @throws NotYourTurnToBet 
-	 * @throws InvalidCardException 
-	 * @throws TurnException 
 	 */
 	public void notifyYourTurnToBet( Hand hand ) throws RemoteException;
 	
@@ -173,6 +170,13 @@ public interface ClientInterface extends Remote {
 	 */
 	public void notifyPlayerList( Player[] players ) throws RemoteException;
 
+	/**
+	 * Événement lancé à la fin de la partie à fin d'informer le joueur sur les statistiques
+	 * de jeu pour son profil.
+	 * 
+	 * @param playerStats Les statistiques du joueur.
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	public void sendStatistics(PlayerStatistics playerStats) throws RemoteException;
 	
 }

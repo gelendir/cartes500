@@ -1,6 +1,10 @@
 package exception;
 
-
+/**
+ * Exception lancé lorsqu'un joueur tente de déposer une carte
+ * qu'il n'a pas dans sa main.
+ *
+ */
 public class DoesNotHaveCardException extends GameException {
 	
 	public DoesNotHaveCardException() {
@@ -8,7 +12,7 @@ public class DoesNotHaveCardException extends GameException {
 	}
 	
 	public DoesNotHaveCardException(String message) {
-		super("message");
+		super(message);
 	}
 	
 	

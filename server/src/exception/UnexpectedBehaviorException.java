@@ -1,9 +1,15 @@
 package exception;
 
+/**
+ * Exception parapluie utilisé lorsqu'un comportement du jeu
+ * inattendu est servenu lorsque le serveur tente d'accomplir 
+ * une action dans le jeu.
+ *
+ */
 public class UnexpectedBehaviorException extends ServerException {
 
 	public UnexpectedBehaviorException() {
-		// TODO Auto-generated constructor stub
+		super("Unexpected behavior was encountered in the server");
 	}
 
 	public UnexpectedBehaviorException( Exception e ) {
