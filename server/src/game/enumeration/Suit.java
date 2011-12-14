@@ -40,6 +40,10 @@ public enum Suit {
 		return this.value;
 	}
 	
+	/**
+	 * Cette méthode retourne la représentation textuelle
+	 * de la sorte de la carte.
+	 */
 	public String toString() {
 		return Suit.BUNDLE.getString( Integer.toString( this.value ) );
 	}

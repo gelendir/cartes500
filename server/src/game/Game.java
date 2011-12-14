@@ -32,6 +32,9 @@ public class Game {
 	 */
 	private Player players[] = null;
 	
+	/**
+	 * La pile des tours jouées.
+	 */
 	private LinkedList<Turn> turns = null;
 
 	/**
@@ -185,12 +188,23 @@ public class Game {
 
 	}
 
+	/**
+	 * Cette méthode retourne le prochain joueur à qui c'est son
+	 * tour de miser.
+	 * @return Retourne le prochain joueur à qui c'est son
+	 * tour de miser.
+	 */
 	public Player getNextPlayerToBet() {
 		
 		return this.players[ this.indexPlayerNextBet ];
 
 	}
 	
+	/**
+	 * Cette méthode indique si les mises sont finiss.
+	 * @return Retourne vrai si les mises sont finies; 
+	 * faux sinon.
+	 */
 	public boolean areBetsFinished() {
 		
 		return( this.indexPlayerNextBet >= this.players.length );
@@ -249,6 +263,12 @@ public class Game {
 		return -1;
 	}
 
+	/**
+	 * Cette méthode retourne les 2 gagnants de la partie
+	 * sous forme de tableau à 2 éléments.
+	 * @return Retourne les 2 gagnants de la partie
+	 * sous forme de tableau à 2 éléments.
+	 */
 	public Player[] getWinners() {
 
 		int winner = -1;
@@ -302,6 +322,12 @@ public class Game {
 
 	}
 	
+	/**
+	 * Cette méthode retourne un tableau avec les 6 cartes
+	 * de la main secret.
+	 * @return Retourne un tableau avec les 6 cartes
+	 * de la main secret.
+	 */
 	public Card[] createSecretHand() {
 		
 		Card newCards[] = new Card[ Game.NB_CARDS_SECRET_HAND ];
@@ -314,6 +340,12 @@ public class Game {
 		
 	}
 	
+	/**
+	 * Cette méthode initialise un nouveau tour à condition
+	 * que le tour précédent soit fini.
+	 * @throws TurnException Est lancé lorsque le tour n'est
+	 * pas fini.
+	 */
 	public void newTurn() throws TurnException {
 		
 		if( this.turns.size() == 0 ) {
@@ -340,6 +372,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Cette méthode retourne le tour actuel du jeu.
+	 * @return Retourne le tour actuel du jeu.
+	 */
 	private Turn currentTurn() {
 		
 		if( this.turns.size() == 0 ) {
@@ -349,10 +385,21 @@ public class Game {
 		return this.turns.peek();
 	}
 	
+	/**
+	 * Cette méthode retourne l'atoût du tour.
+	 * @return Retourne l'atoût du tour.
+	 */
 	public Suit getTurnSuit() {
 		return this.currentTurn().getTurnSuit();
 	}
 
+	/**
+	 * Cette méthode sert à faire jouer une carte à un joueur.
+	 * @param player Le joueur qui joue la carte.
+	 * @param card La carte elle-même.
+	 * @throws GameException Est lancé lorsque un joueur joue un tour
+	 * qui n'est pas le sien ou joue une carte qu'il n'a pas.
+	 */
 	public void playCard(Player player, Card card) throws GameException {
 		
 		if( !player.equals( this.nextPlayer() ) ) {
@@ -368,15 +415,30 @@ public class Game {
 		currentTurn.addCard( player, card );
 		
 	}
-
+	
+	/**
+	 * Cette méthode indique si le tour actuel est fini.
+	 * @return Retourne vrai si le tour est fini; faux sinon.
+	 */
 	public boolean isTurnFinished() {
 		return this.currentTurn().isTurnFinished();
 	}
-
+	
+	/**
+	 * Cette méthode retourne le gagnant du tour actuel.
+	 * @return Retourne le gagnant du tour actuel.
+	 * @throws TurnException Lancé lorsque le tour n'est pas fini.
+	 */
 	public Player getTurnWinner() throws TurnException {
 		return this.currentTurn().getWinner();
 	}
 	
+	/**
+	 * Cette méthode retourne le prochain joueur à jouer dans
+	 * la partie c'est-à-dire que c'est son tour.
+	 * @return Retourne le prochain joueur à jouer dans
+	 * la partie c'est-à-dire que c'est son tour.
+	 */
 	public Player nextPlayer() {
 		
 		if( this.turns.size() == 0 ) {
@@ -411,6 +473,14 @@ public class Game {
 		
 	}
 
+	/**
+	 * Cette méthode modifie la main d'un joueur après qu'il ait choisi les
+	 * cartes dans la main secrete.
+	 * @param player Le joueur qui a choisi les cartes.
+	 * @param cards Les cartes chosies.
+	 * @throws GameException Est lancé lorsque la partie est déjà commencé
+	 * ou que le joueur n'a pas gagné la mise.
+	 */
 	public void newHandAfterSecretBet(Player player, ArrayList<Card> cards) throws GameException {
 		
 		if( this.turns.size() > 0 ) {
@@ -426,6 +496,10 @@ public class Game {
 		
 	}
 
+	/**
+	 * Cette méthode indique si la partie est fini.
+	 * @return Retourne vrai si la partie est fini; faux sinon.
+	 */
 	public boolean isGameFinished() {
 		
 		return( this.turns.size() > Game.MAX_TURNS );

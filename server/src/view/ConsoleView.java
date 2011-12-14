@@ -309,6 +309,9 @@ public class ConsoleView implements IView {
 		
 	}
 	
+	/**
+	 * @see IView#showBetInvalid()
+	 */
 	public void showBetInvalid()
 	{
 		this.out.println( this.bundle.getString("invalidBet") );
@@ -605,10 +608,16 @@ public class ConsoleView implements IView {
 		
 	}
 
+	/**
+	 * @see IView#setPlayerList(Player[])
+	 */
 	@Override
 	public void setPlayerList(Player[] players) {
 	}
 
+	/**
+	 * @see IView#nextPlayer(Player)
+	 */
 	@Override
 	public void nextPlayer(Player player) {
 	
@@ -618,6 +627,9 @@ public class ConsoleView implements IView {
 
 	}
 
+	/**
+	 * @see IView#showStatistics(PlayerStatistics)
+	 */
 	@Override
 	public void showStatistics(PlayerStatistics playerStats) {
 		
