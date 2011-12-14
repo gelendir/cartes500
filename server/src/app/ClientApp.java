@@ -145,7 +145,6 @@ public class ClientApp {
 						
 		boolean exported = true;
 		
-		System.out.println("Exporting client stub...");
 		try {
 			ClientInterface stub = (ClientInterface)UnicastRemoteObject.exportObject( client, 0 );
 		} catch (RemoteException e) {
