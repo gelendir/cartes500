@@ -138,6 +138,9 @@ public interface ServerInterface extends Remote {
 	 */
 	public Player[] getPlayerList() throws RemoteException;
 	
-	
+	/**
+	 * Fonction utilitaire pour déterminer quel est le prochain joueur
+	 * à déposer une carte dans le jeu. Utilisé par le client graphique.
+	 */
 	public Player nextPlayer() throws RemoteException;
 }

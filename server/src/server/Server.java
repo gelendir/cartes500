@@ -96,7 +96,17 @@ public class Server implements ServerInterface, Runnable {
 			
 	}
 	
-	
+	/**
+	 * Fonction permettant de rouler le serveur en tant que thread.
+	 * Le serveur est "threadé" en tant que solution temporaire
+	 * pour contourner un problème au niveau des appels bloquants fait
+	 * par les clients. Pour le moment, seuls les changements d'état
+	 * du serveur déclenche une action dans le thread, mais dans une 
+	 * version future du projet, il est prévu d'implémenter une file d'attente
+	 * pour toutes les notifications reçus par les clients. Cette implémentation
+	 * permetterait de pouvoir jouer plusieurs parties de manière concurrente.  
+	 * 
+	 */
 	@Override
 	public void run() {
 		
@@ -154,6 +164,13 @@ public class Server implements ServerInterface, Runnable {
 		
 	}
 	
+	/**
+	 * Fonction utilitaire pour faire changer l'état du thread du serveur.
+	 * Une fonction associé à chaque état est appelé lors du changement
+	 * d'état.
+	 * 
+	 * @param state L'état que le serveur doit adopter.
+	 */
 	private void changeState( ServerState state ) {
 		
 		synchronized( this ) {
@@ -162,8 +179,6 @@ public class Server implements ServerInterface, Runnable {
 		}
 		
 	}
-	
-	
 	
 	/**
 	 * Cette fonction sert à implémenter une "state machine" minimaliste 
@@ -244,6 +259,12 @@ public class Server implements ServerInterface, Runnable {
 		
 	}
 	
+	/**
+	 * Fonction utilitaire pour envoyer la liste des joueurs
+	 * de connectés aux clients.
+	 * 
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	private void sendPlayerList() throws RemoteException {
 		
 		for( ClientInterface clientToNotify: this.clients.keySet() ) {
@@ -355,6 +376,12 @@ public class Server implements ServerInterface, Runnable {
 		
 	}
 	
+	/**
+	 * Fonction utilitaire pour envoyer la liste des gagnants au clients.
+	 * Appelé à la fin du jeu.
+	 * 
+	 * @throws RemoteException Erreurs RMI.
+	 */
 	private void sendWinners() throws RemoteException {
 		Player[] winners = this.game.getWinners();
 		
@@ -363,6 +390,11 @@ public class Server implements ServerInterface, Runnable {
 		}
 	}
 	
+	/**
+	 * Fonction utilitaire pour envoyer les statistiques du jeu 
+	 * à chacun des clients. Appelé à la fin du jeu.
+	 * @throws RemoteException
+	 */
 	private void sendStatistics() throws RemoteException {
 		
 		Statistics statistics;
@@ -647,12 +679,14 @@ public class Server implements ServerInterface, Runnable {
 		return players;
 	}
 	
+	/**
+	 * Fonction utilitaire pour déterminer quel est le prochain joueur
+	 * à déposer une carte dans le jeu. Utilisé par le client graphique.
+	 */
 	public Player nextPlayer() {
 		
 		return this.game.nextPlayer();
 		
 	}
-
-
 
 }
