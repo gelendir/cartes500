@@ -14,6 +14,12 @@ Le code source de ce projet est disponible à l'adresse suivante :
 
 http://github.com/gelendir/cartes500
 
+License
+=======
+
+Ce projet est sous license GPLv3. La license est disponible à la page
+suivante : http://www.gnu.org/licenses/gpl-3.0.txt
+
 Éxécution
 =========
 
