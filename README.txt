@@ -1,7 +1,11 @@
 Cartes 500
 ==========
 
-Hacké par:
+Implémentation Client <-> Serveur du jeu de cartes '500' en Java.
+Projet final dans le cadre du cours 'Concepts avancés en programmation
+Orienté Objet' pour la technique d'informatique du Cégep de Ste-Foy.
+
+Écrit par:
 
 * Gregory Eric Sanderson Turcot Temlett MacDonnell Forbes
 * Frédérik Paradis
