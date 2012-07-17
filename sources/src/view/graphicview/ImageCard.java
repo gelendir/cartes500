@@ -7,8 +7,10 @@ import game.enumeration.Suit;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +31,7 @@ public class ImageCard {
 	/**
 	 * Le chemin de l'image des cartes.
 	 */
-	private static final String imageName = "images/little_cards.png";
+	private static final String imageName = "/images/little_cards.png";
 	
 	
 	/**
@@ -74,7 +76,9 @@ public class ImageCard {
 	 */
 	private ImageCard() {
 		try {
-			this.image = ImageIO.read(new File(ImageCard.imageName));
+			InputStream in = new BufferedInputStream(getClass().getResourceAsStream(ImageCard.imageName));
+			//this.image = ImageIO.read(new File(ImageCard.imageName));
+			this.image = ImageIO.read(in);
 			this.resize(75);
 			this.cardHeight = (int) Math.floor(this.image.getHeight() / (double)5);
 			this.cardWidth = (int) Math.floor(this.image.getWidth() / (double)13);
